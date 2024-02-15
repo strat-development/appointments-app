@@ -19,6 +19,7 @@
     "@fullcalendar/interaction": "^6.1.10",
     "@fullcalendar/timegrid": "^6.1.10",
     "@ionic/react": "^7.7.0",
+    "@radix-ui/react-dialog": "^1.0.5",
     "@supabase/auth-helpers-nextjs": "^0.9.0",
     "@supabase/auth-helpers-react": "^0.4.2",
     "@supabase/auth-ui-react": "^0.4.7",
@@ -26,13 +27,18 @@
     "@supabase/supabase-js": "^2.39.3",
     "@tanstack/react-query": "^5.18.1",
     "fullcalendar": "^6.1.10",
+    "iconsax-react": "^0.0.8",
     "ionicons": "^7.2.2",
     "next": "14.1.0",
     "next-transpile-modules": "^10.0.1",
     "node": "^21.6.1",
     "react": "^18",
     "react-dom": "^18",
-    "react-table": "^7.8.0"
+    "react-hot-toast": "^2.4.1",
+    "react-icons": "^5.0.1",
+    "react-query": "^3.39.3",
+    "react-table": "^7.8.0",
+    "zustand": "^4.5.0"
   },
   "devDependencies": {
     "@capacitor/cli": "^5.6.0",
