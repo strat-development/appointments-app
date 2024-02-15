@@ -1,11 +1,12 @@
 import { Navbar } from "@/components/dashboard/Navbar";
+import { Schedule } from "@/components/dashboard/Schedule";
 
 export default function SchedulePage() {
     return (
-        <div>
-            <main>
-                <h1>Schedule</h1>
-                <Navbar />
+        <div className="flex gap-16 items-center">
+            <Navbar />
+            <main className="p-8 w-full max-[320px]:p-4">
+                <Schedule />
             </main>
         </div>
     );
