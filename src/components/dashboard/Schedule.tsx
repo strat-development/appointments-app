@@ -5,7 +5,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import timeGridPlugin from '@fullcalendar/timegrid'
-import { DateSelectArg } from "@fullcalendar/core"
+import { DateSelectArg, EventApi, EventClickArg } from "@fullcalendar/core"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { useState } from "react"
 import Swal from "sweetalert2"
@@ -16,6 +16,7 @@ import "@/styles/schedule.css"
 import { useUserContext } from "@/providers/userContextProvider"
 import { handleEvents, renderEventContent } from "@/actions/schedule/EventHandlets"
 import { NewVisitModal } from "./NewVisitModal"
+import { EditVisitModal } from "./EditVisitModal"
 
 type Hours = Database["public"]["Tables"]["hours"]["Row"]
 
@@ -25,6 +26,8 @@ export const Schedule = () => {
     const queryClient = useQueryClient();
     const { userName, userId } = useUserContext();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [eventId, setEventId] = useState<string>("")
     const [newHours, setNewHours] = useState<Hours | null>(null);
 
     const { data: hoursData, isLoading, isError } = useQuery(
@@ -48,6 +51,7 @@ export const Schedule = () => {
 
     const closeModal = () => {
         setIsModalOpen(false);
+        setIsEditModalOpen(false);
     };
 
 
@@ -62,34 +66,22 @@ export const Schedule = () => {
         setNewHours(newHours as Hours);
     };
 
-    const deleteHoursMutation = useMutation(
-        async (eventId: string) => {
-            await supabase.from('hours')
-                .delete()
-                .eq('id', eventId);
-        },
-        {
-            onSuccess: () => {
-                Swal.fire({
-                    title: 'Deleted!',
-                    text: 'Your hours have been deleted.',
-                    icon: 'success',
-                    showConfirmButton: false,
-                    timer: 1000,
-                });
-                queryClient.invalidateQueries(['hours', userId]);
-            },
-            onError: () => {
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Something went wrong.',
-                    icon: 'error',
-                    showConfirmButton: false,
-                    timer: 1000,
-                });
-            },
-        }
-    );
+    const handleEventClick = (clickInfo: EventClickArg) => {
+        setIsEditModalOpen(true);
+
+        const event = clickInfo.event;
+
+        console.log(event.id);
+
+        const newHours = {
+            startTime: clickInfo.event.startStr,
+            endTime: clickInfo.event.endStr,
+        };
+
+        setNewHours(newHours as Hours);
+
+        setEventId(event.id);
+    };
 
 
     return (
@@ -166,7 +158,7 @@ export const Schedule = () => {
                         }
                         select={handleDateSelect}
                         eventsSet={handleEvents}
-                        // eventClick={handleEventClick}
+                        eventClick={handleEventClick}
                         eventMaxStack={1}
                         locale={"en"}
                         buttonText={
@@ -189,6 +181,12 @@ export const Schedule = () => {
                 onClose={closeModal}
                 startTime={newHours?.startTime}
                 endTime={newHours?.endTime}
+            />
+            <EditVisitModal isOpen={isEditModalOpen}
+                onClose={closeModal}
+                startTime={newHours?.startTime}
+                endTime={newHours?.endTime}
+                hourId={eventId}
             />
         </>
     )
