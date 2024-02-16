@@ -5,7 +5,7 @@ import { Database } from "@/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation"
-import { Calendar, LogoutCurve, Note, People, Settings, Task, UserAdd } from 'iconsax-react';
+import { Calendar, Card, ChemicalGlass, Coin1, LogoutCurve, Note, People, Profile2User, Settings, Shop, StatusUp, Task, UserAdd } from 'iconsax-react';
 import { useEffect } from "react";
 import { useUserContext } from "@/providers/userContextProvider";
 
@@ -23,27 +23,42 @@ export const Navbar = () => {
             icon: <Calendar size="24" />
         },
         {
-            name: "Notes",
-            link: "/dashboard/notes",
-            icon: <Note size="24" />
+            name: "Statistics",
+            link: "/dashboard/statistics",
+            icon: <StatusUp size="24" />
         },
         {
-            name: "Tasks",
-            link: "/dashboard/tasks",
-            icon: <Task size="24" />
+            name: "Clients",
+            link: "/dashboard/clients",
+            icon: <Profile2User size="24" />
         },
     ]
     const Links = [
         {
-            name: "Recruitment",
-            link: "/dashboard/recruitment",
-            icon: <UserAdd size="24" />
+            name: "Business page",
+            link: "/dashboard/business-page",
+            icon: <Shop size="24" />
         },
         {
-            name: "Team members",
-            link: "/dashboard/team-members",
+            name: "Employees",
+            link: "/dashboard/employees",
             icon: <People size="24" />
         },
+        {
+            name: "Services and prices",
+            link: "/dashboard/services",
+            icon: <Coin1 size="24" />
+        },
+        {
+            name: "Positions",
+            link: "/dashboard/positions",
+            icon: <ChemicalGlass size="24" />
+        },
+        {
+            name: "Subscription",
+            link: "/dashboard/subscription",
+            icon: <Card size="24" />
+        }
     ]
 
     useEffect(() => {

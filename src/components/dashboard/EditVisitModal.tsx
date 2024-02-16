@@ -159,7 +159,7 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
                         setStatus(null);
                     }
                     }>
-                    Add visit
+                    Edit appointment
                 </button>
                 <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-red-600 to-red-500 text-white w-full"
                     onClick={() => {
@@ -167,7 +167,7 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
                         onClose();
                     }
                     }>
-                    Delete visit
+                    Delete appointment
                 </button>
             </div>
         </>
@@ -176,7 +176,7 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
     return (
         <Modal isOpen={isOpen}
             onClose={onClose}
-            title='New appointment'
+            title='Edit appointment'
             body={bodyContent}
         />
     );

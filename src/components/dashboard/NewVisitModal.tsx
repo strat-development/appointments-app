@@ -123,7 +123,7 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
                         setNote(null);
                     }
                     }>
-                    Add visit
+                    Add appointment
                 </button>
             </div>
         </>
