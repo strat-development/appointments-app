@@ -15,6 +15,7 @@ export default function UserDetailsModal() {
     const [fullname, setFullname] = useState<string | null>(null)
     const [email, setEmail] = useState<string | null>(null)
     const [role, setRole] = useState<string | null>(null)
+    const [companyAddres, setAddres] = useState<string | null>(null)
     const router = useRouter();
     const { userRole, userId } = useUserContext();
 
