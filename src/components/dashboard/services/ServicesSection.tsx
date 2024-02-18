@@ -25,15 +25,15 @@ export const ServicesSection = () => {
     const [servicePrice, setServicePrice] = useState<string>("");
     const [serviceDuration, setServiceDuration] = useState<string>("");
     const filteredData = isData.filter(item => item.title && item.title.includes(searchPrompt));
-    const bussines_name = "Visio";
+    const businessName = "Visio";
 
     useQuery(
-        ['services', bussines_name],
+        ['services', businessName],
         async () => {
             const { data, error, status } = await supabase
                 .from("services")
                 .select("*")
-                .eq("business_name", bussines_name)
+                .eq("business_name", businessName)
 
             if (error && status !== 406) {
                 throw error;

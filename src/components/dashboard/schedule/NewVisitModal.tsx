@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Input } from "../../Input";
 import { Modal } from "../../Modal";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/types/supabase";
 import { useUserContext } from "@/providers/userContextProvider";
@@ -17,6 +17,7 @@ interface NewVisitModalProps {
 
 type Hours = Database["public"]["Tables"]["hours"]["Row"]
 type Clients = Database["public"]["Tables"]["clients"]["Row"]
+type Services = Database["public"]["Tables"]["services"]["Row"]
 
 export const NewVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: NewVisitModalProps) => {
     const [email, setEmail] = useState<string | null>(null);
@@ -24,9 +25,36 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: N
     const [service, setService] = useState<string | null>(null);
     const [client, setClient] = useState<string | null>(null);
     const [note, setNote] = useState<string | null>(null);
+    const [availiableServices, setAvailiableServices] = useState<Services[]>([])
     const supabase = createClientComponentClient<Database>();
     const { userId } = useUserContext();
     const queryClient = useQueryClient();
+    const businessName = "Visio";
+    const [existingClients, setExistingClients] = useState<Clients[]>([]);
+    const [addingNewClient, setAddingNewClient] = useState(false);
+
+    useQuery(
+        ['clients', userId],
+        async () => {
+            const { data, error, status } = await supabase
+                .from("clients")
+                .select("*")
+                .eq("employee_id", userId)
+
+            if (error && status !== 406) {
+                throw error;
+            }
+
+            if (data) {
+                return data;
+            }
+        },
+        {
+            onSuccess: (data) => {
+                setExistingClients(data as Clients[])
+            }
+        }
+    )
 
 
     const addHoursMutation = useMutation(
@@ -56,6 +84,7 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: N
                 .upsert(
                     newClient
                 )
+                .eq("business_name", businessName)
         },
         {
             onSuccess: () => {
@@ -64,12 +93,36 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: N
         }
     );
 
+    useQuery(
+        ['services', userId],
+        async () => {
+            const { data, error, status } = await supabase
+                .from("services")
+                .select("*")
+                .eq("business_name", businessName)
+
+            if (error && status !== 406) {
+                throw error;
+            }
+
+            if (data) {
+                return data;
+            }
+        },
+        {
+            onSuccess: (data) => {
+                setAvailiableServices(data as Services[])
+            }
+        }
+    )
+
     const clearStates = () => {
         setEmail(null);
         setPhoneNumber(null);
         setService(null);
         setClient(null);
         setNote(null);
+        setAddingNewClient(false);
     }
 
     const handleClose = () => {
@@ -81,41 +134,75 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: N
         <>
             <div className="flex flex-col gap-4">
                 <label htmlFor="Client">Client</label>
-                <Input
-                    id="client"
-                    label="Client"
-                    type="text"
-                    placeholder="Client name"
-                    onChange={(e) => setClient(e.target.value)}
-                    value={client || ''}
-                />
-                <label htmlFor="Phone number">Phone number</label>
-                <Input
-                    id="Phone number"
-                    label="Phone number"
-                    type="tel"
-                    placeholder="Phone number"
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    value={phoneNumber || ''}
-                />
-                <label htmlFor="Email">Email</label>
-                <Input
-                    id="Email"
-                    label="Email"
-                    type="email"
-                    placeholder="Email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    value={email || ''}
-                />
+                {addingNewClient === false && existingClients.length > 0 && (
+                    <>
+                        <select
+                            id="Client"
+                            className="peer w-full py-2 pl-4 font-light bg-white border-[.5px] rounded-2xl outline-none transition disabled:opacity-70 disabled:cursor-not-allowed"
+                            onChange={(e) => {
+                                if (e.target.value === "add_new") {
+                                    setAddingNewClient(true);
+                                } else {
+                                    const selectedClient = existingClients.find(client => client.full_name === e.target.value);
+                                    if (selectedClient) {
+                                        setClient(selectedClient.full_name);
+                                        setPhoneNumber(selectedClient.phone_number);
+                                        setEmail(selectedClient.email);
+                                    }
+                                }
+                            }}
+                        >
+                            {existingClients.map((client) => (
+                                <option key={client.id} value={client.full_name ?? ''}>{client.full_name}</option>
+                            ))}
+                        </select>
+                        <button onClick={() => {
+                            setAddingNewClient(true)
+                            setClient('')
+                            setPhoneNumber('')
+                            setEmail('')
+                        }}>Add new client
+                        </button>
+                    </>
+                )}
+
+                {(addingNewClient === true || existingClients.length == 0) && (
+                    <>
+                        <Input
+                            id="client"
+                            label="Client"
+                            type="text"
+                            placeholder="Client name"
+                            onChange={(e) => setClient(e.target.value)}
+                            value={client || ''}
+                        />
+                        <Input
+                            id="Phone number"
+                            label="Phone number"
+                            type="tel"
+                            placeholder="Phone number"
+                            onChange={(e) => setPhoneNumber(e.target.value)}
+                            value={phoneNumber || ''}
+                        />
+                        <Input
+                            id="Email"
+                            label="Email"
+                            type="email"
+                            placeholder="Email"
+                            onChange={(e) => setEmail(e.target.value)}
+                            value={email || ''}
+                        />
+                    </>
+                )}
                 <label htmlFor="Service">Service</label>
-                <Input
+                <select
                     id="Service"
-                    label="Service"
-                    type="text"
-                    placeholder="Service"
-                    onChange={(e) => setService(e.target.value)}
-                    value={service || ''}
-                />
+                    className="peer w-full py-2 pl-4 font-light bg-white border-[.5px] rounded-2xl outline-none transition disabled:opacity-70 disabled:cursor-not-allowed"
+                    onChange={(e) => setService(e.target.value)}>
+                    {availiableServices.map((service) => (
+                        <option key={service.id} value={service.title}>{service.title}</option>
+                    ))}
+                </select>
                 <div>
                     <label htmlFor="Start time">Time</label>
                     <div className="flex gap-4 items-center">
@@ -138,7 +225,7 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: N
                 </div>
                 <div className="flex flex-col gap-4 items-start justify-start">
                     <label htmlFor="Note">{`Note (optional)`}</label>
-                    <textarea className="border-1 outline-none rounded-2xl p-4 w-full h-32"
+                    <textarea className="border-[.5px] rounded-2xl outline-none p-4 w-full h-32"
                         id="Note"
                         placeholder="Write a note..."
                         onChange={(e) => setNote(e.target.value)}
@@ -147,6 +234,12 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: N
                 </div>
                 <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-violet-600 to-violet-500 text-white w-full"
                     onClick={() => {
+
+                        if (!client?.trim() || !phoneNumber?.trim() || !service?.trim()) {
+                            toast.error('Please fill in all required fields!');
+                            return;
+                        }
+
                         addHoursMutation.mutateAsync({
                             userId: userId,
                             title: client,
@@ -159,16 +252,22 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: N
                             status: 'Active'
                         } as Hours);
 
-                        addNewClient.mutateAsync({
-                            full_name: client || '',
-                            phone_number: phoneNumber || '',
-                            email: email || '',
-                            employee_id: userId,
-                            description: note || '',
-                            label: "",
-                            hour_id: hourId,
-                            service: service
-                        } as Clients);
+                        const clientExists = existingClients.some(existingClient => existingClient.full_name === client);
+
+                        // If the client doesn't exist, add them
+                        if (!clientExists) {
+                            addNewClient.mutateAsync({
+                                full_name: client || '',
+                                phone_number: phoneNumber || '',
+                                email: email || '',
+                                employee_id: userId,
+                                description: note || '',
+                                label: "",
+                                business_name: businessName
+                            } as Clients);
+                        }
+
+                        handleClose();
 
                         handleClose();
                     }

@@ -23,15 +23,15 @@ export const PositionsSection = () => {
     const [positionName, setPositionName] = useState<string>("");
     const [positionId, setPositionId] = useState<number>(0);
     const filteredData = isData.filter(item => item.position_name && item.position_name.includes(searchPrompt));
-    const bussines_name = "Visio";
+    const businessName = "Visio";
 
     useQuery(
-        ['positions', bussines_name],
+        ['positions', businessName],
         async () => {
             const { data, error, status } = await supabase
                 .from("positions")
                 .select("*")
-                .eq("business_name", bussines_name)
+                .eq("business_name", businessName)
 
             if (error && status !== 406) {
                 throw error;

@@ -17,6 +17,8 @@ interface EditVisitModalProps {
 }
 
 type Hours = Database["public"]["Tables"]["hours"]["Row"]
+type Clients = Database["public"]["Tables"]["clients"]["Row"]
+type Services = Database["public"]["Tables"]["services"]["Row"]
 
 export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: EditVisitModalProps) => {
     const [email, setEmail] = useState<string | null>(null);
@@ -25,9 +27,12 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
     const [client, setClient] = useState<string | null>(null);
     const [status, setStatus] = useState<string | null>('');
     const [note, setNote] = useState<string | null>(null);
+    const [existingClients, setExistingClients] = useState<string>("");
+    const [availiableServices, setAvailiableServices] = useState<Services[]>([]);
     const supabase = createClientComponentClient<Database>();
     const { userId } = useUserContext();
     const queryClient = useQueryClient();
+    const businessName = "Visio";
 
     const addHoursMutation = useMutation(
         async (newHours: Hours) => {
@@ -48,6 +53,8 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
             }
         }
     );
+
+
 
     const deleteHoursMutation = useMutation(
         async (eventId: string) => {
@@ -78,6 +85,51 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
         }
     );
 
+    useEffect(() => {
+        if (hourId) {
+            // Fetch the client data
+            supabase
+                .from("hours")
+                .select("*")
+                .eq("id", hourId)
+                .then(({ data, error }) => {
+                    if (error) {
+                        console.error("Error fetching client data:", error);
+                    } else if (data && data.length > 0) {
+                        const clientData = data[0];
+                        setPhoneNumber(clientData.phone_number);
+                        setClient(clientData.title);
+                        setNote(clientData.description);
+                        setStatus(clientData.status);
+                        setService(clientData.service);
+                    }
+                });
+        }
+    }, [hourId]);
+
+    useQuery(
+        ['services', userId],
+        async () => {
+            const { data, error, status } = await supabase
+                .from("services")
+                .select("*")
+                .eq("business_name", businessName)
+
+            if (error && status !== 406) {
+                throw error;
+            }
+
+            if (data) {
+                return data;
+            }
+        },
+        {
+            onSuccess: (data) => {
+                setAvailiableServices(data as Services[])
+            }
+        }
+    )
+
     const clearStates = () => {
         setEmail(null);
         setPhoneNumber(null);
@@ -94,6 +146,7 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
     const bodyContent = (
         <>
             <div className="flex flex-col gap-4">
+                <label htmlFor="Client">Client</label>
                 <Input
                     id="client"
                     label="Client"
@@ -101,6 +154,7 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
                     onChange={(e) => setClient(e.target.value)}
                     value={client || ''}
                 />
+                <label htmlFor="Phone number">Phone number</label>
                 <Input
                     id="Phone number"
                     label="Phone number"
@@ -108,14 +162,15 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     value={phoneNumber || ''}
                 />
-
-                <Input
+                <label htmlFor="Service">Service</label>
+                <select
                     id="Service"
-                    label="Service"
-                    type="text"
-                    onChange={(e) => setService(e.target.value)}
-                    value={service || ''}
-                />
+                    className="peer w-full py-2 pl-4 font-light bg-white border-[.5px] rounded-2xl outline-none transition disabled:opacity-70 disabled:cursor-not-allowed"
+                    onChange={(e) => setService(e.target.value)}>
+                    {availiableServices.map((service) => (
+                        <option key={service.id} value={service.title}>{service.title}</option>
+                    ))}
+                </select>
                 <div>
                     <label htmlFor="Start time">Time</label>
                     <div className="flex gap-4 items-center">
@@ -134,14 +189,14 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
                         />
                     </div>
                 </div>
-                <select className="border-1 outline-none rounded-2xl p-4 w-full"
+                <select className="peer w-full py-2 pl-4 font-light bg-white border-[.5px] rounded-2xl outline-none transition disabled:opacity-70 disabled:cursor-not-allowed"
                     onChange={(e) => setStatus(e.target.value)}>
                     <option value="Active">Active</option>
                     <option value="Canceled">Canceled</option>
                 </select>
                 <div className="flex flex-col gap-4 items-start justify-start">
                     <label htmlFor="Note">{`Note (optional)`}</label>
-                    <textarea className="border-1 outline-none rounded-2xl p-4 w-full h-32"
+                    <textarea className="border-[.5px] rounded-2xl outline-none p-4 w-full h-32"
                         id="Note"
                         placeholder="Write a note..."
                         onChange={(e) => setNote(e.target.value)}
