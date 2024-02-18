@@ -12,14 +12,13 @@ interface NewVisitModalProps {
     onClose: () => void;
     startTime: string | null | undefined;
     endTime: string | null | undefined;
-    hourId: string;
 }
 
 type Hours = Database["public"]["Tables"]["hours"]["Row"]
 type Clients = Database["public"]["Tables"]["clients"]["Row"]
 type Services = Database["public"]["Tables"]["services"]["Row"]
 
-export const NewVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: NewVisitModalProps) => {
+export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitModalProps) => {
     const [email, setEmail] = useState<string | null>(null);
     const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
     const [service, setService] = useState<string | null>(null);
@@ -254,7 +253,6 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: N
 
                         const clientExists = existingClients.some(existingClient => existingClient.full_name === client);
 
-                        // If the client doesn't exist, add them
                         if (!clientExists) {
                             addNewClient.mutateAsync({
                                 full_name: client || '',

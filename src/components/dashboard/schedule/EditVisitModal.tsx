@@ -17,7 +17,6 @@ interface EditVisitModalProps {
 }
 
 type Hours = Database["public"]["Tables"]["hours"]["Row"]
-type Clients = Database["public"]["Tables"]["clients"]["Row"]
 type Services = Database["public"]["Tables"]["services"]["Row"]
 
 export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: EditVisitModalProps) => {
@@ -27,7 +26,6 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
     const [client, setClient] = useState<string | null>(null);
     const [status, setStatus] = useState<string | null>('');
     const [note, setNote] = useState<string | null>(null);
-    const [existingClients, setExistingClients] = useState<string>("");
     const [availiableServices, setAvailiableServices] = useState<Services[]>([]);
     const supabase = createClientComponentClient<Database>();
     const { userId } = useUserContext();

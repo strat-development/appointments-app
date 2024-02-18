@@ -180,7 +180,6 @@ export const Schedule = () => {
                 onClose={closeModal}
                 startTime={newHours?.startTime}
                 endTime={newHours?.endTime}
-                hourId={eventId}
             />
             <EditVisitModal isOpen={isEditModalOpen}
                 onClose={closeModal}

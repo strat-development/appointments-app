@@ -6,7 +6,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import toast from "react-hot-toast";
 import { Database } from "@/types/supabase";
 
-interface NewVisitModalProps {
+interface NewPositionModalProps {
     isOpen: boolean;
     onClose: () => void;
     positionName: string;
@@ -15,7 +15,7 @@ interface NewVisitModalProps {
 
 type Positions = Database["public"]["Tables"]["positions"]["Row"]
 
-export const EditPositionModal = ({ isOpen, onClose, positionName, positionId }: NewVisitModalProps) => {
+export const EditPositionModal = ({ isOpen, onClose, positionName, positionId }: NewPositionModalProps) => {
     const supabase = createClientComponentClient<Database>();
     const queryClient = useQueryClient();
     const businessName = "Visio";

@@ -6,62 +6,59 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import toast from "react-hot-toast";
 import { Database } from "@/types/supabase";
 
-interface NewServiceModalProps {
+interface NewEmployeeModalProps {
     isOpen: boolean;
     onClose: () => void;
-    serviceName: string;
-    serviceId: number;
-    servicePrice: string;
-    serviceDuration: string;
+    employeeName: string;
+    employeeId: number;
+    employeePhoneNumber: string;
+    employeeEmail: string;
 }
 
-type Service = Database["public"]["Tables"]["services"]["Row"]
+type Employee = Database["public"]["Tables"]["subordinates"]["Row"]
 
-export const EditServiceModal = ({ isOpen, onClose, serviceName, serviceId, serviceDuration, servicePrice }: NewServiceModalProps) => {
+export const EditEmployeeModal = ({ isOpen, onClose, employeeName, employeeId, employeeEmail, employeePhoneNumber }: NewEmployeeModalProps) => {
     const supabase = createClientComponentClient<Database>();
     const queryClient = useQueryClient();
-    const [serviceNames, setServiceNames] = useState<string>(serviceName);
-    const [price, setPrice] = useState<string>(servicePrice);
-    const [duration, setDuration] = useState<string>(serviceDuration);
+    const [employeeNames, setEmployeeNames] = useState<string>(employeeName);
+    const [phoneNumbers, setPhoneNumbers] = useState<string>(employeePhoneNumber);
+    const [emails, setEmails] = useState<string>(employeeEmail);
 
     useEffect(() => {
-        setServiceNames(serviceName);
-        setPrice(servicePrice);
-        setDuration(serviceDuration);
+        setEmployeeNames(employeeName);
+    }, [employeeName]);
 
-    }, [serviceName, servicePrice, serviceDuration]);
-
-    const editPosition = useMutation(
-        async (newService: Service) => {
+    const editClient = useMutation(
+        async (newEmployee: Employee) => {
             await supabase
-                .from("services")
-                .update(newService)
-                .eq("id", serviceId);
+                .from("subordinates")
+                .update(newEmployee)
+                .eq("id", employeeId);
         },
         {
             onSuccess: () => {
-                queryClient.invalidateQueries(['services', serviceId]);
+                queryClient.invalidateQueries(['subordinates', employeeId]);
 
-                toast.success('Service added!')
+                toast.success('Visit added!')
             },
 
             onError: () => {
-                toast.error('Error adding the service!')
+                toast.error('Error adding the visit!')
             }
         }
     );
 
-    const deleteServiceMutation = useMutation(
+    const deleteEmployeeMutation = useMutation(
         async () => {
             await supabase
-                .from("services")
+                .from("subordinates")
                 .delete()
-                .eq("id", serviceId);
+                .eq("id", employeeId);
         },
         {
             onSuccess: () => {
-                queryClient.invalidateQueries(['services', serviceId]);
-                toast.success('Service deleted!')
+                queryClient.invalidateQueries(['subordinates', employeeId]);
+                toast.success('Employee deleted!')
             },
             onError: () => {
                 toast.error('Error deleting the position!')
@@ -74,52 +71,50 @@ export const EditServiceModal = ({ isOpen, onClose, serviceName, serviceId, serv
             <div className="flex flex-col gap-4">
 
                 <div>
-                    <label htmlFor="Service">Service</label>
+                    <label htmlFor="Employee">Employee</label>
                     <Input
-                        id="position"
-                        label="Service"
+                        id="Employee"
+                        label="Employee name"
                         type="text"
-                        placeholder="Service name"
+                        placeholder="Employee name"
                         onChange={(e) => {
-                            setServiceNames(e.target.value);
+                            setEmployeeNames(e.target.value);
                         }}
-                        value={serviceNames}
+                        value={employeeNames}
                     />
                     <Input
-                        id="price"
-                        label="Service price"
+                        id="phone number"
+                        label="Phone number"
                         type="text"
-                        placeholder="Set service price"
+                        placeholder="Employee phone number"
                         onChange={(e) => {
-                            setPrice(e.target.value);
+                            setPhoneNumbers(e.target.value);
                         }}
-                        value={price}
+                        value={phoneNumbers}
                     />
                     <Input
-                        id="duration"
-                        label="Duration"
+                        id="email"
+                        label="Email"
                         type="text"
-                        placeholder="Service duration"
+                        placeholder="Employee email..."
                         onChange={(e) => {
-                            setDuration(e.target.value);
+                            setEmails(e.target.value);
                         }}
-                        value={duration}
+                        value={emails}
                     />
                 </div>
                 <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-violet-600 to-violet-500 text-white w-full"
                     onClick={() => {
-                        editPosition.mutateAsync({
-                            title: serviceNames,
-                            price: price,
-                            duration: duration
-                        } as Service);
+                        editClient.mutateAsync({
+                            full_name: employeeNames,
+                        } as Employee);
                         handleClose();
                     }}>
                     Edit
                 </button>
                 <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-red-600 to-red-500 text-white w-full"
                     onClick={() => {
-                        deleteServiceMutation.mutate();
+                        deleteEmployeeMutation.mutate();
                         handleClose();
                     }}>
                     Delete
@@ -129,9 +124,7 @@ export const EditServiceModal = ({ isOpen, onClose, serviceName, serviceId, serv
     )
 
     const clearStates = () => {
-        setServiceNames('');
-        setPrice('');
-        setDuration('');
+        setEmployeeNames('');
     }
 
     const handleClose = () => {
