@@ -9,7 +9,6 @@ import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/types/supabase";
 import { useModal } from "@/hooks/useModal";
-import { useMutation } from 'react-query'
 
 
 export const AuthModal = () => {
@@ -17,7 +16,6 @@ export const AuthModal = () => {
     const router = useRouter()
     const { session } = useSessionContext();
     const { onClose, isOpen } = useModal();
-    const [email,setEmail] = useState("");
     const onChange = (open: boolean) => {
         if (!open) {
             onClose()
@@ -27,9 +25,8 @@ export const AuthModal = () => {
     useEffect(() => {
         if (session) {
             onClose();
-            const createProfil = 
-                async () => 
-                {
+            const createProfil =
+                async () => {
                     const { data, error, status, count } = await supabaseClient
                         .from("users")
                         .upsert(
@@ -38,13 +35,12 @@ export const AuthModal = () => {
                                 id: session.user.id ?? ''
                             },
                         )
-        };
-        createProfil();
-            // router.push()
+                };
+            createProfil();
         }
     }, [session, router, onClose])
 
-    return (    
+    return (
         <Modal
             title="Welcome back!"
             description="Login to your account"

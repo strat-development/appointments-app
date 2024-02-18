@@ -1,11 +1,12 @@
 import { Navbar } from "@/components/dashboard/Navbar";
+import { ServicesSection } from "@/components/dashboard/services/ServicesSection";
 
-export default function DashboardPage() {
+export default function ServicesPage() {
     return (
         <div className="flex gap-16 items-center">
             <Navbar />
-            <main>
-                <h1>Dashboard</h1>
+            <main className="p-8 w-full max-[480px]:p-0">
+                <ServicesSection />
             </main>
         </div>
     );

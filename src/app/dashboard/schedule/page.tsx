@@ -1,5 +1,5 @@
 import { Navbar } from "@/components/dashboard/Navbar";
-import { Schedule } from "@/components/dashboard/Schedule";
+import { Schedule } from "@/components/dashboard/schedule/Schedule";
 
 export default function SchedulePage() {
     return (

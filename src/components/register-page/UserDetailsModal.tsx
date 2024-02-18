@@ -19,11 +19,11 @@ export default function UserDetailsModal() {
     const router = useRouter();
     const { userRole, userId } = useUserContext();
 
-    useEffect(() => {
-        if (userRole) {
-            router.push("/dashboard/schedule");
-        }
-    }, [userRole, router])
+    // useEffect(() => {
+    //     if (userRole) {
+    //         router.push("/dashboard/schedule");
+    //     }
+    // }, [userRole, router])
 
     const updateProfile = useMutation(
         async ({

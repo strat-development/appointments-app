@@ -5,12 +5,11 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import timeGridPlugin from '@fullcalendar/timegrid'
-import { DateSelectArg, EventApi, EventClickArg } from "@fullcalendar/core"
+import { DateSelectArg, EventClickArg } from "@fullcalendar/core"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { useState } from "react"
-import Swal from "sweetalert2"
 import { Database } from "@/types/supabase"
-import { useMutation, useQuery, useQueryClient } from "react-query"
+import { useQuery, useQueryClient } from "react-query"
 import { Calendar } from "iconsax-react"
 import "@/styles/schedule.css"
 import { useUserContext } from "@/providers/userContextProvider"
@@ -181,6 +180,7 @@ export const Schedule = () => {
                 onClose={closeModal}
                 startTime={newHours?.startTime}
                 endTime={newHours?.endTime}
+                hourId={eventId}
             />
             <EditVisitModal isOpen={isEditModalOpen}
                 onClose={closeModal}

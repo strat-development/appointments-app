@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Input } from "../Input";
-import { Modal } from "../Modal";
-import { useMutation, useQueryClient } from "react-query";
+import { useEffect, useState } from "react";
+import { Input } from "../../Input";
+import { Modal } from "../../Modal";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/types/supabase";
 import { useUserContext } from "@/providers/userContextProvider";
@@ -28,7 +28,6 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
     const supabase = createClientComponentClient<Database>();
     const { userId } = useUserContext();
     const queryClient = useQueryClient();
-
 
     const addHoursMutation = useMutation(
         async (newHours: Hours) => {
@@ -79,6 +78,19 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
         }
     );
 
+    const clearStates = () => {
+        setEmail(null);
+        setPhoneNumber(null);
+        setService(null);
+        setClient(null);
+        setNote(null);
+    }
+
+    const handleClose = () => {
+        clearStates();
+        onClose();
+    }
+
     const bodyContent = (
         <>
             <div className="flex flex-col gap-4">
@@ -96,6 +108,7 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     value={phoneNumber || ''}
                 />
+
                 <Input
                     id="Service"
                     label="Service"
@@ -150,13 +163,7 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
 
                         } as Hours)
 
-                        onClose();
-                        setEmail(null);
-                        setPhoneNumber(null);
-                        setService(null);
-                        setClient(null);
-                        setNote(null);
-                        setStatus(null);
+                        handleClose();
                     }
                     }>
                     Edit appointment
@@ -164,7 +171,7 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
                 <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-red-600 to-red-500 text-white w-full"
                     onClick={() => {
                         deleteHoursMutation.mutateAsync(hourId);
-                        onClose();
+                        handleClose();
                     }
                     }>
                     Delete appointment
@@ -175,7 +182,7 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
 
     return (
         <Modal isOpen={isOpen}
-            onClose={onClose}
+            onClose={handleClose}
             title='Edit appointment'
             body={bodyContent}
         />

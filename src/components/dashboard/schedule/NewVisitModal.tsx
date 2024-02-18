@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Input } from "../Input";
-import { Modal } from "../Modal";
+import { Input } from "../../Input";
+import { Modal } from "../../Modal";
 import { useMutation, useQueryClient } from "react-query";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/types/supabase";
@@ -12,18 +12,18 @@ interface NewVisitModalProps {
     onClose: () => void;
     startTime: string | null | undefined;
     endTime: string | null | undefined;
+    hourId: string;
 }
 
 type Hours = Database["public"]["Tables"]["hours"]["Row"]
+type Clients = Database["public"]["Tables"]["clients"]["Row"]
 
-export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitModalProps) => {
+export const NewVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: NewVisitModalProps) => {
     const [email, setEmail] = useState<string | null>(null);
     const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
     const [service, setService] = useState<string | null>(null);
     const [client, setClient] = useState<string | null>(null);
     const [note, setNote] = useState<string | null>(null);
-    // const [selectedStartTime, setSelectedStartTime] = useState<string | null | undefined>(null);
-    // const [selectedEndTime, setSelectedEndTime] = useState<string | null | undefined>(null);
     const supabase = createClientComponentClient<Database>();
     const { userId } = useUserContext();
     const queryClient = useQueryClient();
@@ -49,27 +49,70 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
         }
     );
 
+    const addNewClient = useMutation(
+        async (newClient: Clients) => {
+            await supabase
+                .from("clients")
+                .upsert(
+                    newClient
+                )
+        },
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(['clients', userId]);
+            },
+        }
+    );
+
+    const clearStates = () => {
+        setEmail(null);
+        setPhoneNumber(null);
+        setService(null);
+        setClient(null);
+        setNote(null);
+    }
+
+    const handleClose = () => {
+        clearStates();
+        onClose();
+    }
+
     const bodyContent = (
         <>
             <div className="flex flex-col gap-4">
+                <label htmlFor="Client">Client</label>
                 <Input
                     id="client"
                     label="Client"
                     type="text"
+                    placeholder="Client name"
                     onChange={(e) => setClient(e.target.value)}
                     value={client || ''}
                 />
+                <label htmlFor="Phone number">Phone number</label>
                 <Input
                     id="Phone number"
                     label="Phone number"
-                    type="text"
+                    type="tel"
+                    placeholder="Phone number"
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     value={phoneNumber || ''}
                 />
+                <label htmlFor="Email">Email</label>
+                <Input
+                    id="Email"
+                    label="Email"
+                    type="email"
+                    placeholder="Email"
+                    onChange={(e) => setEmail(e.target.value)}
+                    value={email || ''}
+                />
+                <label htmlFor="Service">Service</label>
                 <Input
                     id="Service"
                     label="Service"
                     type="text"
+                    placeholder="Service"
                     onChange={(e) => setService(e.target.value)}
                     value={service || ''}
                 />
@@ -80,12 +123,14 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
                             id="Start time"
                             label=""
                             type="text"
+                            placeholder="Start time"
                             // onChange={(e) => setSelectedStartTime(e.target.value)}
                             value={startTime || ''}
                         /> - <Input
                             id="Sevice"
                             label=""
                             type="text"
+                            placeholder="End time"
                             // onChange={(e) => setSelectedEndTime(e.target.value)}
                             value={endTime || ''}
                         />
@@ -112,15 +157,20 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
                             description: note || '',
                             label: '',
                             status: 'Active'
+                        } as Hours);
 
-                        } as Hours)
+                        addNewClient.mutateAsync({
+                            full_name: client || '',
+                            phone_number: phoneNumber || '',
+                            email: email || '',
+                            employee_id: userId,
+                            description: note || '',
+                            label: "",
+                            hour_id: hourId,
+                            service: service
+                        } as Clients);
 
-                        onClose();
-                        setEmail(null);
-                        setPhoneNumber(null);
-                        setService(null);
-                        setClient(null);
-                        setNote(null);
+                        handleClose();
                     }
                     }>
                     Add appointment
@@ -131,7 +181,7 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
 
     return (
         <Modal isOpen={isOpen}
-            onClose={onClose}
+            onClose={handleClose}
             title='New appointment'
             body={bodyContent}
         />
