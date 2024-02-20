@@ -5,9 +5,10 @@ import { Database } from "@/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation"
-import { Calendar, Card, ChemicalGlass, Coin1, LogoutCurve, Note, People, Profile2User, Settings, Shop, StatusUp, Task, UserAdd } from 'iconsax-react';
-import { useEffect } from "react";
+import { Calendar, Card, ChemicalGlass, Coin1, LogoutCurve, People, Profile2User, Shop, StatusUp} from 'iconsax-react';
 import { useUserContext } from "@/providers/userContextProvider";
+import { UserDataModal } from "./UserDataModal";
+import { useState } from "react";
 
 export const Navbar = () => {
     const router = useRouter();
@@ -16,6 +17,10 @@ export const Navbar = () => {
     const linkStyle = "p-2 transition rounded-full hover:text-white hover:bg-gradient-to-b hover:from-violet-600 hover:to-violet-500 text-[#404040] flex gap-4"
     const activeStyle = "p-2 transition rounded-full text-white bg-gradient-to-b from-violet-600 to-violet-500 flex gap-4"
     const currentRoute = usePathname();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
     const workerLinks = [
         {
             name: "Schedule",
@@ -60,12 +65,6 @@ export const Navbar = () => {
             icon: <Card size="24" />
         }
     ]
-
-    // useEffect(() => {
-    //     if (!userRole) {
-    //         router.push("/");
-    //     }
-    // }, [userRole, router])
 
     return (
         <>
@@ -130,6 +129,11 @@ export const Navbar = () => {
                     </div>
                 </div>
             </div>
+
+            {!userName && (
+                <UserDataModal isOpen={isModalOpen} 
+                onClose={() => closeModal}  />
+            )}
         </>
     )
 }

@@ -15,7 +15,6 @@ export default function UserDetailsModal() {
     const [fullname, setFullname] = useState<string | null>(null)
     const [email, setEmail] = useState<string | null>(null)
     const [role, setRole] = useState<string | null>(null)
-    const [companyAddres, setAddres] = useState<string | null>(null)
     const router = useRouter();
     const { userRole, userId } = useUserContext();
 
@@ -73,8 +72,7 @@ export default function UserDetailsModal() {
                 .update({
                     email: email ?? '',
                     full_name: fullname ?? '',
-                    role: role ?? '',
-                    id: id ?? ''
+                    role: role ?? ''
                 })
                 .eq('email', email ?? '')
         },

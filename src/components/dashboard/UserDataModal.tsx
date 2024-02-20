@@ -7,21 +7,20 @@ import toast from "react-hot-toast";
 import { Database } from "@/types/supabase";
 import { useUserContext } from "@/providers/userContextProvider";
 
-interface NewPositionModalProps {
+interface UserDataModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
 type UserData = Database["public"]["Tables"]["users"]["Row"]
 
-export const AddPositionModal = ({ isOpen, onClose }: NewPositionModalProps) => {
+export const UserDataModal = ({ onClose, isOpen }: UserDataModalProps) => {
     const supabase = createClientComponentClient<Database>();
-    const [userName,setUserName]= useState<string>("");
-    const [userEmail,setUserEmail]= useState<string>("");
-    const [userPhoneNumber,setUserPhoneNumber]= useState<string>("");
+    const [userName, setUserName] = useState<string>("");
+    const [userEmail, setUserEmail] = useState<string>("");
+    const [userPhoneNumber, setUserPhoneNumber] = useState<string>("");
     const queryClient = useQueryClient();
-    const businessName = "Visio";
-    const {userId}= useUserContext();
+    const { userId } = useUserContext();
 
     const addUserData = useMutation(
         async (newUserData: UserData[]) => {
@@ -47,47 +46,52 @@ export const AddPositionModal = ({ isOpen, onClose }: NewPositionModalProps) => 
         <>
             <div className="flex flex-col gap-4">
 
-                    <div key={}>
-                        <label htmlFor="user name">gówno!</label>
-                        <Input
-                            id="user name"
-                            label="user name"
-                            type="text"
-                            placeholder="user name"
-                            onChange={(e) => {
-                                setUserName(userName),
-                            
-                            }}
-                            value={userName}
-                        />
-                    </div>
-
-                <button onClick={}>
-                    Add more
-                </button>
+                <div>
+                    <label htmlFor="user name">Full name</label>
+                    <Input
+                        id="user name"
+                        label="user name"
+                        type="text"
+                        placeholder="Your name..."
+                        onChange={(e) => setUserName(e.target.value)}
+                        value={userName || ''}
+                    />
+                    <label htmlFor="email">Email</label>
+                    <Input
+                        id="email"
+                        label="email"
+                        type="text"
+                        placeholder="Your email..."
+                        onChange={(e) => setUserEmail(e.target.value)}
+                        value={userEmail || ''}
+                    />
+                    <label htmlFor="phone number">Phone number</label>
+                    <Input
+                        id="phone number"
+                        label="phone number"
+                        type="text"
+                        placeholder="Your phone number..."
+                        onChange={(e) => setUserPhoneNumber(e.target.value)}
+                        value={userPhoneNumber || ''}
+                    />
+                </div>
                 <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-violet-600 to-violet-500 text-white w-full"
-                    onClick={()=>{
-                        addUserData.mutateAsync({
-                            full_name: userName ,
-                        } as UserData;) 
-
-                    }}>
-                    Add positions
+                    onClick={() => {
+                        addUserData.mutateAsync([{
+                            full_name: userName,
+                        }] as UserData[]);
+                    }}
+                >
+                    Save
                 </button>
             </div>
         </>
     )
 
-
-    const handleClose = () => {
-
-        onClose();
-    }
-
     return (
         <Modal isOpen={isOpen}
-            onClose={handleClose}
-            title='New position'
+            onClose={onClose}
+            title=''
             body={bodyContent}
         />
     );

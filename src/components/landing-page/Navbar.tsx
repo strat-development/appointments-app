@@ -10,13 +10,6 @@ import Link from "next/link";
 export const Navbar = () => {
     const authModal = useModal();
     const { userRole } = useUserContext();
-    const router = useRouter();
-
-    // useEffect(() => {
-    // if (userRole) {
-    // router.push("/dashboard/schedule");
-    //     }
-    // }, [userRole, router])
 
     return (
         <header className="fixed border-b bg-violet-50 w-full z-[22222222222] backdrop-blur-xl max-lg:px-8 max-[1200px]:px-8 max-[480px]:px-4">

@@ -28,7 +28,7 @@ export const EditEmployeeModal = ({ isOpen, onClose, employeeName, employeeId, e
         setEmployeeNames(employeeName);
     }, [employeeName]);
 
-    const editClient = useMutation(
+    const editEmployee = useMutation(
         async (newEmployee: Employee) => {
             await supabase
                 .from("subordinates")
@@ -105,7 +105,7 @@ export const EditEmployeeModal = ({ isOpen, onClose, employeeName, employeeId, e
                 </div>
                 <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-violet-600 to-violet-500 text-white w-full"
                     onClick={() => {
-                        editClient.mutateAsync({
+                        editEmployee.mutateAsync({
                             full_name: employeeNames,
                         } as Employee);
                         handleClose();
