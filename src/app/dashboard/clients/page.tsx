@@ -1,5 +1,5 @@
 import { Navbar } from "@/components/dashboard/Navbar";
-import { ClientsSection } from "@/components/dashboard/clients/ClientsSection";
+import { ClientsSection } from "@/features/dashboard/clients/ClientsSection";
 
 export default function ClientsPage() {
     return (

@@ -1,4 +1,5 @@
 import { Navbar } from "@/components/dashboard/Navbar";
+import { UploadImagesButton } from "@/features/dashboard/business-page/UploadImagesButton";
 
 
 export default function PageConstructorPage() {
@@ -6,7 +7,7 @@ export default function PageConstructorPage() {
         <div className="flex gap-16 items-center">
             <Navbar />
             <main>
-                <h1>Page Constructor</h1>
+                <UploadImagesButton />
             </main>
         </div>
     );

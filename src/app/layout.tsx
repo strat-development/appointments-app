@@ -6,7 +6,7 @@ import { ToasterProvider } from "@/providers/toasterProvider";
 import { SupabaseProvider } from "@/providers/supabaseProvider";
 import UserContextProvider from "@/providers/userContextProvider";
 import { ModalProvider } from "@/providers/modalProvider";
-import { AuthModal } from "@/components/auth-modal/AuthModal";
+import { AuthModal } from "@/features/auth-modal/AuthModal";
 import { QueryClient, QueryClientProvider } from 'react-query'
 import BusinessContextProvider, { BusinessContext } from "@/providers/businessContextProvider";
 

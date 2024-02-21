@@ -1,43 +1,43 @@
 import { useEffect, useState } from "react";
-import { Input } from "../../Input";
-import { Modal } from "../../Modal";
+import { Input } from "../../../components/Input";
+import { Modal } from "../../../components/Modal";
 import { useMutation, useQueryClient } from "react-query";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import toast from "react-hot-toast";
 import { Database } from "@/types/supabase";
 
-interface NewEmployeeModalProps {
+interface NewClientModalProps {
     isOpen: boolean;
     onClose: () => void;
-    employeeName: string;
-    employeeId: number;
-    employeePhoneNumber: string;
-    employeeEmail: string;
+    clientName: string;
+    clientId: number;
 }
 
-type Employee = Database["public"]["Tables"]["subordinates"]["Row"]
+type Clients = Database["public"]["Tables"]["clients"]["Row"]
 
-export const EditEmployeeModal = ({ isOpen, onClose, employeeName, employeeId, employeeEmail, employeePhoneNumber }: NewEmployeeModalProps) => {
+export const EditClientModal = ({ isOpen, onClose, clientName, clientId }: NewClientModalProps) => {
     const supabase = createClientComponentClient<Database>();
     const queryClient = useQueryClient();
-    const [employeeNames, setEmployeeNames] = useState<string>(employeeName);
-    const [phoneNumbers, setPhoneNumbers] = useState<string>(employeePhoneNumber);
-    const [emails, setEmails] = useState<string>(employeeEmail);
+    const [clientNames, setclientNames] = useState<string>(clientName);
+    const [phoneNumbers, setPhoneNumbers] = useState<string>('');
+    const [emails, setEmails] = useState<string>('');
+    const [notes, setNotes] = useState<string>('');
 
     useEffect(() => {
-        setEmployeeNames(employeeName);
-    }, [employeeName]);
+        setclientNames(clientName);
 
-    const editEmployee = useMutation(
-        async (newEmployee: Employee) => {
+    }, [clientName]);
+
+    const editClient = useMutation(
+        async (newClient: Clients) => {
             await supabase
-                .from("subordinates")
-                .update(newEmployee)
-                .eq("id", employeeId);
+                .from("clients")
+                .update(newClient)
+                .eq("id", clientId);
         },
         {
             onSuccess: () => {
-                queryClient.invalidateQueries(['subordinates', employeeId]);
+                queryClient.invalidateQueries(['clients', clientId]);
 
                 toast.success('Visit added!')
             },
@@ -48,17 +48,17 @@ export const EditEmployeeModal = ({ isOpen, onClose, employeeName, employeeId, e
         }
     );
 
-    const deleteEmployeeMutation = useMutation(
+    const deleteclientMutation = useMutation(
         async () => {
             await supabase
-                .from("subordinates")
+                .from("clients")
                 .delete()
-                .eq("id", employeeId);
+                .eq("id", clientId);
         },
         {
             onSuccess: () => {
-                queryClient.invalidateQueries(['subordinates', employeeId]);
-                toast.success('Employee deleted!')
+                queryClient.invalidateQueries(['clients', clientId]);
+                toast.success('client deleted!')
             },
             onError: () => {
                 toast.error('Error deleting the position!')
@@ -71,32 +71,32 @@ export const EditEmployeeModal = ({ isOpen, onClose, employeeName, employeeId, e
             <div className="flex flex-col gap-4">
 
                 <div>
-                    <label htmlFor="Employee">Employee</label>
+                    <label htmlFor="client">client</label>
                     <Input
-                        id="Employee"
-                        label="Employee name"
+                        id="Client"
+                        label="Client name"
                         type="text"
-                        placeholder="Employee name"
+                        placeholder="client name"
                         onChange={(e) => {
-                            setEmployeeNames(e.target.value);
+                            setclientNames(e.target.value);
                         }}
-                        value={employeeNames}
+                        value={clientNames}
                     />
                     <Input
                         id="phone number"
                         label="Phone number"
                         type="text"
-                        placeholder="Employee phone number"
+                        placeholder="Client phone number"
                         onChange={(e) => {
                             setPhoneNumbers(e.target.value);
                         }}
                         value={phoneNumbers}
                     />
                     <Input
-                        id="email"
-                        label="Email"
+                        id="phone number"
+                        label="Phone number"
                         type="text"
-                        placeholder="Employee email..."
+                        placeholder="Client phone number"
                         onChange={(e) => {
                             setEmails(e.target.value);
                         }}
@@ -105,16 +105,18 @@ export const EditEmployeeModal = ({ isOpen, onClose, employeeName, employeeId, e
                 </div>
                 <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-violet-600 to-violet-500 text-white w-full"
                     onClick={() => {
-                        editEmployee.mutateAsync({
-                            full_name: employeeNames,
-                        } as Employee);
+                        editClient.mutateAsync({
+                            full_name: clientNames,
+                            phone_number: phoneNumbers,
+                            email: emails
+                        } as Clients);
                         handleClose();
                     }}>
                     Edit
                 </button>
                 <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-red-600 to-red-500 text-white w-full"
                     onClick={() => {
-                        deleteEmployeeMutation.mutate();
+                        deleteclientMutation.mutate();
                         handleClose();
                     }}>
                     Delete
@@ -124,7 +126,7 @@ export const EditEmployeeModal = ({ isOpen, onClose, employeeName, employeeId, e
     )
 
     const clearStates = () => {
-        setEmployeeNames('');
+        setclientNames('');
     }
 
     const handleClose = () => {

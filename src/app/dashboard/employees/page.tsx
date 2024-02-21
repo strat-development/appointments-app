@@ -1,5 +1,5 @@
 import { Navbar } from "@/components/dashboard/Navbar"
-import { EmployeesSection } from "@/components/dashboard/employee/EmployeesSection";
+import { EmployeesSection } from "@/features/dashboard/employee/EmployeesSection";
 
 export default function EmployeesPage() {
     return (

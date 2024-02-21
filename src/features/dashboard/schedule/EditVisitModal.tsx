@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Input } from "../../Input";
-import { Modal } from "../../Modal";
+import { Input } from "../../../components/Input";
+import { Modal } from "../../../components/Modal";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/types/supabase";

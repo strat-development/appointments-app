@@ -1,5 +1,5 @@
 import { Navbar } from "@/components/dashboard/Navbar";
-import { ServicesSection } from "@/components/dashboard/services/ServicesSection";
+import { ServicesSection } from "@/features/dashboard/services/ServicesSection";
 
 export default function ServicesPage() {
     return (

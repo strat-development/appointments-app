@@ -4,7 +4,7 @@ import { useModal } from "@/hooks/useModal";
 import { useUserContext } from "@/providers/userContextProvider";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { AuthModal } from "../auth-modal/AuthModal";
+import { AuthModal } from "../../features/auth-modal/AuthModal";
 import Link from "next/link";
 
 export const Navbar = () => {

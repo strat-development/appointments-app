@@ -7,8 +7,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation"
 import { Calendar, Card, ChemicalGlass, Coin1, LogoutCurve, People, Profile2User, Shop, StatusUp} from 'iconsax-react';
 import { useUserContext } from "@/providers/userContextProvider";
-import { UserDataModal } from "./UserDataModal";
 import { useState } from "react";
+import { UserDataModal } from "./UserDataModal";
 
 export const Navbar = () => {
     const router = useRouter();

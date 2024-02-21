@@ -1,6 +1,7 @@
 'use client'
+
 import { Navbar } from "@/components/dashboard/Navbar";
-import { Schedule } from "@/components/dashboard/schedule/Schedule";
+import { Schedule } from "@/features/dashboard/schedule/Schedule";
 
 export default function SchedulePage() {
     return (

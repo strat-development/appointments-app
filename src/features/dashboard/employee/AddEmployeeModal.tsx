@@ -1,43 +1,44 @@
 import { useState } from "react";
-import { Input } from "../../Input";
-import { Modal } from "../../Modal";
+import { Input } from "../../../components/Input";
+import { Modal } from "../../../components/Modal";
 import { useMutation, useQueryClient } from "react-query";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import toast from "react-hot-toast";
 import { Database } from "@/types/supabase";
+import { useUserContext } from "@/providers/userContextProvider";
 
 interface NewClientModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
-type Clients = Database["public"]["Tables"]["clients"]["Row"]
+type Employee = Database["public"]["Tables"]["subordinates"]["Row"]
 
-export const AddClientModal = ({ isOpen, onClose }: NewClientModalProps) => {
+export const AddEmployeeModal = ({ isOpen, onClose }: NewClientModalProps) => {
     const supabase = createClientComponentClient<Database>();
     const queryClient = useQueryClient();
-    const [clientNames, setClientNames] = useState<string[]>(['']);
+    const [employeeNames, setEmployeeNames] = useState<string[]>(['']);
     const [emails, setEmails] = useState<string[]>(['']);
-    const [notes, setNotes] = useState<string[]>(['']);
     const [phoneNumbers, setPhoneNumbers] = useState<string[]>(['']);
+    const { userId } = useUserContext();
     const businessName = "Visio";
 
-    const addNewClient = useMutation(
-        async (newClient: Clients[]) => {
+    const addNewEmployee = useMutation(
+        async (newEmployee: Employee[]) => {
             await supabase
-                .from("clients")
-                .upsert(newClient)
-                .eq("business_name", businessName);
+                .from("subordinates")
+                .upsert(newEmployee)
+                .eq("employer_id", userId);
         },
         {
             onSuccess: () => {
-                queryClient.invalidateQueries(['clients', businessName]);
+                queryClient.invalidateQueries(['subordinates', userId]);
 
-                toast.success('Client added!')
+                toast.success('Employee added!')
             },
 
             onError: () => {
-                toast.error('Error adding the client!')
+                toast.error('Error adding the employee!')
             }
         }
     );
@@ -45,20 +46,20 @@ export const AddClientModal = ({ isOpen, onClose }: NewClientModalProps) => {
     const bodyContent = (
         <>
             <div className="flex flex-col gap-4">
-                {clientNames.map((client, index) => (
+                {employeeNames.map((employeeName, index) => (
                     <div key={index}>
                         <label htmlFor={`Service ${index + 1}`}>Service {index + 1}</label>
                         <Input
-                            id={`client ${index + 1}`}
-                            label={`Client ${index + 1}`}
+                            id={`employee ${index + 1}`}
+                            label={`Employee ${index + 1}`}
                             type="text"
-                            placeholder="Client's name..."
+                            placeholder="Employee's name..."
                             onChange={(e) => {
-                                const newClients = [...clientNames];
-                                newClients[index] = e.target.value;
-                                setClientNames(newClients);
+                                const employee = [...employeeNames];
+                                employee[index] = e.target.value;
+                                setEmployeeNames(employee);
                             }}
-                            value={client}
+                            value={employeeName}
                         />
                         <Input
                             id={`email ${index + 1}`}
@@ -82,41 +83,30 @@ export const AddClientModal = ({ isOpen, onClose }: NewClientModalProps) => {
                                 newPhoneNumber[index] = e.target.value;
                                 setPhoneNumbers(newPhoneNumber);
                             }}
-                            value={emails[index] || ''}
-                        />
-                        <textarea className="w-full rounded-2xl border-[.5px] outline-none"
-                            id={`note ${index + 1}`}
-                            placeholder="Add a note..."
-                            onChange={(e) => {
-                                const newNotes = [...notes];
-                                newNotes[index] = e.target.value;
-                                setNotes(newNotes);
-                            }}
-                            value={notes[index] || ''}
+                            value={phoneNumbers[index] || ''}
                         />
                     </div>
                 ))}
                 <button onClick={() => {
-                    setClientNames([...clientNames, '']);
+                    setEmployeeNames([...employeeNames, '']);
                     setEmails([...emails, '']);
-                    setNotes([...notes, '']);
                 }}>
                     Add more
                 </button>
                 <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-violet-600 to-violet-500 text-white w-full"
                     onClick={() => {
-                        addNewClient.mutateAsync(
-                            clientNames.map((client, index) => ({
-                                full_name: client,
+                        addNewEmployee.mutateAsync(
+                            employeeNames.map((employee, index) => ({
+                                full_name: employee,
                                 email: emails[index],
-                                description: notes[index],
                                 business_name: businessName,
-                                phone_number: phoneNumbers[index]
-                            } as Clients))
+                                phone_number: phoneNumbers[index],
+                                employer_id: userId
+                            } as Employee))
                         );
                         onClose();
                     }}>
-                    Add client
+                    Add employee
                 </button>
             </div>
         </>
@@ -125,7 +115,7 @@ export const AddClientModal = ({ isOpen, onClose }: NewClientModalProps) => {
     return (
         <Modal isOpen={isOpen}
             onClose={onClose}
-            title='New client'
+            title='New employee'
             body={bodyContent}
         />
     );

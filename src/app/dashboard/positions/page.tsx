@@ -1,5 +1,5 @@
 import { Navbar } from "@/components/dashboard/Navbar";
-import { PositionsSection } from "@/components/dashboard/positions/PositionsSection";
+import { PositionsSection } from "@/features/dashboard/positions/PositionsSection";
 
 export default function PositionsPage() {
     return (
