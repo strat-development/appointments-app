@@ -13,13 +13,15 @@ export const UploadImagesButton = () => {
     const businessName = "Visio"
     const [files, setFiles] = useState<File[]>([]);
     const queryClient = useQueryClient();
+
+    
     const uploadFiles = async (files: File[]) => {
         const uploadPromises = files.map((file) => {
-            const path = `business-page-photos/${file.name}+${Math.random()}`;
-            return supabaseAdmin.storage.from('business-page-photos').upload(path, file);
+            const path = `${businessName}${Math.random()}.${file.name.split('.').pop()}`;
+            return { promise: supabaseAdmin.storage.from('business-page-photos').upload(path, file), path };
         });
 
-        const responses = await Promise.all(uploadPromises);
+        const responses = await Promise.all(uploadPromises.map(({ promise }) => promise));
 
         responses.forEach((response, index) => {
             if (response.error) {
@@ -28,19 +30,18 @@ export const UploadImagesButton = () => {
                 console.log(`File ${files[index].name} uploaded successfully`);
             }
         });
+
+        return uploadPromises.map(({ path }) => path);
     }
 
     const businessImagesMutation = useMutation(
-        async (files: File[]) => {
-            const results = await Promise.all(files.map(async (file) => {
-                const fileExt = file.name.split('.').pop();
-                const filePath = `${businessName}/${Math.random()}.${fileExt}`;
-
+        async (paths: string[]) => {
+            const results = await Promise.all(paths.map(async (path) => {
                 const { data, error } = await supabase
                     .from('business-images')
                     .upsert({
                         business_name: businessName,
-                        image_url: filePath
+                        image_url: path
                     });
                 if (error) {
                     throw error;
@@ -85,13 +86,14 @@ export const UploadImagesButton = () => {
             <button onClick={() => {
                 if (files.length > 0) {
                     uploadFiles(files)
-                        .then(() => console.log('All files uploaded'))
+                        .then((paths) => {
+                            console.log('All files uploaded');
+                            return businessImagesMutation.mutateAsync(paths);
+                        })
                         .catch((error) => console.error('Error uploading files:', error));
                 } else {
                     toast.error('Please upload a file')
                 }
-
-                businessImagesMutation.mutateAsync(files)
             }}>
                 Send
             </button >
