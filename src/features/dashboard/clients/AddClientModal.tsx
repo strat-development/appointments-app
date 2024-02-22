@@ -47,7 +47,7 @@ export const AddClientModal = ({ isOpen, onClose }: NewClientModalProps) => {
             <div className="flex flex-col gap-4">
                 {clientNames.map((client, index) => (
                     <div key={index}>
-                        <label htmlFor={`Service ${index + 1}`}>Service {index + 1}</label>
+                        <label htmlFor={`Client ${index + 1}`}>Client {index + 1}</label>
                         <Input
                             id={`client ${index + 1}`}
                             label={`Client ${index + 1}`}

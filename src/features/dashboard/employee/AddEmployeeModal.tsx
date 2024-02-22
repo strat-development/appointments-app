@@ -48,7 +48,7 @@ export const AddEmployeeModal = ({ isOpen, onClose }: NewClientModalProps) => {
             <div className="flex flex-col gap-4">
                 {employeeNames.map((employeeName, index) => (
                     <div key={index}>
-                        <label htmlFor={`Service ${index + 1}`}>Service {index + 1}</label>
+                        <label htmlFor={`Employee ${index + 1}`}>Employee {index + 1}</label>
                         <Input
                             id={`employee ${index + 1}`}
                             label={`Employee ${index + 1}`}

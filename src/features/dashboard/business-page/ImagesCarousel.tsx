@@ -5,6 +5,8 @@ import { useQuery } from "react-query";
 import { UploadImagesButton } from "./UploadImagesButton";
 import { useEffect, useState } from "react";
 import { supabaseAdmin } from "@/libs/admin";
+import "swiper/css";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 type Images = Database['public']['Tables']['business-images']['Row'];
 
@@ -46,16 +48,16 @@ export const ImagesCarousel = () => {
     console.log(imageUrls);
 
     return (
-        <div>
-                {imageUrls.map((url, index) => (
-                    <Image
-                        key={index}
-                        src={url.publicUrl}
-                        alt={`business image ${index}`}
-                        width={500}
-                        height={500}
-                    />
+        <div className="w-[1200px]">
+            <Swiper className='h-[500px]'
+                spaceBetween={0}
+                slidesPerView={1}>
+                {imageUrls.map((image, index) => (
+                    <SwiperSlide key={index}>
+                        <Image src={image.publicUrl} alt="Business image" fill={true} />
+                    </SwiperSlide>
                 ))}
+            </Swiper>
             <UploadImagesButton />
         </div>
     );

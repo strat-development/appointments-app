@@ -1,7 +1,6 @@
 "use client"
 
 import { Inter } from "next/font/google";
-import "./globals.css";
 import { ToasterProvider } from "@/providers/toasterProvider";
 import { SupabaseProvider } from "@/providers/supabaseProvider";
 import UserContextProvider from "@/providers/userContextProvider";
@@ -9,6 +8,7 @@ import { ModalProvider } from "@/providers/modalProvider";
 import { AuthModal } from "@/features/auth-modal/AuthModal";
 import { QueryClient, QueryClientProvider } from 'react-query'
 import BusinessContextProvider, { BusinessContext } from "@/providers/businessContextProvider";
+import "./globals.css";
 
 
 const inter = Inter({ subsets: ["latin"] });
