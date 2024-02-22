@@ -33,19 +33,17 @@ export const UserDataModal = ({ onClose, isOpen }: UserDataModalProps) => {
             onSuccess: () => {
                 queryClient.invalidateQueries(['users']);
 
-                toast.success('Visit added!')
+                toast.success('Data added!')
             },
 
             onError: () => {
-                toast.error('Error adding the visit!')
+                toast.error('Error adding the data!')
             }
         }
     );
-
     const bodyContent = (
         <>
             <div className="flex flex-col gap-4">
-
                 <div>
                     <label htmlFor="user name">Full name</label>
                     <Input
@@ -79,6 +77,9 @@ export const UserDataModal = ({ onClose, isOpen }: UserDataModalProps) => {
                     onClick={() => {
                         addUserData.mutateAsync([{
                             full_name: userName,
+                            email: userEmail,
+                            phone_number: userPhoneNumber,
+                            id: userId
                         }] as UserData[]);
                     }}
                 >

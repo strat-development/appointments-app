@@ -7,7 +7,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation"
 import { Calendar, Card, ChemicalGlass, Coin1, LogoutCurve, People, Profile2User, Shop, StatusUp} from 'iconsax-react';
 import { useUserContext } from "@/providers/userContextProvider";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UserDataModal } from "./UserDataModal";
 
 export const Navbar = () => {
@@ -21,7 +21,15 @@ export const Navbar = () => {
     const closeModal = () => {
         setIsModalOpen(false);
     };
-    const workerLinks = [
+    
+    useEffect(()=>{
+        if(userName.length==0){
+            setIsModalOpen(true);
+        }
+    })
+
+
+    const ClientsLinks = [
         {
             name: "Schedule",
             link: "/dashboard/schedule",
@@ -37,6 +45,11 @@ export const Navbar = () => {
             link: "/dashboard/clients",
             icon: <Profile2User size="24" />
         },
+        {
+            name: "Subscription",
+            link: "/dashboard/subscription",
+            icon: <Card size="24" />
+        }
     ]
     const Links = [
         {
@@ -59,13 +72,8 @@ export const Navbar = () => {
             link: "/dashboard/positions",
             icon: <ChemicalGlass size="24" />
         },
-        {
-            name: "Subscription",
-            link: "/dashboard/subscription",
-            icon: <Card size="24" />
-        }
     ]
-
+console.log(isModalOpen);
     return (
         <>
             <div className="bg-white h-screen z-[99] flex flex-col justify-center border-r-[1px] max-[1024px]:h-fit max-[1024px]:fixed max-[1024px]:bottom-0 max-[1024px]:w-full">
@@ -83,7 +91,7 @@ export const Navbar = () => {
                             </div>
                         </div>
                         <div className="flex flex-col gap-4 max-[1024px]:flex-row max-[1024px]:w-full max-[1024px]:justify-between max-[1024px]:gap-0">
-                            {workerLinks.map((link, index) => (
+                            {ClientsLinks.map((link, index) => (
                                 <Link className={currentRoute === link.link ? activeStyle : linkStyle}
                                     href={link.link} key={index}>
                                     {link.icon}
@@ -130,7 +138,7 @@ export const Navbar = () => {
                 </div>
             </div>
 
-            {!userName && (
+            {(userName.length == 0) && (
                 <UserDataModal isOpen={isModalOpen} 
                 onClose={() => closeModal}  />
             )}
