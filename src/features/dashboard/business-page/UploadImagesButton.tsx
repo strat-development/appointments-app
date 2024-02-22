@@ -87,7 +87,6 @@ export const UploadImagesButton = () => {
                 if (files.length > 0) {
                     uploadFiles(files)
                         .then((paths) => {
-                            console.log('All files uploaded');
                             return businessImagesMutation.mutateAsync(paths);
                         })
                         .catch((error) => console.error('Error uploading files:', error));

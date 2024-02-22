@@ -1,14 +1,13 @@
 "use client"
 
 import { Navbar } from "@/components/dashboard/Navbar";
-import { ImagesCarousel } from "@/features/dashboard/business-page/ImagesCarousel";
-
+import { BusinessPageSection } from "@/features/dashboard/business-page/BusinessPageSection";
 export default function PageConstructorPage() {
     return (
         <div className="flex gap-16 items-center">
             <Navbar />
-            <main>
-                <ImagesCarousel />
+            <main className="w-full max-[480px]:p-0">
+                <BusinessPageSection />
             </main>
         </div>
     );

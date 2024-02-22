@@ -1,6 +1,5 @@
 "use client"
 
-
 import { Database } from "@/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
@@ -36,6 +35,14 @@ export const Navbar = () => {
             icon: <Calendar size="24" />
         },
         {
+            name: "Subscription",
+            link: "/dashboard/subscription",
+            icon: <Card size="24" />
+        }
+    ]
+
+    const Links = [
+        {
             name: "Statistics",
             link: "/dashboard/statistics",
             icon: <StatusUp size="24" />
@@ -45,13 +52,6 @@ export const Navbar = () => {
             link: "/dashboard/clients",
             icon: <Profile2User size="24" />
         },
-        {
-            name: "Subscription",
-            link: "/dashboard/subscription",
-            icon: <Card size="24" />
-        }
-    ]
-    const Links = [
         {
             name: "Business page",
             link: "/dashboard/business-page",
@@ -73,7 +73,7 @@ export const Navbar = () => {
             icon: <ChemicalGlass size="24" />
         },
     ]
-console.log(isModalOpen);
+
     return (
         <>
             <div className="bg-white h-screen z-[99] flex flex-col justify-center border-r-[1px] max-[1024px]:h-fit max-[1024px]:fixed max-[1024px]:bottom-0 max-[1024px]:w-full">
