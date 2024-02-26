@@ -1,3 +1,4 @@
+import { useBusinessContext } from "@/providers/businessContextProvider";
 import { Database } from "@/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useQuery } from "react-query";
@@ -6,7 +7,7 @@ type Services = Database['public']['Tables']['services']['Row'];
 
 export const BusinessServices = () => {
     const supabase = createClientComponentClient<Database>();
-    const businessName = "Visio";
+    const { businessName } = useBusinessContext();
 
     const { data: services } = useQuery<Services[]>(
         ['services'],

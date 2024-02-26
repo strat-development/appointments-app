@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import toast from "react-hot-toast";
 import { Database } from "@/types/supabase";
+import { useBusinessContext } from "@/providers/businessContextProvider";
 
 interface NewServiceModalProps {
     isOpen: boolean;
@@ -16,7 +17,7 @@ type Service = Database["public"]["Tables"]["services"]["Row"]
 export const AddServiceModal = ({ isOpen, onClose }: NewServiceModalProps) => {
     const supabase = createClientComponentClient<Database>();
     const queryClient = useQueryClient();
-    const businessName = "Visio";
+    const {businessName} = useBusinessContext();
     const [serviceNames, setServiceNames] = useState<string[]>(['']);
     const [prices, setPrices] = useState<string[]>(['']);
     const [durations, setDurations] = useState<string[]>(['']);

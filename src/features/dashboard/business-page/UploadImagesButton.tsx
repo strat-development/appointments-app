@@ -1,6 +1,7 @@
 "use client"
 
 import { supabaseAdmin } from "@/libs/admin";
+import { useBusinessContext } from "@/providers/businessContextProvider";
 import { Database } from "@/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { DocumentUpload } from "iconsax-react";
@@ -10,7 +11,7 @@ import { useMutation, useQueryClient } from "react-query";
 
 export const UploadImagesButton = () => {
     const supabase = createClientComponentClient<Database>();
-    const businessName = "Visio"
+    const { businessName } = useBusinessContext();
     const [files, setFiles] = useState<File[]>([]);
     const queryClient = useQueryClient();
 

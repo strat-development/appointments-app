@@ -9,6 +9,7 @@ import { useUserContext } from "@/providers/userContextProvider"
 import { Edit } from "iconsax-react"
 import { AddEmployeeModal } from "./AddEmployeeModal"
 import { EditEmployeeModal } from "./EditEmployeeModal"
+import { useBusinessContext } from "@/providers/businessContextProvider"
 
 type Employees = Database["public"]["Tables"]["subordinates"]["Row"]
 
@@ -25,7 +26,7 @@ export const EmployeesSection = () => {
     const [employeePhoneNumber, setEmployeePhoneNumber] = useState<string>("");
     const [employeeEmail, setEmployeeEmail] = useState<string>("");
     const filteredData = isData.filter(item => item.full_name && item.full_name.includes(searchPrompt));
-    const businessName = "Visio";
+    const { businessName } = useBusinessContext();
 
     useQuery(
         ['subordinates', businessName],

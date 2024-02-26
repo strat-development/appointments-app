@@ -9,6 +9,7 @@ import { useUserContext } from "@/providers/userContextProvider"
 import { Edit } from "iconsax-react"
 import { AddClientModal } from "./AddClientModal"
 import { EditClientModal } from "./EditClientModal"
+import { useBusinessContext } from "@/providers/businessContextProvider"
 
 type Clients = Database["public"]["Tables"]["clients"]["Row"]
 
@@ -23,7 +24,7 @@ export const ClientsSection = () => {
     const [clientName, setClientName] = useState<string>("");
     const [clientId, setClientId] = useState<number>(0);
     const filteredData = isData.filter(item => item.full_name && item.full_name.includes(searchPrompt));
-    const businessName = "Visio";
+    const { businessName } = useBusinessContext();
 
     useQuery(
         ['clients', businessName],

@@ -8,29 +8,15 @@ import { supabaseAdmin } from "@/libs/admin";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { BusinessServices } from "./BusinessServices";
+import { useBusinessContext } from "@/providers/businessContextProvider";
 
 type Images = Database['public']['Tables']['business-images']['Row'];
-type Business = Database['public']['Tables']['business-info']['Row'];
+
 
 export const BusinessHero = () => {
     const supabase = createClientComponentClient<Database>();
-    const businessName = "Visio";
     const [imageUrls, setImageUrls] = useState<{ publicUrl: string }[]>([]);
-
-
-    const { data: business } = useQuery<Business>(
-        ['business'],
-        async () => {
-            const { data, error } = await supabase
-                .from('business-info')
-                .select('*')
-                .eq('business_name', businessName);
-            if (error) {
-                throw error;
-            }
-            return data?.[0];
-        }
-    )
+    const { businessAddress, businessName }=useBusinessContext();
 
     const { data: images } = useQuery<Images[]>(
         ['business-images'],
@@ -79,8 +65,8 @@ export const BusinessHero = () => {
                     <UploadImagesButton />
                 </div>
                 <div>
-                    <h2 className="text-xl font-bold">{business?.business_name}</h2>
-                    <p className="text-base text-black/70">{business?.business_address}</p>
+                    <h2 className="text-xl font-bold">{businessName}</h2>
+                    <p className="text-base text-black/70">{businessAddress}</p>
                 </div>
                 <BusinessServices />
             </div>

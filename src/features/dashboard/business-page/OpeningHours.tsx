@@ -4,12 +4,13 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 import { OpeningHoursModal } from "./OpeningHoursModal";
 import { EditOpeningHoursModal } from "./EditOpeningHoursModal";
+import { useBusinessContext } from "@/providers/businessContextProvider";
 
 type OpeningHours = Database["public"]["Tables"]["business-opening-hours"]["Row"];
 
 export const OpeningHours = () => {
     const supabase = createClientComponentClient<Database>();
-    const businessName = "Visio";
+    const {businessName} = useBusinessContext();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const onClose = () => setIsModalOpen(false);

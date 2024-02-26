@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import toast from "react-hot-toast";
 import { Database } from "@/types/supabase";
+import { useBusinessContext } from "@/providers/businessContextProvider";
 
 interface NewPositionModalProps {
     isOpen: boolean;
@@ -18,7 +19,7 @@ type Positions = Database["public"]["Tables"]["positions"]["Row"]
 export const EditPositionModal = ({ isOpen, onClose, positionName, positionId }: NewPositionModalProps) => {
     const supabase = createClientComponentClient<Database>();
     const queryClient = useQueryClient();
-    const businessName = "Visio";
+    const { businessName } = useBusinessContext();
     const [positionNames, setPositionNames] = useState<string>(positionName);
 
     useEffect(() => {

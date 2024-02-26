@@ -9,6 +9,7 @@ import { useUserContext } from "@/providers/userContextProvider"
 import { AddPositionModal } from "./AddPositionModal"
 import { EditPositionModal } from "./EditPositionModal"
 import { Edit } from "iconsax-react"
+import { useBusinessContext } from "@/providers/businessContextProvider"
 
 type Positions = Database["public"]["Tables"]["positions"]["Row"]
 
@@ -23,7 +24,7 @@ export const PositionsSection = () => {
     const [positionName, setPositionName] = useState<string>("");
     const [positionId, setPositionId] = useState<number>(0);
     const filteredData = isData.filter(item => item.position_name && item.position_name.includes(searchPrompt));
-    const businessName = "Visio";
+    const { businessName } = useBusinessContext();
 
     useQuery(
         ['positions', businessName],

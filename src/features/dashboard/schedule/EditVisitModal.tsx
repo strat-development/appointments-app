@@ -7,6 +7,7 @@ import { Database } from "@/types/supabase";
 import { useUserContext } from "@/providers/userContextProvider";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
+import { useBusinessContext } from "@/providers/businessContextProvider";
 
 interface EditVisitModalProps {
     isOpen: boolean;
@@ -30,7 +31,7 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
     const supabase = createClientComponentClient<Database>();
     const { userId } = useUserContext();
     const queryClient = useQueryClient();
-    const businessName = "Visio";
+    const { businessName } = useBusinessContext();
 
     const addHoursMutation = useMutation(
         async (newHours: Hours) => {

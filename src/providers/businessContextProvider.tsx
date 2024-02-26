@@ -3,22 +3,26 @@ import {
     useUser as useSupaUser
 } from "@supabase/auth-helpers-react";
 import { createContext, useContext, useEffect, useState } from "react";
-type UserContextType = {
-    userName: string;
-    setUserName: (userName: string) => void;
-    userEmail: string;
-    setUserEmail: (userEmail: string) => void;
-    userPhoneNumber: string;
-    setUserPhoneNumber: (userPhoneNumber: string) => void;
+
+type BusinessContextType = {
+    businessName: string;
+    setBusinessName: (businessName: string) => void;
+    businessEmail: string;
+    setBusinessEmail: (businessEmail: string) => void;
+    businessPhoneNumber: string;
+    setBusinessPhoneNumber: (businessPhoneNumber: string) => void;
+    businessAddress: string;
+    setBusinessAddress: (businessAddress: string) => void;
 
 };
 
-export const BusinessContext = createContext<UserContextType | null>(null);
+export const BusinessContext = createContext<BusinessContextType | null>(null);
 
 export default function BusinessContextProvider({ children }: { children: React.ReactNode }) {
-    const [userName, setUserName] = useState<string>("");
-    const [userEmail, setUserEmail] = useState<string>("");
-    const [userPhoneNumber, setUserPhoneNumber] = useState<string>("");
+    const [businessName, setBusinessName] = useState<string>("");
+    const [businessEmail, setBusinessEmail] = useState<string>("");
+    const [businessPhoneNumber, setBusinessPhoneNumber] = useState<string>("");
+    const [businessAddress, setBusinessAddress] = useState<string>("");
     const {
         supabaseClient: supabase
     } = useSessionContext();
@@ -26,33 +30,38 @@ export default function BusinessContextProvider({ children }: { children: React.
     
     useEffect(() => {
         if (user) {
-            const getUserRole = async () => {
-                const { data: userData, error } = await supabase
-                    .from("users")
-                    .select("full_name, email, phone_number")
-                    .eq("id", user.id)
+            const getBusinessInfo = async () => {
+                const { data: businessData, error } = await supabase
+                    .from("business-info")
+                    .select("business_name, business_email, business_phone_number,business_address")
+                    .eq("business_owner", user.id)
                     .single();
                 if (error) {
                     console.log(error);
                 }
-                if (userData?.email && userData?.full_name && userData?.phone_number) {
-                    console.log("Business Data ok");
+                if (businessData?.business_email && businessData?.business_name && businessData?.business_phone_number && businessData?.business_address) {
+                    setBusinessAddress(businessData.business_address);
+                    setBusinessName(businessData.business_name);
+                    setBusinessPhoneNumber(businessData.business_phone_number);
+                    setBusinessEmail(businessData.business_email);
                 }else{
                     console.log("Missing Business Data");
                 }
             };
-            getUserRole();
+            getBusinessInfo();
         }
     }, [user, supabase]);
-
+    
     return (
         <BusinessContext.Provider value={{ 
-            userName, 
-            setUserName, 
-            userEmail,
-            setUserEmail,
-            userPhoneNumber,
-            setUserPhoneNumber}}>
+            businessName, 
+            setBusinessName, 
+            businessEmail,
+            setBusinessEmail,
+            businessPhoneNumber,
+            setBusinessPhoneNumber,
+            businessAddress,
+            setBusinessAddress}}>
             {children}
         </BusinessContext.Provider>
     );
@@ -62,7 +71,7 @@ export function useBusinessContext() {
     const context = useContext(BusinessContext);
     if (!context) {
         throw new Error(
-            "useUserContext must be used within a UserContextProvider"
+            "useBusinessContext must be used within a BusinessContextProvider"
         );
     }
     return context;

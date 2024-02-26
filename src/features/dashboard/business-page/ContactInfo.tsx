@@ -1,3 +1,4 @@
+import { useBusinessContext } from "@/providers/businessContextProvider";
 import { Database } from "@/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Call, Message } from "iconsax-react";
@@ -8,32 +9,18 @@ type Business = Database['public']['Tables']['business-info']['Row'];
 
 export const ContactInfo = () => {
     const supabase = createClientComponentClient<Database>();
-    const businessName = "Visio";
-
-    const { data: contactInformation } = useQuery<Business>(
-        ['business'],
-        async () => {
-            const { data, error } = await supabase
-                .from('business-info')
-                .select('*')
-                .eq('business_name', businessName);
-            if (error) {
-                throw error;
-            }
-            return data?.[0];
-        }
-    )
+    const { businessName, businessEmail, businessPhoneNumber } = useBusinessContext();
 
     return (
         <>
             <div className="flex flex-col gap-2 py-4 w-full">
-                {contactInformation?.business_email &&
+                {businessEmail &&
                     <div className="flex justify-between items-center">
                         <div className="flex gap-2">
                             <Message size="24" />
-                            <p>{contactInformation?.business_email}</p>
+                            <p>{businessEmail}</p>
                         </div>
-                        <Link href={`mailto:${contactInformation?.business_email}`}>
+                        <Link href={`mailto:${businessEmail}`}>
                             <button>
                                 Email
                             </button>
@@ -41,13 +28,13 @@ export const ContactInfo = () => {
                     </div>
 
                 }
-                {contactInformation?.business_email &&
+                {businessPhoneNumber &&
                     <div className="flex justify-between items-center">
                         <div className="flex gap-2">
                             <Call size="24" />
-                            <p>{contactInformation?.business_phone_number}</p>
+                            <p>{businessPhoneNumber}</p>
                         </div>
-                        <Link href={`tel:${contactInformation?.business_phone_number}`}>
+                        <Link href={`tel:${businessPhoneNumber}`}>
                             <button>
                                 Call
                             </button>

@@ -6,6 +6,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/types/supabase";
 import { useUserContext } from "@/providers/userContextProvider";
 import toast from "react-hot-toast";
+import { useBusinessContext } from "@/providers/businessContextProvider";
 
 interface NewVisitModalProps {
     isOpen: boolean;
@@ -28,7 +29,7 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
     const supabase = createClientComponentClient<Database>();
     const { userId } = useUserContext();
     const queryClient = useQueryClient();
-    const businessName = "Visio";
+    const { businessName } = useBusinessContext();
     const [existingClients, setExistingClients] = useState<Clients[]>([]);
     const [addingNewClient, setAddingNewClient] = useState(false);
 

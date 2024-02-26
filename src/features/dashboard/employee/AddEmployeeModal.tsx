@@ -6,6 +6,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import toast from "react-hot-toast";
 import { Database } from "@/types/supabase";
 import { useUserContext } from "@/providers/userContextProvider";
+import { useBusinessContext } from "@/providers/businessContextProvider";
 
 interface NewClientModalProps {
     isOpen: boolean;
@@ -21,7 +22,7 @@ export const AddEmployeeModal = ({ isOpen, onClose }: NewClientModalProps) => {
     const [emails, setEmails] = useState<string[]>(['']);
     const [phoneNumbers, setPhoneNumbers] = useState<string[]>(['']);
     const { userId } = useUserContext();
-    const businessName = "Visio";
+    const { businessName } = useBusinessContext();
 
     const addNewEmployee = useMutation(
         async (newEmployee: Employee[]) => {
