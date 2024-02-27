@@ -89,11 +89,11 @@ export const ServicesSection = () => {
                     <div className="grid grid-cols-1 w-fit min-[768px]:grid-cols-2 gap-4 min-[1024px]:grid-cols-4 grid-template-rows-1fr-1fr-1fr">
                         {filteredData.map((service) => (
                             <div className="peer group cursor-pointer flex flex-col justify-center items-start p-4 w-full bg-white rounded-lg border-[1px] hover:border-violet-300 transition shadow-[0_0px_10px_0px_rgba(0,0,0,0.1)] gap-4"
-                                key={service.id}
+                                key={service.service_id}
                                 onClick={() => {
                                     setIsEditModalOpen(true)
                                     seServiceName(service.title)
-                                    setServiceId(service.id)
+                                    setServiceId(service.service_id)
                                     setServicePrice(service.price)
                                     setServiceDuration(service.duration)
                                 }

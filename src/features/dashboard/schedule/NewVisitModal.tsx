@@ -15,7 +15,7 @@ interface NewVisitModalProps {
     endTime: string | null | undefined;
 }
 
-type Hours = Database["public"]["Tables"]["hours"]["Row"]
+type Visits = Database["public"]["Tables"]["visits"]["Row"]
 type Clients = Database["public"]["Tables"]["clients"]["Row"]
 type Services = Database["public"]["Tables"]["services"]["Row"]
 
@@ -57,16 +57,16 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
     )
 
 
-    const addHoursMutation = useMutation(
-        async (newHours: Hours) => {
+    const addvisitsMutation = useMutation(
+        async (newVisits: Visits) => {
             await supabase
-                .from("hours")
-                .upsert(newHours)
+                .from("visits")
+                .upsert(newVisits)
                 .eq("userId", userId);
         },
         {
             onSuccess: () => {
-                queryClient.invalidateQueries(['hours', userId]);
+                queryClient.invalidateQueries(['visits', userId]);
 
                 toast.success('Visit added!')
             },
@@ -153,7 +153,7 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
                             }}
                         >
                             {existingClients.map((client) => (
-                                <option key={client.id} value={client.full_name ?? ''}>{client.full_name}</option>
+                                <option key={client.client_id} value={client.full_name ?? ''}>{client.full_name}</option>
                             ))}
                         </select>
                         <button onClick={() => {
@@ -200,7 +200,7 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
                     className="peer w-full py-2 pl-4 font-light bg-white border-[.5px] rounded-2xl outline-none transition disabled:opacity-70 disabled:cursor-not-allowed"
                     onChange={(e) => setService(e.target.value)}>
                     {availiableServices.map((service) => (
-                        <option key={service.id} value={service.title}>{service.title}</option>
+                        <option key={service.service_id} value={service.title}>{service.title}</option>
                     ))}
                 </select>
                 <div>
@@ -240,7 +240,7 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
                             return;
                         }
 
-                        addHoursMutation.mutateAsync({
+                        addvisitsMutation.mutateAsync({
                             userId: userId,
                             title: client,
                             phone_number: phoneNumber,
@@ -250,7 +250,7 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
                             description: note || '',
                             label: '',
                             status: 'Active'
-                        } as Hours);
+                        } as unknown as Visits);
 
                         const clientExists = existingClients.some(existingClient => existingClient.full_name === client);
 
@@ -263,10 +263,8 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
                                 description: note || '',
                                 label: "",
                                 business_name: businessName
-                            } as Clients);
+                            } as unknown as Clients);
                         }
-
-                        handleClose();
 
                         handleClose();
                     }

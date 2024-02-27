@@ -12,11 +12,10 @@ import { useBusinessContext } from "@/providers/businessContextProvider";
 
 type Images = Database['public']['Tables']['business-images']['Row'];
 
-
 export const BusinessHero = () => {
     const supabase = createClientComponentClient<Database>();
     const [imageUrls, setImageUrls] = useState<{ publicUrl: string }[]>([]);
-    const { businessAddress, businessName }=useBusinessContext();
+    const { businessAddress, businessId, businessName }=useBusinessContext();
 
     const { data: images } = useQuery<Images[]>(
         ['business-images'],
@@ -24,7 +23,7 @@ export const BusinessHero = () => {
             const { data, error } = await supabase
                 .from('business-images')
                 .select('*')
-                .eq('business_name', businessName);
+                .eq('business_id', businessId);
             if (error) {
                 throw error;
             }
@@ -37,7 +36,7 @@ export const BusinessHero = () => {
             Promise.all(images.map(async (image) => {
                 const { data: publicURL } = await supabaseAdmin.storage
                     .from('business-page-photos')
-                    .getPublicUrl(image.image_url);
+                    .getPublicUrl(image.image_url)
 
                 return { publicUrl: publicURL.publicUrl };
 

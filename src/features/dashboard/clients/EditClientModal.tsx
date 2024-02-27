@@ -21,7 +21,6 @@ export const EditClientModal = ({ isOpen, onClose, clientName, clientId }: NewCl
     const [clientNames, setclientNames] = useState<string>(clientName);
     const [phoneNumbers, setPhoneNumbers] = useState<string>('');
     const [emails, setEmails] = useState<string>('');
-    const [notes, setNotes] = useState<string>('');
 
     useEffect(() => {
         setclientNames(clientName);

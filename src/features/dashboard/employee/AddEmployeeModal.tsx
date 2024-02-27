@@ -8,14 +8,14 @@ import { Database } from "@/types/supabase";
 import { useUserContext } from "@/providers/userContextProvider";
 import { useBusinessContext } from "@/providers/businessContextProvider";
 
-interface NewClientModalProps {
+interface NewEmployeeModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
 type Employee = Database["public"]["Tables"]["subordinates"]["Row"]
 
-export const AddEmployeeModal = ({ isOpen, onClose }: NewClientModalProps) => {
+export const AddEmployeeModal = ({ isOpen, onClose }: NewEmployeeModalProps) => {
     const supabase = createClientComponentClient<Database>();
     const queryClient = useQueryClient();
     const [employeeNames, setEmployeeNames] = useState<string[]>(['']);

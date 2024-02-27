@@ -17,7 +17,7 @@ interface EditVisitModalProps {
     hourId: string;
 }
 
-type Hours = Database["public"]["Tables"]["hours"]["Row"]
+type Visits = Database["public"]["Tables"]["visits"]["Row"]
 type Services = Database["public"]["Tables"]["services"]["Row"]
 
 export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: EditVisitModalProps) => {
@@ -33,16 +33,16 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
     const queryClient = useQueryClient();
     const { businessName } = useBusinessContext();
 
-    const addHoursMutation = useMutation(
-        async (newHours: Hours) => {
+    const addVisitsMutation = useMutation(
+        async (newVisits: Visits) => {
             await supabase
-                .from("hours")
-                .update(newHours)
+                .from("visits")
+                .update(newVisits)
                 .eq("id", hourId);
         },
         {
             onSuccess: () => {
-                queryClient.invalidateQueries(['hours', userId]);
+                queryClient.invalidateQueries(['visits', userId]);
 
                 toast.success('Visit added!')
             },
@@ -55,9 +55,9 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
 
 
 
-    const deleteHoursMutation = useMutation(
+    const deletevisitsMutation = useMutation(
         async (eventId: string) => {
-            await supabase.from('hours')
+            await supabase.from('visits')
                 .delete()
                 .eq('id', eventId);
         },
@@ -65,12 +65,12 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
             onSuccess: () => {
                 Swal.fire({
                     title: 'Deleted!',
-                    text: 'Your hours have been deleted.',
+                    text: 'Your visits have been deleted.',
                     icon: 'success',
                     showConfirmButton: false,
                     timer: 1000,
                 });
-                queryClient.invalidateQueries(['hours', userId]);
+                queryClient.invalidateQueries(['visits', userId]);
             },
             onError: () => {
                 Swal.fire({
@@ -86,9 +86,8 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
 
     useEffect(() => {
         if (hourId) {
-            // Fetch the client data
             supabase
-                .from("hours")
+                .from("visits")
                 .select("*")
                 .eq("id", hourId)
                 .then(({ data, error }) => {
@@ -97,8 +96,8 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
                     } else if (data && data.length > 0) {
                         const clientData = data[0];
                         setPhoneNumber(clientData.phone_number);
-                        setClient(clientData.title);
-                        setNote(clientData.description);
+                        setClient(clientData.client_name);
+                        setNote(clientData.client_description);
                         setStatus(clientData.status);
                         setService(clientData.service);
                     }
@@ -167,7 +166,7 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
                     className="peer w-full py-2 pl-4 font-light bg-white border-[.5px] rounded-2xl outline-none transition disabled:opacity-70 disabled:cursor-not-allowed"
                     onChange={(e) => setService(e.target.value)}>
                     {availiableServices.map((service) => (
-                        <option key={service.id} value={service.title}>{service.title}</option>
+                        <option key={service.service_id} value={service.title}>{service.title}</option>
                     ))}
                 </select>
                 <div>
@@ -204,7 +203,7 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
                 </div>
                 <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-violet-600 to-violet-500 text-white w-full"
                     onClick={() => {
-                        addHoursMutation.mutateAsync({
+                        addVisitsMutation.mutateAsync({
                             userId: userId,
                             title: client,
                             phone_number: phoneNumber,
@@ -214,8 +213,7 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
                             description: note || '',
                             label: '',
                             status: status
-
-                        } as Hours)
+                        } as unknown as Visits)
 
                         handleClose();
                     }
@@ -224,7 +222,7 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
                 </button>
                 <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-red-600 to-red-500 text-white w-full"
                     onClick={() => {
-                        deleteHoursMutation.mutateAsync(hourId);
+                        deletevisitsMutation.mutateAsync(hourId);
                         handleClose();
                     }
                     }>

@@ -2,13 +2,9 @@
 import { useUserContext } from "@/providers/userContextProvider";
 import { Database } from "@/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import {
-    useSessionContext,
-    useUser as useSupaUser
-} from "@supabase/auth-helpers-react";
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function StatisticInfo({ children }: { children: React.ReactNode }) {
+export default function StatisticInfo() {
     const [monthlyClients, setMonthlyClinets] = useState("");
     const dateFrom = "2024-01-01 00:00:00";
     const dateTo = "2024-04-01 00:00:00";

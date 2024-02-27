@@ -13,7 +13,8 @@ type BusinessContextType = {
     setBusinessPhoneNumber: (businessPhoneNumber: string) => void;
     businessAddress: string;
     setBusinessAddress: (businessAddress: string) => void;
-
+    businessId: string;
+    setBusinessId: (businessId: string) => void;
 };
 
 export const BusinessContext = createContext<BusinessContextType | null>(null);
@@ -23,6 +24,7 @@ export default function BusinessContextProvider({ children }: { children: React.
     const [businessEmail, setBusinessEmail] = useState<string>("");
     const [businessPhoneNumber, setBusinessPhoneNumber] = useState<string>("");
     const [businessAddress, setBusinessAddress] = useState<string>("");
+    const [businessId, setBusinessId] = useState<string>("");
     const {
         supabaseClient: supabase
     } = useSessionContext();
@@ -33,7 +35,7 @@ export default function BusinessContextProvider({ children }: { children: React.
             const getBusinessInfo = async () => {
                 const { data: businessData, error } = await supabase
                     .from("business-info")
-                    .select("business_name, business_email, business_phone_number,business_address")
+                    .select("*")
                     .eq("business_owner", user.id)
                     .single();
                 if (error) {
@@ -44,6 +46,7 @@ export default function BusinessContextProvider({ children }: { children: React.
                     setBusinessName(businessData.business_name);
                     setBusinessPhoneNumber(businessData.business_phone_number);
                     setBusinessEmail(businessData.business_email);
+                    setBusinessId(businessData.id);
                 }else{
                     console.log("Missing Business Data");
                 }
@@ -54,6 +57,8 @@ export default function BusinessContextProvider({ children }: { children: React.
     
     return (
         <BusinessContext.Provider value={{ 
+            businessId,
+            setBusinessId,
             businessName, 
             setBusinessName, 
             businessEmail,

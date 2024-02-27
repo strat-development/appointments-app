@@ -6,6 +6,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import toast from "react-hot-toast";
 import { Database } from "@/types/supabase";
 import { useBusinessContext } from "@/providers/businessContextProvider";
+import { useUserContext } from "@/providers/userContextProvider";
 
 interface NewClientModalProps {
     isOpen: boolean;
@@ -22,6 +23,7 @@ export const AddClientModal = ({ isOpen, onClose }: NewClientModalProps) => {
     const [notes, setNotes] = useState<string[]>(['']);
     const [phoneNumbers, setPhoneNumbers] = useState<string[]>(['']);
     const { businessName } = useBusinessContext();
+    const { userId } = useUserContext();
 
     const addNewClient = useMutation(
         async (newClient: Clients[]) => {
@@ -32,7 +34,7 @@ export const AddClientModal = ({ isOpen, onClose }: NewClientModalProps) => {
         },
         {
             onSuccess: () => {
-                queryClient.invalidateQueries(['clients', businessName]);
+                queryClient.invalidateQueries(['clients', clientNames]);
 
                 toast.success('Client added!')
             },
@@ -112,8 +114,9 @@ export const AddClientModal = ({ isOpen, onClose }: NewClientModalProps) => {
                                 email: emails[index],
                                 description: notes[index],
                                 business_name: businessName,
-                                phone_number: phoneNumbers[index]
-                            } as Clients))
+                                phone_number: phoneNumbers[index],
+                                employee_id: userId
+                            } as unknown as Clients))
                         );
                         onClose();
                     }}>

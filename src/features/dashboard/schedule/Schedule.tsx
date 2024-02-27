@@ -17,25 +17,25 @@ import { handleEvents, renderEventContent } from "@/actions/schedule/EventHandle
 import { NewVisitModal } from "./NewVisitModal"
 import { EditVisitModal } from "./EditVisitModal"
 
-type Hours = Database["public"]["Tables"]["hours"]["Row"]
+type Visits = Database["public"]["Tables"]["visits"]["Row"]
 
 export const Schedule = () => {
     const supabase = createClientComponentClient<Database>();
-    const [isData, setIsData] = useState<Hours[]>([])
+    const [isData, setIsData] = useState<Visits[]>([])
     const queryClient = useQueryClient();
     const { userName, userId } = useUserContext();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [eventId, setEventId] = useState<string>("")
-    const [newHours, setNewHours] = useState<Hours | null>(null);
+    const [newVisits, setNewHours] = useState<Visits | null>(null);
 
     const { data: hoursData, isLoading, isError } = useQuery(
-        ['hours', userId],
+        ['visits', userId],
         async () => {
             const { data, error, status } = await supabase
-                .from("hours")
+                .from("visits")
                 .select("*")
-                .eq("userId", userId);
+                .eq("user_id", userId);
 
             if (error && status !== 406) {
                 throw error;
@@ -43,7 +43,7 @@ export const Schedule = () => {
 
             if (data) {
                 setIsData(data);
-                queryClient.invalidateQueries(['hours', userId]);
+                queryClient.invalidateQueries(['visits', userId]);
             }
         },
     );
@@ -57,12 +57,12 @@ export const Schedule = () => {
     const handleDateSelect = async (selectInfo: DateSelectArg) => {
         setIsModalOpen(true);
 
-        const newHours = {
+        const newVisits = {
             startTime: selectInfo.startStr,
             endTime: selectInfo.endStr,
         };
 
-        setNewHours(newHours as Hours);
+        setNewHours(newVisits as unknown as Visits);
     };
 
     const handleEventClick = (clickInfo: EventClickArg) => {
@@ -72,12 +72,12 @@ export const Schedule = () => {
 
         console.log(event.id);
 
-        const newHours = {
+        const newVisits = {
             startTime: clickInfo.event.startStr,
             endTime: clickInfo.event.endStr,
         };
 
-        setNewHours(newHours as Hours);
+        setNewHours(newVisits as unknown as Visits);
 
         setEventId(event.id);
     };
@@ -148,10 +148,10 @@ export const Schedule = () => {
                         events={
                             isData.map((event) => {
                                 return {
-                                    id: event.id.toString(),
-                                    title: event.title || "",
-                                    start: event.startTime?.toString(),
-                                    end: event.endTime?.toString(),
+                                    id: event.visit_id.toString(),
+                                    title: event.client_name || "",
+                                    start: event.start_time?.toString(),
+                                    end: event.end_time?.toString(),
                                 }
                             })
                         }
@@ -178,13 +178,13 @@ export const Schedule = () => {
             </div>
             <NewVisitModal isOpen={isModalOpen}
                 onClose={closeModal}
-                startTime={newHours?.startTime}
-                endTime={newHours?.endTime}
+                startTime={newVisits?.start_time}
+                endTime={newVisits?.end_time}
             />
             <EditVisitModal isOpen={isEditModalOpen}
                 onClose={closeModal}
-                startTime={newHours?.startTime}
-                endTime={newHours?.endTime}
+                startTime={newVisits?.start_time}
+                endTime={newVisits?.end_time}
                 hourId={eventId}
             />
         </>

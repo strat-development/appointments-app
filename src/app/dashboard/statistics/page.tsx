@@ -6,7 +6,7 @@ export default function StatisticsPage() {
         <div className="flex gap-16 items-center">
             <Navbar />
             <main><>
-                <StatisticInfo children={undefined}/>
+                <StatisticInfo />
                 </>
             </main>
         </div>
