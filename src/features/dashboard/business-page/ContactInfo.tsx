@@ -34,7 +34,7 @@ export const ContactInfo = () => {
                             <Call size="24" />
                             <p>{businessPhoneNumber}</p>
                         </div>
-                        <Link href={`tel:${businessPhoneNumber}`}>
+                        <Link href={`tel:${businessEmail}`}>
                             <button>
                                 Call
                             </button>
