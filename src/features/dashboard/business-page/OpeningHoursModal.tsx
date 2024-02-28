@@ -1,4 +1,5 @@
 import { Modal } from "@/components/Modal";
+import { daysOfWeek } from "@/consts/consts";
 import { useBusinessContext } from "@/providers/businessContextProvider";
 import { Database } from "@/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -17,18 +18,7 @@ type OpeningHours = Database["public"]["Tables"]["business-opening-hours"]["Row"
 export const OpeningHoursModal = ({ onClose, isOpen }: OpeningHoursModalProps) => {
     const supabase = createClientComponentClient<Database>();
     const { businessName } = useBusinessContext();
-
-    const daysOfWeek = ([
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-        'Sunday'
-    ]);
     const [openingHours, setOpeningHours] = useState<OpeningHours>({} as OpeningHours);
-
 
     const openingHoursMutation = useMutation(
         async () => {

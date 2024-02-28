@@ -13,7 +13,10 @@ export const OpeningHours = () => {
     const {businessName} = useBusinessContext();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const onClose = () => setIsModalOpen(false);
+    const onClose = () => {
+        setIsModalOpen(false);
+        setIsEditModalOpen(false);
+    }
 
     const { data: openingHours, isLoading } = useQuery<OpeningHours>(
         ['opening-hours'],
@@ -28,8 +31,6 @@ export const OpeningHours = () => {
             return data?.[0];
         }
     )
-
-    console.log(openingHours)
 
     if (isLoading || !openingHours) {
         return <div>Loading...</div>;
