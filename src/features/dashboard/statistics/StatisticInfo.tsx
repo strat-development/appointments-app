@@ -5,28 +5,39 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 
 export default function StatisticInfo() {
-    const [monthlyClients, setMonthlyClinets] = useState("");
-    const dateFrom = "2024-01-01 00:00:00";
-    const dateTo = "2024-04-01 00:00:00";
+    const [monthlyClients, setMonthlyClinets] = useState<number>();
+    const dayFrom=30;
+    const monthFrom=1;
+    const yearFrom=2024;
+
+    const dayTo=1;
+    const monthTo=5;
+    const yearTo=2024;
+
+    
+    const dateFrom="["+yearFrom+"-"+monthFrom+"-"+dayFrom+" 00:00]";
+    const dateTo = "["+yearTo+"-"+monthTo+"-"+dayTo+" 00:00]";
+
+    const businessId= "8666e1af-d200-4e9f-99a4-91c820fdb498";
     const {userId} = useUserContext();
     const supabase=createClientComponentClient<Database>();
 
-    // od pierwszego do pierwszego popbieramy kazdego klienta i sumujemy
     useEffect(() => {
         if (userId) {
             const getMonthlyClients = async () => {
                 const { data: clientsData, error } = await supabase
-                    .from("hours")
-                    .select("*",  {count: 'exact'})
-                    .eq("business_owner", userId)
-                    .rangeAdjacent('endTime', '[' + dateFrom + ',' + dateTo + ']')
-
+                .from("visits")
+                .select("*",  {count: 'exact'})
+                .eq("business_id", businessId)
+                .eq("status","Finished")
+                .gt('end_time',dateFrom)
+                .lt('end_time',dateTo)
                 if (error) {
                     console.log(error);
                 }
                 if (clientsData) {
-                    console.log(clientsData)
-                    // setMonthlyClinets(clientsData.);
+                    console.log(clientsData.length)
+                    setMonthlyClinets(clientsData.length);
                 } else {
                     console.log("Missing Data");
                 }
@@ -40,9 +51,11 @@ export default function StatisticInfo() {
         <>
             <main>
                 <h1>
-                    {monthlyClients}
+                     obecny miesiac={monthlyClients}
                 </h1>
             </main>
         </>
     );
 }
+
+
