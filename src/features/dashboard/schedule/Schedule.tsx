@@ -27,7 +27,7 @@ export const Schedule = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [eventId, setEventId] = useState<string>("")
-    const [newVisits, setNewHours] = useState<Visits | null>(null);
+    const [newVisits, setNewVisits] = useState<Visits | null>(null);
 
     const { data: hoursData, isLoading, isError } = useQuery(
         ['visits', userId],
@@ -35,7 +35,7 @@ export const Schedule = () => {
             const { data, error, status } = await supabase
                 .from("visits")
                 .select("*")
-                .eq("user_id", userId);
+                .eq("employee", userId);
 
             if (error && status !== 406) {
                 throw error;
@@ -43,6 +43,7 @@ export const Schedule = () => {
 
             if (data) {
                 setIsData(data);
+
                 queryClient.invalidateQueries(['visits', userId]);
             }
         },
@@ -56,29 +57,26 @@ export const Schedule = () => {
 
     const handleDateSelect = async (selectInfo: DateSelectArg) => {
         setIsModalOpen(true);
-
+    
         const newVisits = {
-            startTime: selectInfo.startStr,
-            endTime: selectInfo.endStr,
+            start_time: selectInfo.startStr,
+            end_time: selectInfo.endStr,
         };
-
-        setNewHours(newVisits as unknown as Visits);
+    
+        setNewVisits(newVisits as Visits);
     };
-
+    
     const handleEventClick = (clickInfo: EventClickArg) => {
         setIsEditModalOpen(true);
-
+    
         const event = clickInfo.event;
-
-        console.log(event.id);
-
+    
         const newVisits = {
-            startTime: clickInfo.event.startStr,
-            endTime: clickInfo.event.endStr,
+            start_time: clickInfo.event.startStr,
+            end_time: clickInfo.event.endStr,
         };
-
-        setNewHours(newVisits as unknown as Visits);
-
+    
+        setNewVisits(newVisits as Visits);
         setEventId(event.id);
     };
 
@@ -185,7 +183,7 @@ export const Schedule = () => {
                 onClose={closeModal}
                 startTime={newVisits?.start_time}
                 endTime={newVisits?.end_time}
-                hourId={eventId}
+                visitId={eventId}
             />
         </>
     )

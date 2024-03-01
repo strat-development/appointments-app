@@ -24,22 +24,25 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
     const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
     const [service, setService] = useState<string | null>(null);
     const [client, setClient] = useState<string | null>(null);
+    const [clientId, setClientId] = useState<string | null>(null);
     const [note, setNote] = useState<string | null>(null);
     const [availiableServices, setAvailiableServices] = useState<Services[]>([])
     const supabase = createClientComponentClient<Database>();
     const { userId } = useUserContext();
     const queryClient = useQueryClient();
-    const { businessName } = useBusinessContext();
+    const { businessName, businessId } = useBusinessContext();
     const [existingClients, setExistingClients] = useState<Clients[]>([]);
     const [addingNewClient, setAddingNewClient] = useState(false);
+    const [selectedStartTime, setSelectedStartTime] = useState<string | null>(null);
+    const [selectedEndTime, setSelectedEndTime] = useState<string | null>(null);
 
     useQuery(
-        ['clients', userId],
+        ['clients'],
         async () => {
             const { data, error, status } = await supabase
                 .from("clients")
                 .select("*")
-                .eq("employee_id", userId)
+                .eq("business_name", businessName)
 
             if (error && status !== 406) {
                 throw error;
@@ -57,7 +60,7 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
     )
 
 
-    const addvisitsMutation = useMutation(
+    const addVisitsMutation = useMutation(
         async (newVisits: Visits) => {
             await supabase
                 .from("visits")
@@ -99,7 +102,7 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
             const { data, error, status } = await supabase
                 .from("services")
                 .select("*")
-                .eq("business_name", businessName)
+                .eq("business_id", businessId)
 
             if (error && status !== 406) {
                 throw error;
@@ -130,6 +133,8 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
         onClose();
     }
 
+    console.log('email', email)
+
     const bodyContent = (
         <>
             <div className="flex flex-col gap-4">
@@ -148,6 +153,7 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
                                         setClient(selectedClient.full_name);
                                         setPhoneNumber(selectedClient.phone_number);
                                         setEmail(selectedClient.email);
+                                        setClientId(selectedClient.client_id);
                                     }
                                 }
                             }}
@@ -200,7 +206,7 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
                     className="peer w-full py-2 pl-4 font-light bg-white border-[.5px] rounded-2xl outline-none transition disabled:opacity-70 disabled:cursor-not-allowed"
                     onChange={(e) => setService(e.target.value)}>
                     {availiableServices.map((service) => (
-                        <option key={service.service_id} value={service.title}>{service.title}</option>
+                        <option key={service.service_id} value={service.service_id}>{service.title}</option>
                     ))}
                 </select>
                 <div>
@@ -211,14 +217,14 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
                             label=""
                             type="text"
                             placeholder="Start time"
-                            // onChange={(e) => setSelectedStartTime(e.target.value)}
+                            onChange={(e) => setSelectedStartTime(e.target.value)}
                             value={startTime || ''}
                         /> - <Input
-                            id="Sevice"
+                            id="End time"
                             label=""
                             type="text"
                             placeholder="End time"
-                            // onChange={(e) => setSelectedEndTime(e.target.value)}
+                            onChange={(e) => setSelectedEndTime(e.target.value)}
                             value={endTime || ''}
                         />
                     </div>
@@ -240,30 +246,34 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
                             return;
                         }
 
-                        addvisitsMutation.mutateAsync({
-                            userId: userId,
-                            title: client,
+                        addVisitsMutation.mutateAsync({
+                            employee: userId,
+                            client_name: client,
                             phone_number: phoneNumber,
-                            service: service,
-                            startTime: startTime || '',
-                            endTime: endTime || '',
-                            description: note || '',
+                            service_id: service,
+                            start_time: startTime || '',
+                            end_time: endTime || '',
+                            client_description: note || '',
                             label: '',
-                            status: 'Active'
+                            status: 'Active',
+                            business_id: businessId,
+                            client_id: clientId,
                         } as unknown as Visits);
 
                         const clientExists = existingClients.some(existingClient => existingClient.full_name === client);
 
                         if (!clientExists) {
                             addNewClient.mutateAsync({
-                                full_name: client || '',
                                 phone_number: phoneNumber || '',
                                 email: email || '',
-                                employee_id: userId,
-                                description: note || '',
+                                employee: userId,
+                                client_description: note || '',
                                 label: "",
-                                business_name: businessName
-                            } as unknown as Clients);
+                                business_name: businessName,
+                                client_id: '',
+                                full_name: client || '',
+                                visit_count: 0,
+                            } as Clients);
                         }
 
                         handleClose();

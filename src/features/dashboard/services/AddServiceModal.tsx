@@ -17,7 +17,7 @@ type Service = Database["public"]["Tables"]["services"]["Row"]
 export const AddServiceModal = ({ isOpen, onClose }: NewServiceModalProps) => {
     const supabase = createClientComponentClient<Database>();
     const queryClient = useQueryClient();
-    const {businessName} = useBusinessContext();
+    const {businessId} = useBusinessContext();
     const [serviceNames, setServiceNames] = useState<string[]>(['']);
     const [prices, setPrices] = useState<string[]>(['']);
     const [durations, setDurations] = useState<string[]>(['']);
@@ -27,11 +27,11 @@ export const AddServiceModal = ({ isOpen, onClose }: NewServiceModalProps) => {
             await supabase
                 .from("services")
                 .upsert(newService)
-                .eq("business_name", businessName);
+                .eq("business_id", businessId);
         },
         {
             onSuccess: () => {
-                queryClient.invalidateQueries(['services', businessName]);
+                queryClient.invalidateQueries(['services', businessId]);
 
                 toast.success('Visit added!')
             },
@@ -100,7 +100,7 @@ export const AddServiceModal = ({ isOpen, onClose }: NewServiceModalProps) => {
                                 title: serviceName,
                                 price: prices[index],
                                 duration: durations[index],
-                                business_name: businessName,
+                                business_id: businessId,
                             } as Service))
                         );
                         onClose();

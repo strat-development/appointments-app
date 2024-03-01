@@ -10,7 +10,7 @@ import Link from "next/link";
 import { EditSocialsModal } from "./EditSocialsModal";
 
 type Socials = Database["public"]["Tables"]["socials"]["Row"];
-type SocialMediaTypes = 'Facebook' | 'Instagram' | 'Twitter'; // Add more social media types here
+type SocialMediaTypes = 'Facebook' | 'Instagram' | 'Twitter';
 
 export const Socials = () => {
     const supabase = createClientComponentClient<Database>();
@@ -21,7 +21,6 @@ export const Socials = () => {
         Facebook: <Facebook />,
         Instagram: <Instagram />,
         Twitter: <IoLogoTwitter />,
-        // Add more social media types and their corresponding icons here
     };
 
 

@@ -17,7 +17,7 @@ type Positions = Database["public"]["Tables"]["positions"]["Row"]
 export const AddPositionModal = ({ isOpen, onClose }: NewPositionModalProps) => {
     const supabase = createClientComponentClient<Database>();
     const queryClient = useQueryClient();
-    const { businessName } = useBusinessContext();
+    const { businessId } = useBusinessContext();
     const [positionNames, setPositionNames] = useState<string[]>(['']);
 
     const addNewPosition = useMutation(
@@ -25,11 +25,11 @@ export const AddPositionModal = ({ isOpen, onClose }: NewPositionModalProps) => 
             await supabase
                 .from("positions")
                 .upsert(newPosition)
-                .eq("business_name", businessName);
+                .eq("business_id", businessId);
         },
         {
             onSuccess: () => {
-                queryClient.invalidateQueries(['positions', businessName]);
+                queryClient.invalidateQueries(['positions', businessId]);
 
                 toast.success('Visit added!')
             },
@@ -68,7 +68,7 @@ export const AddPositionModal = ({ isOpen, onClose }: NewPositionModalProps) => 
                         addNewPosition.mutateAsync(
                             positionNames.map(positionName => ({
                                 position_name: positionName,
-                                business_name: businessName
+                                business_id: businessId
                             } as Positions))
                         );
                         onClose();

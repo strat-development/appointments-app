@@ -22,7 +22,7 @@ export const AddClientModal = ({ isOpen, onClose }: NewClientModalProps) => {
     const [emails, setEmails] = useState<string[]>(['']);
     const [notes, setNotes] = useState<string[]>(['']);
     const [phoneNumbers, setPhoneNumbers] = useState<string[]>(['']);
-    const { businessName } = useBusinessContext();
+    const { businessName, businessId } = useBusinessContext();
     const { userId } = useUserContext();
 
     const addNewClient = useMutation(
@@ -30,7 +30,7 @@ export const AddClientModal = ({ isOpen, onClose }: NewClientModalProps) => {
             await supabase
                 .from("clients")
                 .upsert(newClient)
-                .eq("business_name", businessName);
+                .eq("business_id", businessId);
         },
         {
             onSuccess: () => {
@@ -114,9 +114,14 @@ export const AddClientModal = ({ isOpen, onClose }: NewClientModalProps) => {
                                 email: emails[index],
                                 description: notes[index],
                                 business_name: businessName,
+                                business_id: businessId,
                                 phone_number: phoneNumbers[index],
-                                employee_id: userId
-                            } as unknown as Clients))
+                                employee_id: userId,
+                                client_description: notes[index],
+                                client_id: '',
+                                label: "",
+                                visit_count: 0
+                            } as Clients))
                         );
                         onClose();
                     }}>

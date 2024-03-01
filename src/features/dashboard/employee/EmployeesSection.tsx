@@ -11,7 +11,7 @@ import { AddEmployeeModal } from "./AddEmployeeModal"
 import { EditEmployeeModal } from "./EditEmployeeModal"
 import { useBusinessContext } from "@/providers/businessContextProvider"
 
-type Employees = Database["public"]["Tables"]["subordinates"]["Row"]
+type Employees = Database["public"]["Tables"]["employees"]["Row"]
 
 export const EmployeesSection = () => {
     const supabase = createClientComponentClient<Database>();
@@ -22,17 +22,17 @@ export const EmployeesSection = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [searchPrompt, setSearchPrompt] = useState("");
     const [employeeName, setEmployeeName] = useState<string>("");
-    const [employeeId, setEmployeeId] = useState<number>(0);
+    const [employeeId, setEmployeeId] = useState<string>("");
     const [employeePhoneNumber, setEmployeePhoneNumber] = useState<string>("");
     const [employeeEmail, setEmployeeEmail] = useState<string>("");
     const filteredData = isData.filter(item => item.full_name && item.full_name.includes(searchPrompt));
     const { businessName } = useBusinessContext();
 
     useQuery(
-        ['subordinates', businessName],
+        ['employees', businessName],
         async () => {
             const { data, error, status } = await supabase
-                .from("subordinates")
+                .from("employees")
                 .select("*")
                 .eq("employer_id", userId)
 
@@ -42,7 +42,7 @@ export const EmployeesSection = () => {
 
             if (data) {
                 setIsData(data)
-                queryClient.invalidateQueries(['subordinates', employeeId]);
+                queryClient.invalidateQueries(['employees', employeeId]);
             }
         },
     );
@@ -89,11 +89,11 @@ export const EmployeesSection = () => {
                     <div className="grid grid-cols-1 w-fit min-[768px]:grid-cols-2 gap-4 min-[1024px]:grid-cols-4 grid-template-rows-1fr-1fr-1fr">
                         {filteredData.map((employee) => (
                             <div className="peer group cursor-pointer flex flex-col justify-center items-start p-4 w-full bg-white rounded-lg border-[1px] hover:border-violet-300 transition shadow-[0_0px_10px_0px_rgba(0,0,0,0.1)] gap-4"
-                                key={employee.id}
+                                key={employee.employee_id}
                                 onClick={() => {
                                     setIsEditModalOpen(true)
                                     setEmployeeName(employee.full_name || "")
-                                    setEmployeeId(employee.id)
+                                    setEmployeeId(employee.employee_id || "")
                                     setEmployeePhoneNumber(employee.phone_number || "")
                                     setEmployeeEmail(employee.email || "")
                                 }

@@ -10,12 +10,12 @@ interface NewEmployeeModalProps {
     isOpen: boolean;
     onClose: () => void;
     employeeName: string;
-    employeeId: number;
+    employeeId: string;
     employeePhoneNumber: string;
     employeeEmail: string;
 }
 
-type Employee = Database["public"]["Tables"]["subordinates"]["Row"]
+type Employee = Database["public"]["Tables"]["employees"]["Row"]
 
 export const EditEmployeeModal = ({ isOpen, onClose, employeeName, employeeId, employeeEmail, employeePhoneNumber }: NewEmployeeModalProps) => {
     const supabase = createClientComponentClient<Database>();
@@ -31,13 +31,13 @@ export const EditEmployeeModal = ({ isOpen, onClose, employeeName, employeeId, e
     const editEmployee = useMutation(
         async (newEmployee: Employee) => {
             await supabase
-                .from("subordinates")
+                .from("employees")
                 .update(newEmployee)
                 .eq("id", employeeId);
         },
         {
             onSuccess: () => {
-                queryClient.invalidateQueries(['subordinates', employeeId]);
+                queryClient.invalidateQueries(['employees', employeeId]);
 
                 toast.success('Visit added!')
             },
@@ -51,13 +51,13 @@ export const EditEmployeeModal = ({ isOpen, onClose, employeeName, employeeId, e
     const deleteEmployeeMutation = useMutation(
         async () => {
             await supabase
-                .from("subordinates")
+                .from("employees")
                 .delete()
                 .eq("id", employeeId);
         },
         {
             onSuccess: () => {
-                queryClient.invalidateQueries(['subordinates', employeeId]);
+                queryClient.invalidateQueries(['employees', employeeId]);
                 toast.success('Employee deleted!')
             },
             onError: () => {

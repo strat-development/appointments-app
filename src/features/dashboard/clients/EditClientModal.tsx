@@ -10,7 +10,7 @@ interface NewClientModalProps {
     isOpen: boolean;
     onClose: () => void;
     clientName: string;
-    clientId: number;
+    clientId: string;
 }
 
 type Clients = Database["public"]["Tables"]["clients"]["Row"]
@@ -126,6 +126,8 @@ export const EditClientModal = ({ isOpen, onClose, clientName, clientId }: NewCl
 
     const clearStates = () => {
         setclientNames('');
+        setPhoneNumbers('');
+        setEmails('');
     }
 
     const handleClose = () => {

@@ -19,7 +19,7 @@ type Positions = Database["public"]["Tables"]["positions"]["Row"]
 export const EditPositionModal = ({ isOpen, onClose, positionName, positionId }: NewPositionModalProps) => {
     const supabase = createClientComponentClient<Database>();
     const queryClient = useQueryClient();
-    const { businessName } = useBusinessContext();
+    const { businessId } = useBusinessContext();
     const [positionNames, setPositionNames] = useState<string>(positionName);
 
     useEffect(() => {
@@ -36,7 +36,7 @@ export const EditPositionModal = ({ isOpen, onClose, positionName, positionId }:
         },
         {
             onSuccess: () => {
-                queryClient.invalidateQueries(['positions', businessName]);
+                queryClient.invalidateQueries(['positions', businessId]);
 
                 toast.success('Visit added!')
             },
@@ -56,7 +56,7 @@ export const EditPositionModal = ({ isOpen, onClose, positionName, positionId }:
         },
         {
             onSuccess: () => {
-                queryClient.invalidateQueries(['positions', businessName]);
+                queryClient.invalidateQueries(['positions', businessId]);
                 toast.success('Position deleted!')
             },
             onError: () => {
@@ -86,7 +86,7 @@ export const EditPositionModal = ({ isOpen, onClose, positionName, positionId }:
                     onClick={() => {
                         editPosition.mutateAsync({
                             position_name: positionNames,
-                            business_name: businessName
+                            business_id: businessId
                         } as Positions);
                         handleClose();
                     }}>

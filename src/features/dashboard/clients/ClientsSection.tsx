@@ -22,17 +22,17 @@ export const ClientsSection = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [searchPrompt, setSearchPrompt] = useState("");
     const [clientName, setClientName] = useState<string>("");
-    const [clientId, setClientId] = useState<number>(0);
+    const [clientId, setClientId] = useState<string>("");
     const filteredData = isData.filter(item => item.full_name && item.full_name.includes(searchPrompt));
-    const { businessName } = useBusinessContext();
+    const { businessId } = useBusinessContext();
 
     useQuery(
-        ['clients', businessName],
+        ['clients', businessId],
         async () => {
             const { data, error, status } = await supabase
                 .from("clients")
                 .select("*")
-                .eq("business_name", businessName)
+                .eq("business_id", businessId)
 
             if (error && status !== 406) {
                 throw error;
@@ -87,11 +87,11 @@ export const ClientsSection = () => {
                     <div className="grid grid-cols-1 w-fit min-[768px]:grid-cols-2 gap-4 min-[1024px]:grid-cols-4 grid-template-rows-1fr-1fr-1fr">
                         {filteredData.map((client) => (
                             <div className="peer group cursor-pointer flex flex-col justify-center items-start p-4 w-full bg-white rounded-lg border-[1px] hover:border-violet-300 transition shadow-[0_0px_10px_0px_rgba(0,0,0,0.1)] gap-4"
-                                key={client.id}
+                                key={client.client_id}
                                 onClick={() => {
                                     setIsEditModalOpen(true)
                                     setClientName(client.full_name || "")
-                                    setClientId(client.id)
+                                    setClientId(client.client_id)
                                 }
                                 }>
                                 <div className="flex justify-between w-full gap-4">
@@ -100,7 +100,7 @@ export const ClientsSection = () => {
                                             {client.full_name}
                                         </p>
                                         <p className="text-black/70 text-base">{client.phone_number}</p>
-                                        <p className="text-black/70 text-base">{client.description}</p>
+                                        <p className="text-black/70 text-base">{client.client_description}</p>
                                     </div>
                                     <Edit className="group-hover:opacity-100 opacity-0 duration-300 w-6 h-6 text-violet-500" />
                                 </div>

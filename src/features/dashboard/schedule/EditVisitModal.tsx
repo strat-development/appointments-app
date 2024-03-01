@@ -14,31 +14,32 @@ interface EditVisitModalProps {
     onClose: () => void;
     startTime: string | null | undefined;
     endTime: string | null | undefined;
-    hourId: string;
+    visitId: string;
 }
 
 type Visits = Database["public"]["Tables"]["visits"]["Row"]
 type Services = Database["public"]["Tables"]["services"]["Row"]
 
-export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: EditVisitModalProps) => {
+export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, visitId }: EditVisitModalProps) => {
     const [email, setEmail] = useState<string | null>(null);
     const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
-    const [service, setService] = useState<string | null>(null);
+    const [service, setService] = useState<number | null>(null);
     const [client, setClient] = useState<string | null>(null);
+    const [clientId, setClientId] = useState<string | null>(null)
     const [status, setStatus] = useState<string | null>('');
     const [note, setNote] = useState<string | null>(null);
     const [availiableServices, setAvailiableServices] = useState<Services[]>([]);
     const supabase = createClientComponentClient<Database>();
     const { userId } = useUserContext();
     const queryClient = useQueryClient();
-    const { businessName } = useBusinessContext();
+    const { businessName, businessId } = useBusinessContext();
 
-    const addVisitsMutation = useMutation(
+    const editVisitsMutation = useMutation(
         async (newVisits: Visits) => {
             await supabase
                 .from("visits")
                 .update(newVisits)
-                .eq("id", hourId);
+                .eq("visit_id", visitId);
         },
         {
             onSuccess: () => {
@@ -53,13 +54,11 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
         }
     );
 
-
-
-    const deletevisitsMutation = useMutation(
+    const deleteVisitsMutation = useMutation(
         async (eventId: string) => {
             await supabase.from('visits')
                 .delete()
-                .eq('id', eventId);
+                .eq('visit_id', eventId);
         },
         {
             onSuccess: () => {
@@ -85,11 +84,11 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
     );
 
     useEffect(() => {
-        if (hourId) {
+        if (visitId && isOpen) {
             supabase
                 .from("visits")
                 .select("*")
-                .eq("id", hourId)
+                .eq("visit_id", visitId)
                 .then(({ data, error }) => {
                     if (error) {
                         console.error("Error fetching client data:", error);
@@ -99,11 +98,12 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
                         setClient(clientData.client_name);
                         setNote(clientData.client_description);
                         setStatus(clientData.status);
-                        setService(clientData.service);
+                        setService(clientData.service_id);
+                        setClientId(clientData.client_id);
                     }
                 });
         }
-    }, [hourId]);
+    }, [visitId, isOpen]);
 
     useQuery(
         ['services', userId],
@@ -164,9 +164,9 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
                 <select
                     id="Service"
                     className="peer w-full py-2 pl-4 font-light bg-white border-[.5px] rounded-2xl outline-none transition disabled:opacity-70 disabled:cursor-not-allowed"
-                    onChange={(e) => setService(e.target.value)}>
+                    onChange={(e) => setService(parseInt(e.target.value))}>
                     {availiableServices.map((service) => (
-                        <option key={service.service_id} value={service.title}>{service.title}</option>
+                        <option key={service.service_id} value={service.service_id}>{service.title}</option>
                     ))}
                 </select>
                 <div>
@@ -203,17 +203,19 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
                 </div>
                 <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-violet-600 to-violet-500 text-white w-full"
                     onClick={() => {
-                        addVisitsMutation.mutateAsync({
-                            userId: userId,
-                            title: client,
-                            phone_number: phoneNumber,
-                            service: service,
-                            startTime: startTime || '',
-                            endTime: endTime || '',
-                            description: note || '',
+                        editVisitsMutation.mutateAsync({
+                            business_id: businessId,
+                            client_description: note || '',
+                            client_id: clientId,
+                            client_name: client,
+                            employee: userId,
+                            end_time: endTime || '',
                             label: '',
-                            status: status
-                        } as unknown as Visits)
+                            start_time: startTime || '',
+                            status: status,
+                            phone_number: phoneNumber,
+                            service_id: service
+                        } as Visits)
 
                         handleClose();
                     }
@@ -222,7 +224,7 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, hourId }: 
                 </button>
                 <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-red-600 to-red-500 text-white w-full"
                     onClick={() => {
-                        deletevisitsMutation.mutateAsync(hourId);
+                        deleteVisitsMutation.mutateAsync(visitId);
                         handleClose();
                     }
                     }>

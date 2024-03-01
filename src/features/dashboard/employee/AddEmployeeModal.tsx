@@ -13,7 +13,7 @@ interface NewEmployeeModalProps {
     onClose: () => void;
 }
 
-type Employee = Database["public"]["Tables"]["subordinates"]["Row"]
+type Employee = Database["public"]["Tables"]["employees"]["Row"]
 
 export const AddEmployeeModal = ({ isOpen, onClose }: NewEmployeeModalProps) => {
     const supabase = createClientComponentClient<Database>();
@@ -27,13 +27,13 @@ export const AddEmployeeModal = ({ isOpen, onClose }: NewEmployeeModalProps) => 
     const addNewEmployee = useMutation(
         async (newEmployee: Employee[]) => {
             await supabase
-                .from("subordinates")
+                .from("employees")
                 .upsert(newEmployee)
                 .eq("employer_id", userId);
         },
         {
             onSuccess: () => {
-                queryClient.invalidateQueries(['subordinates', userId]);
+                queryClient.invalidateQueries(['employees', userId]);
 
                 toast.success('Employee added!')
             },

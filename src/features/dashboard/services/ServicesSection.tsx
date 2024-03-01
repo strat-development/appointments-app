@@ -26,7 +26,7 @@ export const ServicesSection = () => {
     const [servicePrice, setServicePrice] = useState<string>("");
     const [serviceDuration, setServiceDuration] = useState<string>("");
     const filteredData = isData.filter(item => item.title && item.title.includes(searchPrompt));
-    const {businessName} = useBusinessContext();
+    const {businessName, businessId} = useBusinessContext();
 
     useQuery(
         ['services', businessName],
@@ -34,7 +34,7 @@ export const ServicesSection = () => {
             const { data, error, status } = await supabase
                 .from("services")
                 .select("*")
-                .eq("business_name", businessName)
+                .eq("business_id", businessId)
 
             if (error && status !== 406) {
                 throw error;
