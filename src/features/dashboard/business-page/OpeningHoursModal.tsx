@@ -17,7 +17,7 @@ type OpeningHours = Database["public"]["Tables"]["business-opening-hours"]["Row"
 
 export const OpeningHoursModal = ({ onClose, isOpen }: OpeningHoursModalProps) => {
     const supabase = createClientComponentClient<Database>();
-    const { businessName } = useBusinessContext();
+    const { businessId } = useBusinessContext();
     const [openingHours, setOpeningHours] = useState<OpeningHours>({} as OpeningHours);
 
     const openingHoursMutation = useMutation(
@@ -25,7 +25,7 @@ export const OpeningHoursModal = ({ onClose, isOpen }: OpeningHoursModalProps) =
             await supabase
                 .from('business-opening-hours')
                 .upsert({
-                    business_name: businessName,
+                    business_id: businessId,
                     opening_hours: JSON.stringify(openingHours)
                 })
         },

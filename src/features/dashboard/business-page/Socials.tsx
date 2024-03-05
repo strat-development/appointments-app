@@ -14,7 +14,7 @@ type SocialMediaTypes = 'Facebook' | 'Instagram' | 'Twitter';
 
 export const Socials = () => {
     const supabase = createClientComponentClient<Database>();
-    const { businessName } = useBusinessContext()
+    const { businessId } = useBusinessContext()
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const socialMediaIcons: Record<SocialMediaTypes, JSX.Element> = {
@@ -35,7 +35,7 @@ export const Socials = () => {
             const { data, error } = await supabase
                 .from('socials')
                 .select('*')
-                .eq('business_name', businessName);
+                .eq('business_id', businessId);
             if (error) {
                 throw error;
             }
@@ -48,11 +48,7 @@ export const Socials = () => {
 
     }
 
-    console.log(socials)
-
-    const parsedSocials = JSON.parse(socials?.socials_data as string);
-
-    console.log(socials)
+    const parsedSocials = socials?.socials_data ? JSON.parse(socials?.socials_data as string) : null;
 
     return (
         <>

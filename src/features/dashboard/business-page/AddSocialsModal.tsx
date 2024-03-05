@@ -18,7 +18,7 @@ type Socials = Database["public"]["Tables"]["socials"]["Row"] & {
 
 export const AddSocialsModal = ({ onClose, isOpen }: AddSocialsModalProps) => {
     const supabase = createClientComponentClient<Database>();
-    const { businessName } = useBusinessContext()
+    const { businessId } = useBusinessContext()
     const [socials, setSocials] = useState<Socials>({} as Socials);
    
     const addSocialsMutation = useMutation(
@@ -26,10 +26,10 @@ export const AddSocialsModal = ({ onClose, isOpen }: AddSocialsModalProps) => {
             await supabase
                 .from('socials')
                 .upsert({
-                    business_name: businessName,
+                    business_id: businessId,
                     socials_data: JSON.stringify(socials)
                 })
-                .eq('business_name', businessName)
+                .eq('business_id', businessId)
         },
         {
             onSuccess: () => {

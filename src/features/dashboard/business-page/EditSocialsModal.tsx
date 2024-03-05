@@ -18,7 +18,7 @@ type Socials = Database["public"]["Tables"]["socials"]["Row"] & {
 
 export const EditSocialsModal = ({ onClose, isOpen }: EditSocialsModalProps) => {
     const supabase = createClientComponentClient<Database>();
-    const { businessName } = useBusinessContext()
+    const { businessId } = useBusinessContext()
     const [socials, setSocials] = useState<Socials>({} as Socials);
    
     const editSocialsMutation = useMutation(
@@ -26,10 +26,9 @@ export const EditSocialsModal = ({ onClose, isOpen }: EditSocialsModalProps) => 
             await supabase
                 .from('socials')
                 .update({
-                    business_name: businessName,
                     socials_data: JSON.stringify(socials)
                 })
-                .eq('business_name', businessName)
+                .eq('business_id', businessId)
         },
         {
             onSuccess: () => {

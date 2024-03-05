@@ -10,7 +10,7 @@ type OpeningHours = Database["public"]["Tables"]["business-opening-hours"]["Row"
 
 export const OpeningHours = () => {
     const supabase = createClientComponentClient<Database>();
-    const {businessName} = useBusinessContext();
+    const { businessId } = useBusinessContext();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const onClose = () => {
@@ -24,7 +24,7 @@ export const OpeningHours = () => {
             const { data, error } = await supabase
                 .from('business-opening-hours')
                 .select('*')
-                .eq('business_name', businessName);
+                .eq('business_id', businessId);
             if (error) {
                 throw error;
             }

@@ -7,7 +7,7 @@ type Services = Database['public']['Tables']['services']['Row'];
 
 export const BusinessServices = () => {
     const supabase = createClientComponentClient<Database>();
-    const { businessName } = useBusinessContext();
+    const { businessId } = useBusinessContext();
 
     const { data: services } = useQuery<Services[]>(
         ['services'],
@@ -15,7 +15,7 @@ export const BusinessServices = () => {
             const { data, error } = await supabase
                 .from('services')
                 .select('*')
-                .eq('business_name', businessName);
+                .eq('business_id', businessId);
             if (error) {
                 throw error;
             }

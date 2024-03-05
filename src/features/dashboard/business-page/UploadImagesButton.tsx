@@ -11,14 +11,14 @@ import { useMutation, useQueryClient } from "react-query";
 
 export const UploadImagesButton = () => {
     const supabase = createClientComponentClient<Database>();
-    const { businessName } = useBusinessContext();
+    const { businessId } = useBusinessContext();
     const [files, setFiles] = useState<File[]>([]);
     const queryClient = useQueryClient();
 
     
     const uploadFiles = async (files: File[]) => {
         const uploadPromises = files.map((file) => {
-            const path = `${businessName}${Math.random()}.${file.name.split('.').pop()}`;
+            const path = `${businessId}${Math.random()}.${file.name.split('.').pop()}`;
             return { promise: supabaseAdmin.storage.from('business-page-photos').upload(path, file), path };
         });
 
@@ -41,7 +41,7 @@ export const UploadImagesButton = () => {
                 const { data, error } = await supabase
                     .from('business-images')
                     .upsert({
-                        business_name: businessName,
+                        business_id: businessId,
                         image_url: path
                     });
                 if (error) {
