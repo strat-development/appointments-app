@@ -5,7 +5,8 @@ import { Database } from "@/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { count } from "console";
 import { useEffect, useState } from "react";
-
+import { VerticalChart } from "./VerticalChart";
+  
 export default function StatisticInfo() {
     const {businessId}= useBusinessContext();
 
@@ -45,8 +46,6 @@ export default function StatisticInfo() {
         }
     }, [userId, supabase]);
 
-
-
     //Getting visits in selected range time
 
 
@@ -58,6 +57,7 @@ export default function StatisticInfo() {
         <>
             <main>
                 <h1>
+                    <VerticalChart></VerticalChart>
                      obecny miesiac={monthlyClients} 
                 </h1>
             </main>
