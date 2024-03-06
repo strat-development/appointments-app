@@ -12,15 +12,20 @@ export default function StatisticInfo() {
 
     //Getting current month visits
     const [monthlyClients, setMonthlyClinets] = useState<number>();
-    console.log(businessId)
+    let profit=0.0;
+    const [totalProfit,setTotalProfit]=useState<number>();
+    const [newClients,setNewClients]=useState<number>();
+    const [currentProfit,setCurrentProfit]=useState<number>(0);
+    const servicesMap=new Map();
 
     const currentDate = new Date();
     const year = currentDate.getFullYear();
     const month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
     const firstDayOfCurrentMonth = `${year}-${month}-01T00:00:00+00:00`;
-
     const {userId} = useUserContext();
     const supabase=createClientComponentClient<Database>();
+
+    //Getting current month visits
 
     useEffect(() => {
         if (userId) {
@@ -37,6 +42,7 @@ export default function StatisticInfo() {
                 }
                 if (clientsData) {
                     setMonthlyClinets(clientsData.length);
+                    getCurrentMonthProfit(clientsData);
                 } else {
                     console.log("Missing Data");
                     setMonthlyClinets(0);
@@ -45,6 +51,45 @@ export default function StatisticInfo() {
             getMonthlyClients();
         }
     }, [userId, supabase]);
+
+    //Getting current month profit
+
+    useEffect(() => {
+        if (userId) {
+            const getServicesForBusiness = async () => {
+                const { data: services, error } = await supabase
+                .from("services")
+                .select("service_id,price")
+                .eq("business_id", businessId)
+                if (error) {
+                    console.log(error);
+                }
+                if (services) {
+                    services.forEach((service)=>{
+                        servicesMap.set(service.service_id,service.price)
+                    });
+                } else {
+                    console.log("Something went wrong with downloanding service data");
+                }
+            };
+            getServicesForBusiness();
+        }
+    }, [userId, supabase]);
+
+
+
+    function getCurrentMonthProfit(clientsData: { service_id: number | null; end_time: string | null; }[]){
+        console.log("Mapa:"+servicesMap)
+        console.log("Data:"+clientsData)
+        clientsData.forEach((visit)=>{
+            if(servicesMap.has(visit.service_id)){
+             profit+=parseFloat(servicesMap.get(visit.service_id));   
+            }else{
+                console.log("You dont have acces to this service");
+            }
+        })
+        setCurrentProfit(profit)
+    }
 
     //Getting visits in selected range time
 
@@ -58,7 +103,8 @@ export default function StatisticInfo() {
             <main>
                 <h1>
                     <VerticalChart></VerticalChart>
-                     obecny miesiac={monthlyClients} 
+                     profit w tym miesiacu :{currentProfit}<br></br>
+                     wizyty w tym miesiacu :{monthlyClients} 
                 </h1>
             </main>
         </>
