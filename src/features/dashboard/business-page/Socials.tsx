@@ -45,7 +45,6 @@ export const Socials = () => {
 
     if (isLoading) {
         return <div>Loading...</div>;
-
     }
 
     const parsedSocials = socials?.socials_data ? JSON.parse(socials?.socials_data as string) : null;

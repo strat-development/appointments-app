@@ -9,6 +9,7 @@ import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { BusinessServices } from "./BusinessServices";
 import { useBusinessContext } from "@/providers/businessContextProvider";
+import { DeleteImagesModal } from "./DeleteImagesModal";
 
 type Images = Database['public']['Tables']['business-images']['Row'];
 
@@ -62,6 +63,7 @@ export const BusinessHero = () => {
                         </Swiper>
                     </div>
                     <UploadImagesButton />
+                    <DeleteImagesModal />
                 </div>
                 <div>
                     <h2 className="text-xl font-bold">{businessName}</h2>
