@@ -12,7 +12,6 @@ export default function StatisticInfo() {
     //Getting current month visits
     const [monthlyClients, setMonthlyClinets] = useState<number>();
     let profit=0.0;
-    const [servicesToChart,setServicesToChart]=useState<Map<number,number>>();
     const [totalProfit,setTotalProfit]=useState<number>();
     const [everyServiceCount,setEveryServiceCount]=useState<Map<number,number>>();
     const [newClients,setNewClients]=useState<number>();
@@ -69,7 +68,6 @@ export default function StatisticInfo() {
                 if (services) {
                     services.forEach((service)=>{
                         servicesMap.set(service.service_id,service.price)
-                        setServicesToChart(servicesMap)
                     });
                 } else {
                     console.log("Something went wrong with downloanding service data");
@@ -106,6 +104,10 @@ export default function StatisticInfo() {
         });
         setEveryServiceCount(serviceCount);
     }
+
+
+
+
     //Getting visits in selected range time
 
 
@@ -117,7 +119,7 @@ export default function StatisticInfo() {
         <>
             <main>
                 <h1>
-                    <PieChart serviceCountMap={everyServiceCount || new Map<number, number>()} serviceMap={servicesToChart || new Map<number, number>()} />
+                    <PieChart serviceCountMap={everyServiceCount || new Map<number, number>()} />
                      profit w tym miesiacu :{currentProfit}<br></br>
                      wizyty w tym miesiacu :{monthlyClients} 
                 </h1>

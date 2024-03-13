@@ -4,12 +4,11 @@ import { Pie } from 'react-chartjs-2';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 interface StatisticInfoProps{
-  serviceMap: Map<number,number>;
   serviceCountMap:Map<number,number>;
 }
 
 
-export function PieChart({serviceMap,serviceCountMap}:StatisticInfoProps) {
+export function PieChart({serviceCountMap}:StatisticInfoProps) {
   const services: number[] = [];
   const countServices: number[]=[];
   serviceCountMap.forEach((value,key)=>{
