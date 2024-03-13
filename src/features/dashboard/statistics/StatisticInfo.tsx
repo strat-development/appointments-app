@@ -14,10 +14,11 @@ export default function StatisticInfo() {
     let profit=0.0;
     const [totalProfit,setTotalProfit]=useState<number>();
     const [everyServiceCount,setEveryServiceCount]=useState<Map<number,number>>();
+    const [serviceName,setServiceName]=useState<Map<number,string>>();
     const [newClients,setNewClients]=useState<number>();
     const [currentProfit,setCurrentProfit]=useState<number>(0);
     const servicesMap=new Map<number,number>();
-
+    const servicesNameMap=new Map<number,string>();
     const currentDate = new Date();
     const year = currentDate.getFullYear();
     const month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
@@ -60,7 +61,7 @@ export default function StatisticInfo() {
             const getServicesForBusiness = async () => {
                 const { data: services, error } = await supabase
                 .from("services")
-                .select("service_id,price")
+                .select("service_id,price,title")
                 .eq("business_id", businessId)
                 if (error) {
                     console.log(error);
@@ -68,7 +69,9 @@ export default function StatisticInfo() {
                 if (services) {
                     services.forEach((service)=>{
                         servicesMap.set(service.service_id,service.price)
+                        servicesNameMap.set(service.service_id,service.title)
                     });
+                    setServiceName(servicesNameMap)
                 } else {
                     console.log("Something went wrong with downloanding service data");
                 }
@@ -76,8 +79,6 @@ export default function StatisticInfo() {
             getServicesForBusiness();
         }
     }, [userId, supabase]);
-
-
 
     function getCurrentMonthProfit(clientsData: { service_id: number | null; end_time: string | null; }[]){
         clientsData.forEach((visit)=>{
@@ -119,7 +120,7 @@ export default function StatisticInfo() {
         <>
             <main>
                 <h1>
-                    <PieChart serviceCountMap={everyServiceCount || new Map<number, number>()} />
+                    <PieChart serviceNameMap={serviceName || new Map<number, string>()} serviceCountMap={everyServiceCount || new Map<number, number>()} />
                      profit w tym miesiacu :{currentProfit}<br></br>
                      wizyty w tym miesiacu :{monthlyClients} 
                 </h1>

@@ -5,15 +5,20 @@ import { Pie } from 'react-chartjs-2';
 ChartJS.register(ArcElement, Tooltip, Legend);
 interface StatisticInfoProps{
   serviceCountMap:Map<number,number>;
+  serviceNameMap:Map<number,string>;
 }
 
 
-export function PieChart({serviceCountMap}:StatisticInfoProps) {
-  const services: number[] = [];
+export function PieChart({serviceCountMap,serviceNameMap}:StatisticInfoProps) {
+  const services: string[] = [];
   const countServices: number[]=[];
   serviceCountMap.forEach((value,key)=>{
-    services.push(key);
-    countServices.push(value);
+    let serviceName=serviceNameMap.get(key);
+
+    if (serviceName !== undefined) {
+      services.push(serviceName);
+      countServices.push(value);
+    }
   })
 
   
