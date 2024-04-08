@@ -3,23 +3,34 @@ import { BusinessContext, useBusinessContext } from "@/providers/businessContext
 import { useUserContext } from "@/providers/userContextProvider";
 import { Database } from "@/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { count } from "console";
 import { useEffect, useState } from "react";
-
+import { PieChart } from "./PieChart";
+import "@/styles/statistic.css"
+import DateRangePicker from '@wojtekmaj/react-daterange-picker'
+  
 export default function StatisticInfo() {
     const {businessId}= useBusinessContext();
 
     //Getting current month visits
     const [monthlyClients, setMonthlyClinets] = useState<number>();
-    console.log(businessId)
-
+    let profit=0.0;
+    const [totalProfit,setTotalProfit]=useState<number>();
+    const [everyServiceCount,setEveryServiceCount]=useState<Map<number,number>>();
+    const [serviceName,setServiceName]=useState<Map<number,string>>();
+    const [newClients,setNewClients]=useState<number>();
+    const [currentProfit,setCurrentProfit]=useState<number>(0);
+    const servicesMap=new Map<number,number>();
+    const servicesNameMap=new Map<number,string>();
     const currentDate = new Date();
     const year = currentDate.getFullYear();
     const month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
     const firstDayOfCurrentMonth = `${year}-${month}-01T00:00:00+00:00`;
-
     const {userId} = useUserContext();
     const supabase=createClientComponentClient<Database>();
+    type ValuePiece = Date | null;
+    type Value = ValuePiece | [ValuePiece, ValuePiece];
+
+    //Getting current month visits
 
     useEffect(() => {
         if (userId) {
@@ -36,6 +47,8 @@ export default function StatisticInfo() {
                 }
                 if (clientsData) {
                     setMonthlyClinets(clientsData.length);
+                    getCurrentMonthProfit(clientsData);
+                    getEveryServiceCount(clientsData);
                 } else {
                     console.log("Missing Data");
                     setMonthlyClinets(0);
@@ -45,24 +58,89 @@ export default function StatisticInfo() {
         }
     }, [userId, supabase]);
 
+    //Getting current month profit
+
+    useEffect(() => {
+        if (userId) {
+            const getServicesForBusiness = async () => {
+                const { data: services, error } = await supabase
+                .from("services")
+                .select("service_id,price,title")
+                .eq("business_id", businessId)
+                if (error) {
+                    console.log(error);
+                }
+                if (services) {
+                    services.forEach((service)=>{
+                        servicesMap.set(service.service_id,service.price)
+                        servicesNameMap.set(service.service_id,service.title)
+                    });
+                    setServiceName(servicesNameMap)
+                } else {
+                    console.log("Something went wrong with downloanding service data");
+                }
+            };
+            getServicesForBusiness();
+        }
+    }, [userId, supabase]);
+
+    function getCurrentMonthProfit(clientsData: { service_id: number | null; end_time: string | null; }[]){
+        clientsData.forEach((visit)=>{
+            if(servicesMap.has(visit.service_id as any)){
+             profit+=parseFloat(servicesMap.get(visit.service_id as any) as any);   
+            }else{
+                console.log("You dont have acces to this service");
+            }
+        })
+        setCurrentProfit(profit)
+    }
+
+
+    function getEveryServiceCount(clientsData: { service_id: number | null; end_time: string | null; }[]){
+        const serviceCount = new Map<number, number>();
+        
+        clientsData.forEach((value) => {
+            if (value.service_id !== null && serviceCount.has(value.service_id as any)) {
+                let oldValue = serviceCount.get(value.service_id as any) || 0; 
+                serviceCount.set(value.service_id, oldValue + 1);
+            } else {
+                serviceCount.set(value.service_id as any, 1);
+            }
+        });
+        setEveryServiceCount(serviceCount);
+    }
+
+
 
 
     //Getting visits in selected range time
-
-
-
+    const [value, onChange] = useState<Value>(new Date());
+ 
 
 
 
     return (
         <>
-            <main>
-                <h1>
-                     obecny miesiac={monthlyClients} 
-                </h1>
-            </main>
+            <main className="flex min-h-screen flex-col items-center justify-between p-54">
+
+                    {/* <div style={{ width: "500px",height: "300px"}}>
+                        <PieChart serviceNameMap={serviceName || new Map<number, string>()} serviceCountMap={everyServiceCount || new Map<number, number>()} />
+                        profit w tym miesiacu :{currentProfit}<br></br>
+                        wizyty w tym miesiacu :{monthlyClients} <br/><br/>
+                     </div> */}
+                     <div className="flex h-[500px] flex-col items-center justify-between p-54 w-[500px] bg-[#f5f5f5]">
+                     <DateRangePicker
+                        onChange={onChange}
+                        value={value} 
+                        id="customDatePicker"
+                        autoFocus
+                        dayPlaceholder="01"
+                        yearPlaceholder="2024"
+                        monthPlaceholder="04"
+                        />
+                    </div>
+                </main>
         </>
     );
 }
-
 
