@@ -5,6 +5,8 @@ import { Database } from "@/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 import { PieChart } from "./PieChart";
+import "@/styles/statistic.css"
+import DateRangePicker from '@wojtekmaj/react-daterange-picker'
   
 export default function StatisticInfo() {
     const {businessId}= useBusinessContext();
@@ -25,6 +27,8 @@ export default function StatisticInfo() {
     const firstDayOfCurrentMonth = `${year}-${month}-01T00:00:00+00:00`;
     const {userId} = useUserContext();
     const supabase=createClientComponentClient<Database>();
+    type ValuePiece = Date | null;
+    type Value = ValuePiece | [ValuePiece, ValuePiece];
 
     //Getting current month visits
 
@@ -110,23 +114,33 @@ export default function StatisticInfo() {
 
 
     //Getting visits in selected range time
-
-
-
+    const [value, onChange] = useState<Value>(new Date());
+ 
 
 
 
     return (
         <>
-            <main>
-                <h1>
-                    <PieChart serviceNameMap={serviceName || new Map<number, string>()} serviceCountMap={everyServiceCount || new Map<number, number>()} />
-                     profit w tym miesiacu :{currentProfit}<br></br>
-                     wizyty w tym miesiacu :{monthlyClients} 
-                </h1>
-            </main>
+            <main className="flex min-h-screen flex-col items-center justify-between p-54">
+
+                    {/* <div style={{ width: "500px",height: "300px"}}>
+                        <PieChart serviceNameMap={serviceName || new Map<number, string>()} serviceCountMap={everyServiceCount || new Map<number, number>()} />
+                        profit w tym miesiacu :{currentProfit}<br></br>
+                        wizyty w tym miesiacu :{monthlyClients} <br/><br/>
+                     </div> */}
+                     <div className="flex h-[500px] flex-col items-center justify-between p-54 w-[500px] bg-[#f5f5f5]">
+                     <DateRangePicker
+                        onChange={onChange}
+                        value={value} 
+                        id="customDatePicker"
+                        autoFocus
+                        dayPlaceholder="01"
+                        yearPlaceholder="2024"
+                        monthPlaceholder="04"
+                        />
+                    </div>
+                </main>
         </>
     );
 }
-
 
