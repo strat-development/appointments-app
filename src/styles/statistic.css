@@ -16,17 +16,25 @@
         font-size: 16px; 
         height: 40px;
 }
-.react-daterange-picker__inputGroup{
-    width: 50px;
-    background-color: rgb(53, 56, 55);
-    height: 40px;
+.react-daterange-picker__inputGroup {
+    /* width: 150px; */
+    /* background-color: rgb(53, 56, 55); */
+    display: flex;
+    gap: 10px;
+    /* justify-content: space-between; */
+    align-items: center;
+    border: 1px solid #ccc;
 }
 
 .react-daterange-picker__inputGroup{
     width: 100%;
     height: 100%;
 }
-.react-daterange-picker__inputGroup__input react-daterange-picker__inputGroup__day,react-daterange-picker__inputGroup__input react-daterange-picker__inputGroup__month,react-daterange-picker__inputGroup__input react-daterange-picker__inputGroup__year{
-    
+.react-daterange-picker__inputGroup__input, 
+.react-daterange-picker__inputGroup__day, 
+.react-daterange-picker__inputGroup__input, 
+.react-daterange-picker__inputGroup__month, 
+.react-daterange-picker__inputGroup__input, 
+.react-daterange-picker__inputGroup__year {    
     width: 30%;
 }
