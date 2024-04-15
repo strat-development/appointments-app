@@ -69,7 +69,6 @@ export const BusinessHero = () => {
                     <h2 className="text-xl font-bold">{businessName}</h2>
                     <p className="text-base text-black/70">{businessAddress}</p>
                 </div>
-                <BusinessServices />
             </div>
         </>
     );

@@ -2,8 +2,6 @@
 
 import { useModal } from "@/hooks/useModal";
 import { useUserContext } from "@/providers/userContextProvider";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import { AuthModal } from "../../features/auth-modal/AuthModal";
 import Link from "next/link";
 
@@ -21,6 +19,9 @@ export const Navbar = () => {
                             className="flex rounded-full text-violet-600 border-2 font-medium border-violet-600 items-center justify-center px-8 py-2 hover:scale-95 duration-300 max-lg:text-sm max-lg:py-1 max-sm:hidden">
                             Login
                         </button>
+                        <Link href="/business-browse-page">
+                            Businesess
+                        </Link>
                         <button onClick={authModal.onOpen}
                             className="bg-gradient-to-b from-violet-600 to-violet-500 text-white px-8 py-2 rounded-full font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:text-sm">
                             Register
@@ -28,9 +29,14 @@ export const Navbar = () => {
                     </div>
                 )}
                 {userRole && (
-                    <Link href="/dashboard/schedule" className="bg-gradient-to-b from-violet-600 to-violet-500 text-white px-8 py-2 rounded-full font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:text-sm">
-                        Dashboard
-                    </Link>
+                    <>
+                        <Link href="/business-browse-page">
+                            Businesess
+                        </Link>
+                        <Link href="/dashboard/schedule" className="bg-gradient-to-b from-violet-600 to-violet-500 text-white px-8 py-2 rounded-full font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:text-sm">
+                            Dashboard
+                        </Link>
+                    </>
                 )}
                 <AuthModal />
             </nav>
