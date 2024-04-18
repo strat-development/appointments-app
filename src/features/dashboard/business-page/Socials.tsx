@@ -12,7 +12,7 @@ import { EditSocialsModal } from "./EditSocialsModal";
 type Socials = Database["public"]["Tables"]["socials"]["Row"];
 type SocialMediaTypes = 'Facebook' | 'Instagram' | 'Twitter';
 
-export const Socials = () => {
+export const Socials = ({businessSlugId}: {businessSlugId: string}) => {
     const supabase = createClientComponentClient<Database>();
     const { businessId } = useBusinessContext()
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,7 +35,7 @@ export const Socials = () => {
             const { data, error } = await supabase
                 .from('socials')
                 .select('*')
-                .eq('business_id', businessId);
+                .or(`business_id.eq.${businessSlugId || businessId}`)
             if (error) {
                 throw error;
             }

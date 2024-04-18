@@ -8,7 +8,7 @@ import { useBusinessContext } from "@/providers/businessContextProvider";
 
 type OpeningHours = Database["public"]["Tables"]["business-opening-hours"]["Row"];
 
-export const OpeningHours = () => {
+export const OpeningHours = ({businessSlugId}: {businessSlugId: string}) => {
     const supabase = createClientComponentClient<Database>();
     const { businessId } = useBusinessContext();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,7 +24,7 @@ export const OpeningHours = () => {
             const { data, error } = await supabase
                 .from('business-opening-hours')
                 .select('*')
-                .eq('business_id', businessId);
+                .or(`business_id.eq.${businessSlugId || businessId}`)
             if (error) {
                 throw error;
             }

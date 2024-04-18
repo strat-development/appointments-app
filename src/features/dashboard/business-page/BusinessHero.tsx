@@ -7,35 +7,43 @@ import { useEffect, useState } from "react";
 import { supabaseAdmin } from "@/libs/admin";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { BusinessServices } from "./BusinessServices";
 import { useBusinessContext } from "@/providers/businessContextProvider";
 import { DeleteImagesModal } from "./DeleteImagesModal";
 
 type Images = Database['public']['Tables']['business-images']['Row'];
 
-export const BusinessHero = () => {
+export const BusinessHero = ({ businessSlugId }: { businessSlugId: string }) => {
     const supabase = createClientComponentClient<Database>();
     const [imageUrls, setImageUrls] = useState<{ publicUrl: string }[]>([]);
-    const { businessAddress, businessId, businessName }=useBusinessContext();
+    const { businessAddress, businessId, businessName } = useBusinessContext();
 
-    const { data: images } = useQuery<Images[]>(
-        ['business-images'],
+    console.log(businessSlugId);
+
+    const { data: images, isLoading } = useQuery<Images[]>(
+        ['business-images', businessSlugId || businessId],
         async () => {
+            const id = businessSlugId || businessId;
+            if (!id) {
+                return [];
+            }
             const { data, error } = await supabase
                 .from('business-images')
                 .select('*')
-                .eq('business_id', businessId);
+                .eq('business_id', id)
             if (error) {
                 throw error;
             }
             return data || [];
+        },
+        {
+            enabled: !!businessSlugId || !!businessId
         }
     );
 
     useEffect(() => {
         if (images) {
             Promise.all(images.map(async (image) => {
-                const { data: publicURL } = await supabaseAdmin.storage
+                const { data: publicURL } = await supabase.storage
                     .from('business-page-photos')
                     .getPublicUrl(image.image_url)
 

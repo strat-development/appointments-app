@@ -8,7 +8,7 @@ import { useQuery, useQueryClient } from "react-query";
 
 type Opinions = Database["public"]["Tables"]["opinions"]["Row"];
 
-export const BusinessOpinions = () => {
+export const BusinessOpinions = ({ businessSlugId }: { businessSlugId: string }) => {
     const queryClient = useQueryClient();
     const businessId = useBusinessContext();
     const supabase = createClientComponentClient<Database>();
@@ -20,7 +20,7 @@ export const BusinessOpinions = () => {
             const { data, error, status } = await supabase
                 .from("opinions")
                 .select("*")
-                .eq("business_id", businessId)
+                .or(`business_id.eq.${businessSlugId || businessId}`)
 
             if (error && status !== 406) {
                 throw error;
@@ -32,8 +32,6 @@ export const BusinessOpinions = () => {
             }
         },
     );
-
-    console.log(opinionsData);
 
     return (
         <>

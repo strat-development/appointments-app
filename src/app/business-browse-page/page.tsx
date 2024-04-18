@@ -1,5 +1,6 @@
 "use client"
 
+import { Navbar } from "@/components/landing-page/Navbar";
 import { Database } from "@/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
@@ -32,21 +33,24 @@ export default function BusinessPagesBrowser() {
     );
 
     return (
-        <div>
-            {businessPages.map((businessPage) => (
-                <Link href={`/business-page/${businessPage.business_name}`}>
-                    <div className="border-[.5px] rounded-2xl p-4 flex justify-between"
-                        key={businessPage.id}>
-                        <div className="flex flex-col gap-2">
-                            <h2>{businessPage.business_name}</h2>
-                            <div className="flex gap-4">
-                                <p>{businessPage.business_name}</p>
-                                <p>{businessPage.business_address}</p>
+        <>
+            <Navbar />
+            <div className="relative top-24">
+                {businessPages.map((businessPage) => (
+                    <Link href={`/business-browse-page/${businessPage.id}`}>
+                        <div className="border-[.5px] rounded-2xl p-4 flex justify-between"
+                            key={businessPage.id}>
+                            <div className="flex flex-col gap-2">
+                                <h2>{businessPage.business_name}</h2>
+                                <div className="flex gap-4">
+                                    <p>{businessPage.business_name}</p>
+                                    <p>{businessPage.business_address}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </Link>
-            ))}
-        </div>
+                    </Link>
+                ))}
+            </div>
+        </>
     )
 }

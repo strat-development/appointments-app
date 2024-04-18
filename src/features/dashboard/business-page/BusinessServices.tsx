@@ -5,7 +5,7 @@ import { useQuery } from "react-query";
 
 type Services = Database['public']['Tables']['services']['Row'];
 
-export const BusinessServices = () => {
+export const BusinessServices = ({businessSlugId}: {businessSlugId: string}) => {
     const supabase = createClientComponentClient<Database>();
     const { businessId } = useBusinessContext();
 
@@ -15,7 +15,7 @@ export const BusinessServices = () => {
             const { data, error } = await supabase
                 .from('services')
                 .select('*')
-                .eq('business_id', businessId);
+                .or(`business_id.eq.${businessSlugId || businessId}`)
             if (error) {
                 throw error;
             }
