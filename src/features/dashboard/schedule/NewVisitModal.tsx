@@ -7,6 +7,7 @@ import { Database } from "@/types/supabase";
 import { useUserContext } from "@/providers/userContextProvider";
 import toast from "react-hot-toast";
 import { useBusinessContext } from "@/providers/businessContextProvider";
+import { ClientsData, ServicesData, VisitsData } from "@/types/types";
 
 interface NewVisitModalProps {
     isOpen: boolean;
@@ -15,10 +16,6 @@ interface NewVisitModalProps {
     endTime: string | null | undefined;
 }
 
-type Visits = Database["public"]["Tables"]["visits"]["Row"]
-type Clients = Database["public"]["Tables"]["clients"]["Row"]
-type Services = Database["public"]["Tables"]["services"]["Row"]
-
 export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitModalProps) => {
     const [email, setEmail] = useState<string | null>(null);
     const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
@@ -26,12 +23,12 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
     const [client, setClient] = useState<string | null>(null);
     const [clientId, setClientId] = useState<string | null>(null);
     const [note, setNote] = useState<string | null>(null);
-    const [availiableServices, setAvailiableServices] = useState<Services[]>([])
+    const [availiableServices, setAvailiableServices] = useState<ServicesData[]>([])
     const supabase = createClientComponentClient<Database>();
     const { userId } = useUserContext();
     const queryClient = useQueryClient();
     const { businessName, businessId } = useBusinessContext();
-    const [existingClients, setExistingClients] = useState<Clients[]>([]);
+    const [existingClients, setExistingClients] = useState<ClientsData[]>([]);
     const [addingNewClient, setAddingNewClient] = useState(false);
     const [selectedStartTime, setSelectedStartTime] = useState<string | null>(null);
     const [selectedEndTime, setSelectedEndTime] = useState<string | null>(null);
@@ -54,14 +51,14 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
         },
         {
             onSuccess: (data) => {
-                setExistingClients(data as Clients[])
+                setExistingClients(data as ClientsData[])
             }
         }
     )
 
 
     const addVisitsMutation = useMutation(
-        async (newVisits: Visits) => {
+        async (newVisits: VisitsData) => {
             await supabase
                 .from("visits")
                 .upsert(newVisits)
@@ -81,7 +78,7 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
     );
 
     const addNewClient = useMutation(
-        async (newClient: Clients) => {
+        async (newClient: ClientsData) => {
             await supabase
                 .from("clients")
                 .upsert(
@@ -114,7 +111,7 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
         },
         {
             onSuccess: (data) => {
-                setAvailiableServices(data as Services[])
+                setAvailiableServices(data as ServicesData[])
             }
         }
     )
@@ -256,7 +253,7 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
                             status: 'Active',
                             business_id: businessId,
                             client_id: clientId,
-                        } as unknown as Visits);
+                        } as unknown as VisitsData);
 
                         const clientExists = existingClients.some(existingClient => existingClient.full_name === client);
 
@@ -271,7 +268,7 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
                                 client_id: '',
                                 full_name: client || '',
                                 visit_count: 0,
-                            } as Clients);
+                            } as ClientsData);
                         }
 
                         handleClose();

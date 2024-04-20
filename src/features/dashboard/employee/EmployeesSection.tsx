@@ -10,12 +10,11 @@ import { Edit } from "iconsax-react"
 import { AddEmployeeModal } from "./AddEmployeeModal"
 import { EditEmployeeModal } from "./EditEmployeeModal"
 import { useBusinessContext } from "@/providers/businessContextProvider"
-
-type Employees = Database["public"]["Tables"]["employees"]["Row"]
+import { EmployeesData } from "@/types/types"
 
 export const EmployeesSection = () => {
     const supabase = createClientComponentClient<Database>();
-    const [isData, setIsData] = useState<Employees[]>([])
+    const [isData, setIsData] = useState<EmployeesData[]>([])
     const queryClient = useQueryClient();
     const { userName, userId } = useUserContext();
     const [isModalOpen, setIsModalOpen] = useState(false);

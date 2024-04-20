@@ -1,21 +1,25 @@
-import { useBusinessContext } from "@/providers/businessContextProvider";
 import { Database } from "@/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useQuery } from "react-query";
+import { BookVisitModal } from "./visits-booking/BookVisitModal";
+import { useState } from "react";
+import { BusinessSlugIdProps, ServicesData } from "@/types/types";
 
-type Services = Database['public']['Tables']['services']['Row'];
 
-export const BusinessServices = ({businessSlugId}: {businessSlugId: string}) => {
+
+export const BusinessServices = ({ businessSlugId }: BusinessSlugIdProps) => {
     const supabase = createClientComponentClient<Database>();
-    const { businessId } = useBusinessContext();
-
-    const { data: services } = useQuery<Services[]>(
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const handleClose = () => {
+        setIsModalOpen(false);
+    }
+    const { data: services } = useQuery<ServicesData[]>(
         ['services'],
         async () => {
             const { data, error } = await supabase
                 .from('services')
                 .select('*')
-                .or(`business_id.eq.${businessSlugId || businessId}`)
+                .eq('business_id', businessSlugId || "")
             if (error) {
                 throw error;
             }
@@ -35,11 +39,15 @@ export const BusinessServices = ({businessSlugId}: {businessSlugId: string}) => 
                             <p>{service.price}</p>
                         </div>
                     </div>
-                    <button>
+                    <button value={service.title}
+                        onClick={() => setIsModalOpen(true)}>
                         Book
                     </button>
                 </div>
             ))}
+            <BookVisitModal businessSlugId={businessSlugId}
+                isOpen={isModalOpen}
+                onClose={handleClose} />
         </>
     )
 }

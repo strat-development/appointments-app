@@ -6,6 +6,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import toast from "react-hot-toast";
 import { Database } from "@/types/supabase";
 import { useBusinessContext } from "@/providers/businessContextProvider";
+import { PositionsData } from "@/types/types";
 
 interface NewPositionModalProps {
     isOpen: boolean;
@@ -13,8 +14,6 @@ interface NewPositionModalProps {
     positionName: string;
     positionId: number;
 }
-
-type Positions = Database["public"]["Tables"]["positions"]["Row"]
 
 export const EditPositionModal = ({ isOpen, onClose, positionName, positionId }: NewPositionModalProps) => {
     const supabase = createClientComponentClient<Database>();
@@ -28,7 +27,7 @@ export const EditPositionModal = ({ isOpen, onClose, positionName, positionId }:
     }, [positionName]);
 
     const editPosition = useMutation(
-        async (newPosition: Positions) => {
+        async (newPosition: PositionsData) => {
             await supabase
                 .from("positions")
                 .update(newPosition)
@@ -87,7 +86,7 @@ export const EditPositionModal = ({ isOpen, onClose, positionName, positionId }:
                         editPosition.mutateAsync({
                             position_name: positionNames,
                             business_id: businessId
-                        } as Positions);
+                        } as PositionsData);
                         handleClose();
                     }}>
                     Edit

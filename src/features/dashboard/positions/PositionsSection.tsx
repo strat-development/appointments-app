@@ -10,12 +10,11 @@ import { AddPositionModal } from "./AddPositionModal"
 import { EditPositionModal } from "./EditPositionModal"
 import { Edit } from "iconsax-react"
 import { useBusinessContext } from "@/providers/businessContextProvider"
-
-type Positions = Database["public"]["Tables"]["positions"]["Row"]
+import { PositionsData } from "@/types/types"
 
 export const PositionsSection = () => {
     const supabase = createClientComponentClient<Database>();
-    const [isData, setIsData] = useState<Positions[]>([])
+    const [isData, setIsData] = useState<PositionsData[]>([])
     const queryClient = useQueryClient();
     const { userName } = useUserContext();
     const [isModalOpen, setIsModalOpen] = useState(false);

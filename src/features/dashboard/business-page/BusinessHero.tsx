@@ -4,18 +4,18 @@ import Image from "next/image";
 import { useQuery } from "react-query";
 import { UploadImagesButton } from "./UploadImagesButton";
 import { useEffect, useState } from "react";
-import { supabaseAdmin } from "@/libs/admin";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useBusinessContext } from "@/providers/businessContextProvider";
 import { DeleteImagesModal } from "./DeleteImagesModal";
+import { useUserContext } from "@/providers/userContextProvider";
+import { BusinessSlugIdProps, Images } from "@/types/types";
 
-type Images = Database['public']['Tables']['business-images']['Row'];
-
-export const BusinessHero = ({ businessSlugId }: { businessSlugId: string }) => {
+export const BusinessHero = ({ businessSlugId }: BusinessSlugIdProps) => {
     const supabase = createClientComponentClient<Database>();
     const [imageUrls, setImageUrls] = useState<{ publicUrl: string }[]>([]);
     const { businessAddress, businessId, businessName } = useBusinessContext();
+    const { userRole } = useUserContext();
 
     const { data: images, isLoading } = useQuery<Images[]>(
         ['business-images', businessSlugId || businessId],
@@ -68,8 +68,12 @@ export const BusinessHero = ({ businessSlugId }: { businessSlugId: string }) => 
                             ))}
                         </Swiper>
                     </div>
-                    <UploadImagesButton />
-                    <DeleteImagesModal />
+                    {userRole === 'Employer' && (
+                        <>
+                            <UploadImagesButton />
+                            <DeleteImagesModal />
+                        </>
+                    )}
                 </div>
                 <div>
                     <h2 className="text-xl font-bold">{businessName}</h2>

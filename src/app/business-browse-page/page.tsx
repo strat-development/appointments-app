@@ -2,17 +2,16 @@
 
 import { Navbar } from "@/components/landing-page/Navbar";
 import { Database } from "@/types/supabase";
+import { BusinessData } from "@/types/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 
-type BusinessInfo = Database["public"]["Tables"]["business-info"]["Row"];
-
 export default function BusinessPagesBrowser() {
     const queryClient = useQueryClient();
     const supabase = createClientComponentClient<Database>();
-    const [businessPages, setBusinessPages] = useState<BusinessInfo[]>([]);
+    const [businessPages, setBusinessPages] = useState<BusinessData[]>([]);
 
     const { data: businessPagesData, isLoading, isError } = useQuery(
         ['businessPages'],

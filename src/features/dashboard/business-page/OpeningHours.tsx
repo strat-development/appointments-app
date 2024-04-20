@@ -4,27 +4,26 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 import { OpeningHoursModal } from "./OpeningHoursModal";
 import { EditOpeningHoursModal } from "./EditOpeningHoursModal";
-import { useBusinessContext } from "@/providers/businessContextProvider";
+import { useUserContext } from "@/providers/userContextProvider";
+import { BusinessSlugIdProps, OpeningHoursData } from "@/types/types";
 
-type OpeningHours = Database["public"]["Tables"]["business-opening-hours"]["Row"];
-
-export const OpeningHours = ({businessSlugId}: {businessSlugId: string}) => {
+export const OpeningHours = ({businessSlugId}: BusinessSlugIdProps) => {
     const supabase = createClientComponentClient<Database>();
-    const { businessId } = useBusinessContext();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const { userRole } = useUserContext();
     const onClose = () => {
         setIsModalOpen(false);
         setIsEditModalOpen(false);
     }
 
-    const { data: openingHours, isLoading } = useQuery<OpeningHours>(
+    const { data: openingHours, isLoading } = useQuery<OpeningHoursData>(
         ['opening-hours'],
         async () => {
             const { data, error } = await supabase
                 .from('business-opening-hours')
                 .select('*')
-                .or(`business_id.eq.${businessSlugId || businessId}`)
+                .eq('business_id', businessSlugId || "")
             if (error) {
                 throw error;
             }
@@ -40,26 +39,28 @@ export const OpeningHours = ({businessSlugId}: {businessSlugId: string}) => {
 
     return (
         <>
-            <div>
-                <h2>Opening Hours</h2>
-                <div>
+            <div className="flex flex-col gap-4 w-full">
+                <h2 className="self-center text-xl font-semibold">Opening Hours</h2>
+                <div className="flex flex-col gap-2 w-full">
                     {Object.entries(parsedOpeningHours).map(([day, hours]) => {
                         const hoursAsObj = hours as { start?: string, end?: string, closed?: boolean };
                         return (
-                            <div key={day}>
+                            <div className="flex justify-between w-full"  
+                            key={day}>
                                 <h3>{day}</h3>
                                 {hoursAsObj.closed
-                                    ? <p>Closed</p>
-                                    : <p>Open from {hoursAsObj.start} to {hoursAsObj.end}</p>}
+                                    ? <p className="text-black/70">Closed</p>
+                                    : <p className="text-black/70">{hoursAsObj.start} - {hoursAsObj.end}</p>}
                             </div>
                         );
                     })}
                 </div>
-                {!openingHours ? (
+                {!openingHours && userRole === "Employer" && (
                     <button onClick={() => setIsModalOpen(true)}>
                         Add hours
                     </button>
-                ) : (
+                )} 
+                {openingHours && userRole === "Employer" && (
                     <button onClick={() => setIsEditModalOpen(true)}>
                         Edit hours
                     </button>

@@ -2,12 +2,11 @@ import { Modal } from "@/components/Modal";
 import { supabaseAdmin } from "@/libs/admin";
 import { useBusinessContext } from "@/providers/businessContextProvider";
 import { Database } from "@/types/supabase";
+import { Images } from "@/types/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-
-type Images = Database['public']['Tables']['business-images']['Row'];
 
 export const DeleteImagesModal = () => {
     const supabase = createClientComponentClient<Database>();

@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import toast from "react-hot-toast";
 import { Database } from "@/types/supabase";
+import { ClientsData } from "@/types/types";
 
 interface NewClientModalProps {
     isOpen: boolean;
@@ -12,8 +13,6 @@ interface NewClientModalProps {
     clientName: string;
     clientId: string;
 }
-
-type Clients = Database["public"]["Tables"]["clients"]["Row"]
 
 export const EditClientModal = ({ isOpen, onClose, clientName, clientId }: NewClientModalProps) => {
     const supabase = createClientComponentClient<Database>();
@@ -28,7 +27,7 @@ export const EditClientModal = ({ isOpen, onClose, clientName, clientId }: NewCl
     }, [clientName]);
 
     const editClient = useMutation(
-        async (newClient: Clients) => {
+        async (newClient: ClientsData) => {
             await supabase
                 .from("clients")
                 .update(newClient)
@@ -108,7 +107,7 @@ export const EditClientModal = ({ isOpen, onClose, clientName, clientId }: NewCl
                             full_name: clientNames,
                             phone_number: phoneNumbers,
                             email: emails
-                        } as Clients);
+                        } as ClientsData);
                         handleClose();
                     }}>
                     Edit

@@ -16,18 +16,17 @@ import { useUserContext } from "@/providers/userContextProvider"
 import { handleEvents, renderEventContent } from "@/actions/schedule/EventHandlets"
 import { NewVisitModal } from "./NewVisitModal"
 import { EditVisitModal } from "./EditVisitModal"
-
-type Visits = Database["public"]["Tables"]["visits"]["Row"]
+import { VisitsData } from "@/types/types"
 
 export const Schedule = () => {
     const supabase = createClientComponentClient<Database>();
-    const [isData, setIsData] = useState<Visits[]>([])
+    const [isData, setIsData] = useState<VisitsData[]>([])
     const queryClient = useQueryClient();
     const { userName, userId } = useUserContext();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [eventId, setEventId] = useState<string>("")
-    const [newVisits, setNewVisits] = useState<Visits | null>(null);
+    const [newVisits, setNewVisits] = useState<VisitsData | null>(null);
 
     const { data: hoursData, isLoading, isError } = useQuery(
         ['visits', userId],
@@ -63,7 +62,7 @@ export const Schedule = () => {
             end_time: selectInfo.endStr,
         };
     
-        setNewVisits(newVisits as Visits);
+        setNewVisits(newVisits as VisitsData);
     };
     
     const handleEventClick = (clickInfo: EventClickArg) => {
@@ -76,7 +75,7 @@ export const Schedule = () => {
             end_time: clickInfo.event.endStr,
         };
     
-        setNewVisits(newVisits as Visits);
+        setNewVisits(newVisits as VisitsData);
         setEventId(event.id);
     };
 

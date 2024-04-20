@@ -7,13 +7,12 @@ import toast from "react-hot-toast";
 import { Database } from "@/types/supabase";
 import { useUserContext } from "@/providers/userContextProvider";
 import { useBusinessContext } from "@/providers/businessContextProvider";
+import { EmployeesData } from "@/types/types";
 
 interface NewEmployeeModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
-
-type Employee = Database["public"]["Tables"]["employees"]["Row"]
 
 export const AddEmployeeModal = ({ isOpen, onClose }: NewEmployeeModalProps) => {
     const supabase = createClientComponentClient<Database>();
@@ -25,7 +24,7 @@ export const AddEmployeeModal = ({ isOpen, onClose }: NewEmployeeModalProps) => 
     const { businessName } = useBusinessContext();
 
     const addNewEmployee = useMutation(
-        async (newEmployee: Employee[]) => {
+        async (newEmployee: EmployeesData[]) => {
             await supabase
                 .from("employees")
                 .upsert(newEmployee)
@@ -103,7 +102,7 @@ export const AddEmployeeModal = ({ isOpen, onClose }: NewEmployeeModalProps) => 
                                 business_name: businessName,
                                 phone_number: phoneNumbers[index],
                                 employer_id: userId
-                            } as Employee))
+                            } as EmployeesData))
                         );
                         onClose();
                     }}>

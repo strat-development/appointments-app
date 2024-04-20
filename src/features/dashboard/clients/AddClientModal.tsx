@@ -7,13 +7,12 @@ import toast from "react-hot-toast";
 import { Database } from "@/types/supabase";
 import { useBusinessContext } from "@/providers/businessContextProvider";
 import { useUserContext } from "@/providers/userContextProvider";
+import { ClientsData } from "@/types/types";
 
 interface NewClientModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
-
-type Clients = Database["public"]["Tables"]["clients"]["Row"]
 
 export const AddClientModal = ({ isOpen, onClose }: NewClientModalProps) => {
     const supabase = createClientComponentClient<Database>();
@@ -26,7 +25,7 @@ export const AddClientModal = ({ isOpen, onClose }: NewClientModalProps) => {
     const { userId } = useUserContext();
 
     const addNewClient = useMutation(
-        async (newClient: Clients[]) => {
+        async (newClient: ClientsData[]) => {
             await supabase
                 .from("clients")
                 .upsert(newClient)
@@ -121,7 +120,7 @@ export const AddClientModal = ({ isOpen, onClose }: NewClientModalProps) => {
                                 client_id: '',
                                 label: "",
                                 visit_count: 0
-                            } as Clients))
+                            } as ClientsData))
                         );
                         onClose();
                     }}>

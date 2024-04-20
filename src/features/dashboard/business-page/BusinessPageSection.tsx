@@ -2,8 +2,10 @@ import { BusinessInfo } from "./BusinessInfo";
 import { BusinessHero } from "./BusinessHero";
 import { BusinessServices } from "./BusinessServices";
 import { BusinessOpinions } from "./BusinessOpinions";
+import { BusinessSlugIdProps } from "@/types/types";
 
-export const BusinessPageSection = ({businessSlugId}: {businessSlugId: string}) => {
+
+export const BusinessPageSection = ({businessSlugId}: BusinessSlugIdProps) => {
     return (
         <div className="flex flex-col py-8 rounded-2xl w-full h-screen">
             <div className="flex flex-col items-center gap-4">

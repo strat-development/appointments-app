@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import toast from "react-hot-toast";
 import { Database } from "@/types/supabase";
+import { ServicesData } from "@/types/types";
 
 interface NewServiceModalProps {
     isOpen: boolean;
@@ -14,8 +15,6 @@ interface NewServiceModalProps {
     servicePrice: string;
     serviceDuration: string;
 }
-
-type Service = Database["public"]["Tables"]["services"]["Row"]
 
 export const EditServiceModal = ({ isOpen, onClose, serviceName, serviceId, serviceDuration, servicePrice }: NewServiceModalProps) => {
     const supabase = createClientComponentClient<Database>();
@@ -32,7 +31,7 @@ export const EditServiceModal = ({ isOpen, onClose, serviceName, serviceId, serv
     }, [serviceName, servicePrice, serviceDuration]);
 
     const editPosition = useMutation(
-        async (newService: Service) => {
+        async (newService: ServicesData) => {
             await supabase
                 .from("services")
                 .update(newService)
@@ -112,7 +111,7 @@ export const EditServiceModal = ({ isOpen, onClose, serviceName, serviceId, serv
                             title: serviceNames,
                             price: price,
                             duration: duration
-                        } as Service);
+                        } as ServicesData);
                         handleClose();
                     }}>
                     Edit

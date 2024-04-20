@@ -1,21 +1,20 @@
 "use client"
 
-import { useBusinessContext } from "@/providers/businessContextProvider";
 import { Database } from "@/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { OpinionForm } from "./OpinionForm";
 import { Rating } from '@mui/material';
+import { BusinessSlugIdProps, OpinionsData } from "@/types/types";
+import { useUserContext } from "@/providers/userContextProvider";
 
-type Opinions = Database["public"]["Tables"]["opinions"]["Row"];
-
-export const BusinessOpinions = ({ businessSlugId }: { businessSlugId: string }) => {
+export const BusinessOpinions = ({ businessSlugId }: BusinessSlugIdProps) => {
     const queryClient = useQueryClient();
-    const businessId = useBusinessContext();
     const supabase = createClientComponentClient<Database>();
-    const [opinions, setOpinions] = useState<Opinions[]>([]);
+    const [opinions, setOpinions] = useState<OpinionsData[]>([]);
     const [opinionsPerPage, setOpinionsPerPage] = useState(10);
+    const { userRole } = useUserContext();
 
     const loadOpinions = useQuery(
         ['opinions'],
@@ -23,7 +22,7 @@ export const BusinessOpinions = ({ businessSlugId }: { businessSlugId: string })
             const { data, error, status } = await supabase
                 .from("opinions")
                 .select("*")
-                .or(`business_id.eq.${businessSlugId || businessId}`)
+                .eq("business_id", businessSlugId || "")
                 .limit(opinionsPerPage)
                 .order('created_at', { ascending: false });
 
@@ -75,7 +74,9 @@ export const BusinessOpinions = ({ businessSlugId }: { businessSlugId: string })
                     }}
                         className="bg-gradient-to-b from-violet-600 to-violet-500 text-white px-8 py-2 rounded-full font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:text-sm outline-none">Show more</button>
                 )}
-                <OpinionForm businessSlugId={businessSlugId} />
+                {!userRole && (
+                    <OpinionForm businessSlugId={businessSlugId} />
+                )}
             </div >
         </>
     )

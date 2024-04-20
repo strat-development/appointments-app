@@ -4,15 +4,21 @@ import { Database } from "@/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation"
-import { Calendar, Card, ChemicalGlass, Coin1, LogoutCurve, People, Profile2User, Shop, StatusUp} from 'iconsax-react';
+import { Calendar, Card, ChemicalGlass, Coin1, LogoutCurve, People, Profile2User, Shop, StatusUp } from 'iconsax-react';
 import { useUserContext } from "@/providers/userContextProvider";
 import { useEffect, useState } from "react";
 import { UserDataModal } from "./UserDataModal";
+import { useBusinessContext } from "@/providers/businessContextProvider";
 
-export const Navbar = () => {
+interface NavbarProps {
+    className?: string;
+}
+
+export const Navbar = ({ className }: NavbarProps) => {
     const router = useRouter();
     const supabase = createClientComponentClient<Database>();
     const { userRole, userName, clearUserRole } = useUserContext();
+    const { businessId } = useBusinessContext();
     const linkStyle = "p-2 transition rounded-full hover:text-white hover:bg-gradient-to-b hover:from-violet-600 hover:to-violet-500 text-[#404040] flex gap-4"
     const activeStyle = "p-2 transition rounded-full text-white bg-gradient-to-b from-violet-600 to-violet-500 flex gap-4"
     const currentRoute = usePathname();
@@ -20,9 +26,9 @@ export const Navbar = () => {
     const closeModal = () => {
         setIsModalOpen(false);
     };
-    
-    useEffect(()=>{
-        if(userName.length==0){
+
+    useEffect(() => {
+        if (userName.length == 0) {
             setIsModalOpen(true);
         }
     })
@@ -54,7 +60,7 @@ export const Navbar = () => {
         },
         {
             name: "Business page",
-            link: "/dashboard/business-page",
+            link: `/dashboard/${businessId}`,
             icon: <Shop size="24" />
         },
         {
@@ -110,37 +116,27 @@ export const Navbar = () => {
                                 </>
                             )}
 
-                            <button className="min-[1024px]:hidden p-2 transition rounded-full hover:text-white hover:bg-gradient-to-b hover:from-violet-600 hover:to-violet-500 text-[#404040] gap-4"
-                                onClick={async () => {
-                                    await supabase.auth.signOut();
-                                    router.push('/')
-                                }}
-                                type="submit">
-                                <LogoutCurve size="24" />
-                                <p className="max-[1024px]:hidden">Log out</p>
-                            </button>
+                            <div className="flex flex-col gap-4 self-start">
+                                <button className="max-[1024px]:hidden p-2 transition rounded-full hover:text-white hover:bg-gradient-to-b hover:from-violet-600 hover:to-violet-500 text-[#404040] flex self-end gap-4"
+                                    onClick={async () => {
+                                        await supabase.auth.signOut();
+                                        clearUserRole();
+
+                                        router.push('/')
+                                    }}
+                                    type="submit">
+                                    <LogoutCurve size="24" />
+                                    <p className="max-[1024px]:hidden">Log out</p>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-
-                    <div className="flex flex-col gap-4 self-start">
-                        <button className="max-[1024px]:hidden p-2 transition rounded-full hover:text-white hover:bg-gradient-to-b hover:from-violet-600 hover:to-violet-500 text-[#404040] flex self-end gap-4"
-                            onClick={async () => {
-                                await supabase.auth.signOut();
-                                clearUserRole();
-
-                                router.push('/')
-                            }}
-                            type="submit">
-                            <LogoutCurve size="24" />
-                            <p className="max-[1024px]:hidden">Log out</p>
-                        </button>
                     </div>
                 </div>
             </div>
 
             {(userName.length == 0) && (
-                <UserDataModal isOpen={isModalOpen} 
-                onClose={() => closeModal}  />
+                <UserDataModal isOpen={isModalOpen}
+                    onClose={() => closeModal} />
             )}
         </>
     )

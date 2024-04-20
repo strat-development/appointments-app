@@ -6,24 +6,23 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useMutation, useQueryClient } from "react-query";
 import { Rating } from '@mui/material';
+import { BusinessSlugIdProps, OpinionsData } from "@/types/types";
 
-type Opinions = Database["public"]["Tables"]["opinions"]["Row"];
-
-export const OpinionForm = ({ businessSlugId }: { businessSlugId: string }) => {
+export const OpinionForm = ({ businessSlugId }: BusinessSlugIdProps) => {
     const supabase = createClientComponentClient<Database>();
     const queryClient = useQueryClient();
     const [fullName, setFullName] = useState("");
     const [rating, setRating] = useState(0);
     const [opinion, setOpinion] = useState("");
     const opinionDate = new Date().toISOString();
-    const businessId = businessSlugId as string;
+    const businessId = businessSlugId || "";
 
     const AddOpinionMutation = useMutation(
-        async (newOpinion: Opinions[]) => {
+        async (newOpinion: OpinionsData[]) => {
             await supabase
                 .from("opinions")
                 .insert(newOpinion)
-                .eq("business_id", businessSlugId);
+                .eq("business_id", businessSlugId || businessId);
         },
         {
             onSuccess: () => {

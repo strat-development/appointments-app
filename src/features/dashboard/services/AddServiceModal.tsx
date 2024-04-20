@@ -6,13 +6,12 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import toast from "react-hot-toast";
 import { Database } from "@/types/supabase";
 import { useBusinessContext } from "@/providers/businessContextProvider";
+import { ServicesData } from "@/types/types";
 
 interface NewServiceModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
-
-type Service = Database["public"]["Tables"]["services"]["Row"]
 
 export const AddServiceModal = ({ isOpen, onClose }: NewServiceModalProps) => {
     const supabase = createClientComponentClient<Database>();
@@ -23,7 +22,7 @@ export const AddServiceModal = ({ isOpen, onClose }: NewServiceModalProps) => {
     const [durations, setDurations] = useState<string[]>(['']);
 
     const addNewService = useMutation(
-        async (newService: Service[]) => {
+        async (newService: ServicesData[]) => {
             await supabase
                 .from("services")
                 .upsert(newService)
@@ -102,7 +101,7 @@ export const AddServiceModal = ({ isOpen, onClose }: NewServiceModalProps) => {
                                 duration: durations[index],
                                 business_id: businessId,
                                 service_id: index + 1,
-                            } as Service))
+                            } as ServicesData))
                         );
                         onClose();
                     }}>

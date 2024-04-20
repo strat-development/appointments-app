@@ -8,15 +8,15 @@ import { Edit, Facebook, Instagram } from "iconsax-react";
 import { IoLogoTwitter } from "react-icons/io";
 import Link from "next/link";
 import { EditSocialsModal } from "./EditSocialsModal";
+import { useUserContext } from "@/providers/userContextProvider";
+import { BusinessSlugIdProps, SocialMediaTypes, SocialsData } from "@/types/types";
 
-type Socials = Database["public"]["Tables"]["socials"]["Row"];
-type SocialMediaTypes = 'Facebook' | 'Instagram' | 'Twitter';
-
-export const Socials = ({businessSlugId}: {businessSlugId: string}) => {
+export const Socials = ({ businessSlugId }: BusinessSlugIdProps) => {
     const supabase = createClientComponentClient<Database>();
     const { businessId } = useBusinessContext()
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const { userRole } = useUserContext();
     const socialMediaIcons: Record<SocialMediaTypes, JSX.Element> = {
         Facebook: <Facebook />,
         Instagram: <Instagram />,
@@ -29,7 +29,7 @@ export const Socials = ({businessSlugId}: {businessSlugId: string}) => {
         setIsEditModalOpen(false);
     }
 
-    const { data: socials, isLoading } = useQuery<Socials>(
+    const { data: socials, isLoading } = useQuery<SocialsData>(
         ['socials'],
         async () => {
             const { data, error } = await supabase
@@ -55,37 +55,35 @@ export const Socials = ({businessSlugId}: {businessSlugId: string}) => {
             {isLoading ?
                 <div>Loading...</div>
                 :
-                <div>
+                <div className="w-full flex flex-col gap-4">
+                    <div className="flex justify-evenly items-center w-full">
+                        {parsedSocials && Object.entries(parsedSocials).map(([socialsType, value]) => {
+                            const socialsAsObj = value as { link: string };
+                            const Icon = socialMediaIcons[socialsType as SocialMediaTypes]; // Cast socialsType to SocialMediaTypes
+                            return (
+                                <div className="flex flex-col gap-2 items-center"
+                                    key={socialsType}>
+                                    {Icon && <Link href={socialsAsObj.link}>{Icon}</Link>} {/* Render the icon with the link */}
+                                    <h3>{socialsType}</h3>
+                                </div>
+                            );
+                        })}
+                    </div>
                     <div>
-                        <h2>Socials</h2>
-                        <div>
-                            {parsedSocials && Object.entries(parsedSocials).map(([socialsType, value]) => {
-                                const socialsAsObj = value as { link: string };
-                                const Icon = socialMediaIcons[socialsType as SocialMediaTypes]; // Cast socialsType to SocialMediaTypes
-                                return (
-                                    <div key={socialsType}>
-                                        <h3>{socialsType}</h3>
-                                        {Icon && <Link href={socialsAsObj.link}>{Icon}</Link>} {/* Render the icon with the link */}
-                                    </div>
-                                );
-                            })}
-                        </div>
-                        <div>
-                            {!socials &&
-                                < button onClick={() => setIsModalOpen(true)}>
-                                    Add Socials
-                                </button>
-                            }
-                            {socials &&
-                                <button onClick={() => setIsEditModalOpen(true)}>
-                                    Edit Socials
-                                </button>
-                            }
-                            <AddSocialsModal isOpen={isModalOpen}
-                                onClose={handleClose} />
-                            <EditSocialsModal isOpen={isEditModalOpen}
-                                onClose={handleClose} />
-                        </div >
+                        {!socials && userRole === "Employer" && (
+                            < button onClick={() => setIsModalOpen(true)}>
+                                Add Socials
+                            </button>
+                        )}
+                        {socials && userRole === "Employer" && (
+                            <button onClick={() => setIsEditModalOpen(true)}>
+                                Edit Socials
+                            </button>
+                        )}
+                        <AddSocialsModal isOpen={isModalOpen}
+                            onClose={handleClose} />
+                        <EditSocialsModal isOpen={isEditModalOpen}
+                            onClose={handleClose} />
                     </div>
                 </div>
             }

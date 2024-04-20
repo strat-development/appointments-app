@@ -6,13 +6,12 @@ import { Database } from "@/types/supabase";
 import { useUserContext } from "@/providers/userContextProvider";
 import { Input } from "@/components/Input";
 import { Modal } from "@/components/Modal";
+import { BusinessData } from "@/types/types";
 
 interface BusinesDataModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
-
-type BusinessData = Database["public"]["Tables"]["business-info"]["Row"]
 
 export const BusinessDataModal = ({ onClose, isOpen }:BusinesDataModalProps) => {
     const supabase = createClientComponentClient<Database>();

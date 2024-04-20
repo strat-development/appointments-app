@@ -8,6 +8,7 @@ import { useUserContext } from "@/providers/userContextProvider";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import { useBusinessContext } from "@/providers/businessContextProvider";
+import { ServicesData, VisitsData } from "@/types/types";
 
 interface EditVisitModalProps {
     isOpen: boolean;
@@ -17,9 +18,6 @@ interface EditVisitModalProps {
     visitId: string;
 }
 
-type Visits = Database["public"]["Tables"]["visits"]["Row"]
-type Services = Database["public"]["Tables"]["services"]["Row"]
-
 export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, visitId }: EditVisitModalProps) => {
     const [email, setEmail] = useState<string | null>(null);
     const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
@@ -28,14 +26,14 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, visitId }:
     const [clientId, setClientId] = useState<string | null>(null)
     const [status, setStatus] = useState<string | null>('');
     const [note, setNote] = useState<string | null>(null);
-    const [availiableServices, setAvailiableServices] = useState<Services[]>([]);
+    const [availiableServices, setAvailiableServices] = useState<ServicesData[]>([]);
     const supabase = createClientComponentClient<Database>();
     const { userId } = useUserContext();
     const queryClient = useQueryClient();
     const { businessName, businessId } = useBusinessContext();
 
     const editVisitsMutation = useMutation(
-        async (newVisits: Visits) => {
+        async (newVisits: VisitsData) => {
             await supabase
                 .from("visits")
                 .update(newVisits)
@@ -123,7 +121,7 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, visitId }:
         },
         {
             onSuccess: (data) => {
-                setAvailiableServices(data as Services[])
+                setAvailiableServices(data as ServicesData[])
             }
         }
     )
@@ -176,13 +174,11 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, visitId }:
                             id="Start time"
                             label=""
                             type="text"
-                            // onChange={(e) => setSelectedStartTime(e.target.value)}
                             value={startTime || ''}
                         /> - <Input
                             id="Sevice"
                             label=""
                             type="text"
-                            // onChange={(e) => setSelectedEndTime(e.target.value)}
                             value={endTime || ''}
                         />
                     </div>
@@ -215,7 +211,7 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, visitId }:
                             status: status,
                             phone_number: phoneNumber,
                             service_id: service
-                        } as Visits)
+                        } as VisitsData)
 
                         handleClose();
                     }
