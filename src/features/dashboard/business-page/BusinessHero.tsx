@@ -17,8 +17,6 @@ export const BusinessHero = ({ businessSlugId }: { businessSlugId: string }) => 
     const [imageUrls, setImageUrls] = useState<{ publicUrl: string }[]>([]);
     const { businessAddress, businessId, businessName } = useBusinessContext();
 
-    console.log(businessSlugId);
-
     const { data: images, isLoading } = useQuery<Images[]>(
         ['business-images', businessSlugId || businessId],
         async () => {

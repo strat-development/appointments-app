@@ -133,8 +133,6 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
         onClose();
     }
 
-    console.log('email', email)
-
     const bodyContent = (
         <>
             <div className="flex flex-col gap-4">

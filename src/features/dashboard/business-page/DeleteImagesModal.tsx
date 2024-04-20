@@ -76,7 +76,6 @@ export const DeleteImagesModal = () => {
                 const { data: publicURL } = await supabaseAdmin.storage
                     .from('business-page-photos')
                     .getPublicUrl(image.image_url)
-                console.log(publicURL);
                 return { publicUrl: publicURL.publicUrl };
 
 

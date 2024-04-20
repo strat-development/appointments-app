@@ -25,9 +25,6 @@ export default function StatisticInfo() {
     const [selectedFirstDate, setSelectedFirstDate] = useState<Date | null>(null);
     const [selectedSecondDate, setSelectedSecondDate] = useState<Date | null>(null);
 
-
-    //Getting current month visits
-
     useEffect(() => {
         if (userId) {
             const getMonthlyClients = async () => {
@@ -181,15 +178,6 @@ export default function StatisticInfo() {
                     wizyty w tym miesiacu :{monthlyClients} <br /><br />
                 </div>
                 <div className="flex items-center justify-between w-[500px] h-[300px] bg-[#f5f5f5]">
-                    {/* <DateRangePicker
-                        onChange={onChange}
-                        value={value} 
-                        id="customDatePicker"
-                        autoFocus
-                        dayPlaceholder="01"
-                        yearPlaceholder="2024"
-                        monthPlaceholder="04"
-                        /> */}
                     <input type="date" id="datePicker"
                         min="2021-01-01"
                         max="2099-12-31"
