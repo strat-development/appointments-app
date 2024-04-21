@@ -127,8 +127,8 @@ export const Schedule = () => {
                         businessHours={
                             {
                                 daysOfWeek: [1, 2, 3, 4, 5],
-                                startTime: '08:00',
-                                endTime: '16:00',
+                                startTime: '00:00',
+                                endTime: '24:00',
                             }
                         }
                         eventContent={renderEventContent}
@@ -165,7 +165,7 @@ export const Schedule = () => {
                                 day: "Day",
                             }
                         }
-                        slotDuration={"01:00:00"}
+                        slotDuration={"00:30:00"}
                         eventBackgroundColor="rgba(221,209,254)"
                         eventDisplay={"list-item"}
                         slotEventOverlap={false}

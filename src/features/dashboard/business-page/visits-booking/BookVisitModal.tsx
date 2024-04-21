@@ -3,7 +3,9 @@ import { Database } from "@/types/supabase";
 import { BusinessSlugIdProps, VisitsData } from "@/types/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useState } from "react";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
+import { DatePickSlider } from "./DatePickSlider";
+import { SelectWorkerService } from "./SelectWorkerService";
 
 interface BookVisitModalProps {
     isOpen: boolean;
@@ -37,11 +39,7 @@ export const BookVisitModal = ({ onClose, isOpen, businessSlugId }: BookVisitMod
         <div>
             <h2>{businessData?.employee}</h2>
             <div>
-                <input type="datetime-local" />
-                <button onClick={() => {
-                    console.log(businessData?.client_name)
-                }}
-                >Book</button>
+                <DatePickSlider businessSlugId={businessSlugId} />
             </div>
         </div>
     )
