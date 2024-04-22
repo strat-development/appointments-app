@@ -6,21 +6,19 @@ import { UploadImagesButton } from "./UploadImagesButton";
 import { useEffect, useState } from "react";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { useBusinessContext } from "@/providers/businessContextProvider";
 import { DeleteImagesModal } from "./DeleteImagesModal";
 import { useUserContext } from "@/providers/userContextProvider";
 import { BusinessSlugIdProps, Images } from "@/types/types";
 
-export const BusinessHero = ({ businessSlugId }: BusinessSlugIdProps) => {
+export const BusinessImages = ({ businessSlugId }: BusinessSlugIdProps) => {
     const supabase = createClientComponentClient<Database>();
     const [imageUrls, setImageUrls] = useState<{ publicUrl: string }[]>([]);
-    const { businessAddress, businessId, businessName } = useBusinessContext();
     const { userRole } = useUserContext();
 
     const { data: images, isLoading } = useQuery<Images[]>(
-        ['business-images', businessSlugId || businessId],
+        ['business-images', businessSlugId],
         async () => {
-            const id = businessSlugId || businessId;
+            const id = businessSlugId;
             if (!id) {
                 return [];
             }
@@ -34,7 +32,7 @@ export const BusinessHero = ({ businessSlugId }: BusinessSlugIdProps) => {
             return data || [];
         },
         {
-            enabled: !!businessSlugId || !!businessId
+            enabled: !!businessSlugId
         }
     );
 
@@ -55,7 +53,7 @@ export const BusinessHero = ({ businessSlugId }: BusinessSlugIdProps) => {
 
     return (
         <>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-32">
                 <div>
                     <div className="max-w-[800px] rounded-2xl relative z-10">
                         <Swiper className='h-[500px] rounded-2xl  relative z-10'
@@ -74,10 +72,6 @@ export const BusinessHero = ({ businessSlugId }: BusinessSlugIdProps) => {
                             <DeleteImagesModal />
                         </>
                     )}
-                </div>
-                <div>
-                    <h2 className="text-xl font-bold">{businessName}</h2>
-                    <p className="text-base text-black/70">{businessAddress}</p>
                 </div>
             </div>
         </>

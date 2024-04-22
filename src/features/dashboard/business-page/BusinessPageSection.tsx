@@ -1,8 +1,9 @@
 import { BusinessInfo } from "./BusinessInfo";
-import { BusinessHero } from "./BusinessHero";
 import { BusinessServices } from "./BusinessServices";
 import { BusinessOpinions } from "./BusinessOpinions";
 import { BusinessSlugIdProps } from "@/types/types";
+import { BusinessImages } from "./BusinessImages";
+import { BusinessDescription } from "./BusinessDescription";
 
 
 export const BusinessPageSection = ({businessSlugId}: BusinessSlugIdProps) => {
@@ -11,7 +12,8 @@ export const BusinessPageSection = ({businessSlugId}: BusinessSlugIdProps) => {
             <div className="flex flex-col items-center gap-4">
                 <div className="flex gap-8">
                     <div className="flex flex-col gap-8">
-                        <BusinessHero businessSlugId={businessSlugId} />
+                        <BusinessImages businessSlugId={businessSlugId} />
+                        <BusinessDescription businessSlugId={businessSlugId} />
                         <BusinessServices businessSlugId={businessSlugId} />
                         <BusinessOpinions businessSlugId={businessSlugId} />
                     </div>

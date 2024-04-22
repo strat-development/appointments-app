@@ -79,9 +79,6 @@ export const HoursPickerSlider = ({ visits, businessSlugId, selectedDate }: Hour
 
         setSelectedStartTime(startTime);
         setSelectedEndTime(endTime);
-
-        console.log("Selected start time: ", startTime);
-        console.log("Selected end time: ", endTime);
     };
 
     return (
