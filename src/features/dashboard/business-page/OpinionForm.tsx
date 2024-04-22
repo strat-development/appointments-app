@@ -15,14 +15,13 @@ export const OpinionForm = ({ businessSlugId }: BusinessSlugIdProps) => {
     const [rating, setRating] = useState(0);
     const [opinion, setOpinion] = useState("");
     const opinionDate = new Date().toISOString();
-    const businessId = businessSlugId || "";
 
     const AddOpinionMutation = useMutation(
         async (newOpinion: OpinionsData[]) => {
             await supabase
                 .from("opinions")
                 .insert(newOpinion)
-                .eq("business_id", businessSlugId || businessId);
+                .eq("business_id", businessSlugId || "");
         },
         {
             onSuccess: () => {
@@ -58,19 +57,17 @@ export const OpinionForm = ({ businessSlugId }: BusinessSlugIdProps) => {
                         placeholder="Your opinion"
                         className="border-[.5px] rounded-2xl p-2 outline-none" />
                     <button onClick={() => {
-                        async () => { // Make the onClick handler async
-                            await AddOpinionMutation.mutateAsync({ // Wait for mutateAsync to finish
-                                business_id: businessId,
-                                user_name: fullName,
-                                opinion_rating: rating,
-                                opinion_text: opinion,
-                                created_at: opinionDate,
-                            })
+                        AddOpinionMutation.mutateAsync({
+                            business_id: businessSlugId || "",
+                            user_name: fullName,
+                            opinion_rating: rating,
+                            opinion_text: opinion,
+                            created_at: opinionDate,
+                        })
 
-                            setFullName("");
-                            setOpinion("");
-                            setRating(0);
-                        }
+                        setFullName("");
+                        setOpinion("");
+                        setRating(0);
                     }}
                         className="bg-gradient-to-b from-violet-600 to-violet-500 text-white px-8 py-2 rounded-full font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:text-sm">
                         Submit

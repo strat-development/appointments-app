@@ -165,10 +165,6 @@ export default function StatisticInfo() {
         }
     }
 
-    useEffect(() => {
-        console.log(selectedFirstDate);
-    }, [selectedFirstDate]);
-
     return (
         <>
             <main className="flex min-h-screen flex-col items-center justify-between">

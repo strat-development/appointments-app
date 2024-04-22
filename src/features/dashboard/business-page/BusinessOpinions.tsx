@@ -17,7 +17,7 @@ export const BusinessOpinions = ({ businessSlugId }: BusinessSlugIdProps) => {
     const { userRole } = useUserContext();
 
     const loadOpinions = useQuery(
-        ['opinions'],
+        ['opinions', opinionsPerPage],
         async () => {
             const { data, error, status } = await supabase
                 .from("opinions")
@@ -38,8 +38,10 @@ export const BusinessOpinions = ({ businessSlugId }: BusinessSlugIdProps) => {
     );
 
     useEffect(() => {
-        loadOpinions;
-    }, []);
+        loadOpinions.refetch();
+    }, [opinionsPerPage]);
+
+    console.log(opinions.length);
 
     return (
         <>
@@ -64,11 +66,11 @@ export const BusinessOpinions = ({ businessSlugId }: BusinessSlugIdProps) => {
                         <p className="text-black/70">{opinion.created_at}</p>
                     </div>
                 ))}
-                {opinions.length > 10 && (
+                {opinions.length > 9 && (
                     <button onClick={() => {
                         setOpinionsPerPage(prevOpinionsPerPage => {
                             const newOpinionsPerPage = prevOpinionsPerPage + 10;
-                            loadOpinions.refetch();
+                            loadOpinions.refetch(newOpinionsPerPage as any);
                             return newOpinionsPerPage;
                         });
                     }}
