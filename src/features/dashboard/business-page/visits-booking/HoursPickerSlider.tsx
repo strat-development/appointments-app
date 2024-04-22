@@ -1,60 +1,99 @@
-import { BusinessSlugIdProps, VisitsData } from "@/types/types";
-import { useEffect, useState } from "react";
+import { BusinessSlugIdProps, OpeningHoursData, VisitsData } from "@/types/types";
+import { useState } from "react";
 import { SelectWorkerService } from "./SelectWorkerService";
+import { useQuery } from "react-query";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Database } from "@/types/supabase";
+import { format, isValid } from 'date-fns';
 
 interface HoursPickerSliderProps {
     visits: VisitsData[];
     businessSlugId: BusinessSlugIdProps["businessSlugId"];
+    selectedDate: string | null;
 }
 
-export const HoursPickerSlider = ({ visits, businessSlugId }: HoursPickerSliderProps) => {
-    const workingHours = Array.from({ length: 20 }, (_, i) => (i * 0.5) + 8);
-    const [selectedDate, setSelectedDate] = useState<string | null>(null);
+export const HoursPickerSlider = ({ visits, businessSlugId, selectedDate }: HoursPickerSliderProps) => {
     const [selectedStartTime, setSelectedStartTime] = useState<string>("");
     const [selectedEndTime, setSelectedEndTime] = useState<string>("");
+    const supabase = createClientComponentClient<Database>();
 
-    const availableHours = workingHours.filter(hour => {
-        const hourPart = Math.floor(hour).toString().padStart(2, '0');
-        const minutePart = (hour % 1 > 0) ? '30' : '00';
-        const hourString = hourPart + ':' + minutePart;
-        return !visits.some(visit => {
-            const startTime = visit.start_time ? new Date(visit.start_time) : null;
-            const endTime = visit.end_time ? new Date(visit.end_time) : null;
-            const currentHour = new Date(startTime?.toISOString().split('T')[0] + 'T' + hourString + ':00');
-            return startTime !== null && currentHour >= startTime && (endTime === null || currentHour < endTime);
-        });
-    });
+    const { data: openingHours, isLoading } = useQuery<OpeningHoursData>(
+        ['opening-hours'],
+        async () => {
+            const { data, error } = await supabase
+                .from('business-opening-hours')
+                .select('*')
+                .eq('business_id', businessSlugId || "")
+            if (error) {
+                throw error;
+            }
+            return data?.[0];
+        }
+    )
+
+    if (isLoading || !openingHours) {
+        return <div>Loading...</div>;
+    }
+
+    const parsedOpeningHours = JSON.parse(openingHours.opening_hours as string);
+
+    const generateTimeSlots = (start: string, end: string) => {
+        const result = [];
+        const startHour = parseInt(start.split(':')[0]);
+        const endHour = parseInt(end.split(':')[0]);
+        const startMinutes = parseInt(start.split(':')[1]);
+        const endMinutes = parseInt(end.split(':')[1]);
+
+        for (let i = startHour; i <= endHour; i++) {
+            for (let j = 0; j < 60; j += 30) {
+                if (i === startHour && j < startMinutes) continue;
+                if (i === endHour && j > endMinutes) break;
+                const hourPart = i.toString().padStart(2, '0');
+                const minutePart = j.toString().padStart(2, '0');
+                result.push(hourPart + ':' + minutePart);
+            }
+        }
+
+        return result;
+    }
+
+    const selectedDateObj = new Date(selectedDate || "");
+    if (!isValid(selectedDateObj)) {
+        return <div>Select a date...</div>;
+    }
+
+    const dayOfWeek = format(selectedDateObj, 'EEEE');
+    const hoursForDay = parsedOpeningHours[dayOfWeek];
+
+    const timeSlots = generateTimeSlots(hoursForDay.start, hoursForDay.end);
+    const bookedTimes = visits.map(visit => {
+        const visitDate = new Date(visit.start_time ?? "");
+        return isValid(visitDate) ? format(visitDate, 'HH:mm') : null;
+    }).filter(Boolean);
+
+    const availableTimeSlots = timeSlots.filter(slot => !bookedTimes.includes(slot));
+
+    const handleTimeSlotClick = (slot: string, index: number) => {
+        const startTime = new Date(`${selectedDate}T${slot}:00Z`).toISOString();
+        const endTime = new Date(`${selectedDate}T${availableTimeSlots[index + 1]}:00Z`).toISOString();
+
+        setSelectedStartTime(startTime);
+        setSelectedEndTime(endTime);
+
+        console.log("Selected start time: ", startTime);
+        console.log("Selected end time: ", endTime);
+    };
 
     return (
         <>
             <div className="flex gap-4 overflow-x-scroll w-[600px]">
-                {availableHours.map(hour => {
-                    const hourPart = Math.floor(hour).toString().padStart(2, '0');
-                    const minutePart = (hour % 1 > 0) ? '30' : '00';
-                    const startTimeString = hourPart + ':' + minutePart;
-                    const endTimeHourPart = (hour % 1 > 0) ? (Math.floor(hour) + 1).toString().padStart(2, '0') : hourPart;
-                    const endTimeMinutePart = (hour % 1 > 0) ? '00' : '30';
-
-                    const date = selectedDate ? new Date(selectedDate) : new Date();
-                    const startTimeDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), parseInt(hourPart), parseInt(minutePart));
-                    const endTimeDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), parseInt(endTimeHourPart), parseInt(endTimeMinutePart));
-
-                    const startTime = new Date(startTimeDate.getTime() - startTimeDate.getTimezoneOffset() * 60000).toISOString();
-                    const endTime = new Date(endTimeDate.getTime() - endTimeDate.getTimezoneOffset() * 60000).toISOString();
-
-                    return (
-                        <div key={hour}>
-                            <button onClick={() => {
-                                setSelectedDate(date.toISOString().split('T')[0]);
-                                setSelectedStartTime(startTime);
-                                setSelectedEndTime(endTime);
-                            }}
-                                className="p-2 border-[1px]">
-                                {startTimeString}
-                            </button>
-                        </div>
-                    )
-                })}
+                {availableTimeSlots.map((slot, index) => (
+                    <button key={slot} onClick={() => {
+                        handleTimeSlotClick(slot, index)
+                    }}>
+                        {slot}
+                    </button>
+                ))}
             </div>
             <SelectWorkerService
                 businessSlugId={businessSlugId}

@@ -1,9 +1,39 @@
 import { useBusinessContext } from "@/providers/businessContextProvider";
+import { Database } from "@/types/supabase";
+import { BusinessSlugIdProps } from "@/types/types";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Call, Message } from "iconsax-react";
 import Link from "next/link";
+import { useState } from "react";
+import { useQuery } from "react-query";
 
-export const ContactInfo = () => {
-    const { businessEmail, businessPhoneNumber } = useBusinessContext();
+interface ContactInfoProps {
+    businessSlugId: BusinessSlugIdProps["businessSlugId"];
+}
+
+export const ContactInfo = ({ businessSlugId }: ContactInfoProps) => {
+    const [businessEmail, setBusinessEmail] = useState<string>("")
+    const [businessPhoneNumber, setBusinessPhoneNumber] = useState<string>("")
+    const supabase = createClientComponentClient<Database>();
+
+    const { data: contactInfo } = useQuery(
+        ['contactInfo', businessSlugId],
+        async () => {
+            const { data, error } = await supabase
+                .from('business-info')
+                .select('business_email, business_phone_number')
+                .eq('id', businessSlugId || "")
+                .single()
+            if (error) {
+                throw error;
+            } else {
+                setBusinessEmail(data?.business_email || "");
+                setBusinessPhoneNumber(data?.business_phone_number || "");
+            }
+
+            return data || [];
+        }
+    )
 
     return (
         <>

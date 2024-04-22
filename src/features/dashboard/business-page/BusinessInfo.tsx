@@ -15,7 +15,7 @@ export const BusinessInfo = ({businessSlugId}: BusinessSlugIdProps) => {
                 </div>
                 <div className="flex flex-col items-start justify-start w-full">
                     <h3 className="border-b-[.5px] w-full text-xl font-semibold pb-2">Contact</h3>
-                    <ContactInfo />
+                    <ContactInfo businessSlugId={businessSlugId} />
                 </div>
                 <div className="flex items-center justify-center w-full border-t-[.5px] p-4">
                     <Socials businessSlugId={businessSlugId} />

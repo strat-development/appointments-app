@@ -32,6 +32,7 @@
     "@supabase/supabase-js": "^2.39.3",
     "@tanstack/react-query": "^5.18.1",
     "chart.js": "^4.4.2",
+    "date-fns": "^3.6.0",
     "fullcalendar": "^6.1.10",
     "iconsax-react": "^0.0.8",
     "ionicons": "^7.2.2",

@@ -4,7 +4,6 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { ArrowLeft, ArrowRight } from "iconsax-react";
 import { useEffect, useRef, useState } from "react";
 import { HoursPickerSlider } from "./HoursPickerSlider";
-import { SelectWorkerService } from "./SelectWorkerService";
 
 interface DatePickSliderProps {
     businessSlugId: BusinessSlugIdProps["businessSlugId"];
@@ -102,7 +101,8 @@ export const DatePickSlider = ({ businessSlugId }: DatePickSliderProps) => {
                     <ArrowRight />
                 </button>
             </div>
-            <HoursPickerSlider businessSlugId={businessSlugId}
+            <HoursPickerSlider selectedDate={selectedDate}
+                businessSlugId={businessSlugId}
                 visits={visits} />
         </div>
     )
