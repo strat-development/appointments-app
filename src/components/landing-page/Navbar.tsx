@@ -17,7 +17,7 @@ export const Navbar = () => {
     return (
         <header className="fixed border-b bg-violet-50 w-full z-[22222222222] backdrop-blur-xl max-lg:px-8 max-[1200px]:px-8 max-[480px]:px-4">
             <nav className="m-auto flex items-center justify-between py-4 max-w-[1200px]">
-                <h1 className="text-3xl font-sans font-semibold text-[#1b0b3b] m-0 max-lg:text-2xl">Visio</h1>
+                <Link href="/" className="text-3xl font-sans font-semibold text-[#1b0b3b] m-0 max-lg:text-2xl">Visio</Link>
                 {!userRole && (
                     <>
                         <Link href="/business-browse-page">
