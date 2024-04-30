@@ -2,6 +2,7 @@ import { Database } from "@/types/supabase";
 import { BusinessSlugIdProps } from "@/types/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useMutation, useQueryClient } from "react-query";
+import { NavigationType, useNavigate } from "react-router-dom";
 
 interface BookVisitButtonProps {
     businessSlugId: BusinessSlugIdProps["businessSlugId"];
@@ -46,6 +47,8 @@ export const BookVisitButton = ({
         },
         {
             onSuccess: () => {
+                const navigate = useNavigate();
+                navigate('localhost:3001/api/mail');
                 queryClient.invalidateQueries('visits');
             }
         }
