@@ -19,30 +19,60 @@ export default function BusinessPagesBrowser({
     const [businessPages, setBusinessPages] = useState<BusinessData[]>([]);
 
 
-    const { data: businessPagesData, isLoading, isError } = useQuery(
-        ['businessPages'],
-        async () => {
-            const { data, error, status } = await supabase
-                .from("business-type-info-linker")
-                .select(`
+    if (params.slug === "all") {
+        const { data: businessPagesData, isLoading, isError } = useQuery(
+            ['businessPages'],
+            async () => {
+                const { data, error, status } = await supabase
+                    .from("business-type-info-linker")
+                    .select(`
                     business-info (
                         business_name,
                         business_address,
                         id
                     )
                 `)
-                .eq("business_type_id", params.slug)
 
-            if (error && status !== 406) {
-                throw error;
-            }
+                if (error && status !== 406) {
+                    throw error;
+                }
 
-            if (data) {
-                const mappedData = data.map((item: any) => item['business-info']);
-                setBusinessPages(mappedData as BusinessData[]);
+                if (data) {
+                    const mappedData = data.map((item: any) => item['business-info']);
+                    const uniqueData = Array.from(new Set(mappedData.map((item: any) => item.id)))
+                        .map(id => {
+                            return mappedData.find((item: any) => item.id === id);
+                        });
+                    setBusinessPages(uniqueData as BusinessData[]);
+                }
             }
-        }
-    );
+        )
+    } else {
+        const { data: businessPagesData, isLoading, isError } = useQuery(
+            ['businessPages'],
+            async () => {
+                const { data, error, status } = await supabase
+                    .from("business-type-info-linker")
+                    .select(`
+                    business-info (
+                        business_name,
+                        business_address,
+                        id
+                    )
+                `)
+                    .eq("business_type_id", params.slug)
+
+                if (error && status !== 406) {
+                    throw error;
+                }
+
+                if (data) {
+                    const mappedData = data.map((item: any) => item['business-info']);
+                    setBusinessPages(mappedData as BusinessData[]);
+                }
+            }
+        );
+    }
 
     return (
         <>

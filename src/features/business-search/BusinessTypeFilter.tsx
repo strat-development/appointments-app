@@ -1,10 +1,11 @@
 import { Database } from "@/types/supabase";
+import { BusinessTypeData } from "@/types/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { useState } from "react";
 import { useQuery } from "react-query";
 
-type BusinessTypeData = Database["public"]["Tables"]["business-types"]["Row"]
+
 
 export const BusinessTypeFilter = () => {
     const supabase = createClientComponentClient<Database>();
@@ -29,7 +30,7 @@ export const BusinessTypeFilter = () => {
     );
 
     return (
-        <div className="relative top-36">
+        <div className="relative top-36 w-fit">
             {businessType.map((type) => (
                 <Link href={`/business-browse-page/${type.id}`} key={type.id}>
                     <p>{type["business-type"]}</p>

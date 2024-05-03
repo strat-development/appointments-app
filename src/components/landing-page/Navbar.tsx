@@ -20,7 +20,7 @@ export const Navbar = () => {
                 <Link href="/" className="text-3xl font-sans font-semibold text-[#1b0b3b] m-0 max-lg:text-2xl">Visio</Link>
                 {!userRole && (
                     <>
-                        <Link href="/business-browse-page">
+                        <Link href={`/business-browse-page/${"all"}`}>
                             Businesess
                         </Link>
                         <div className="flex gap-4">

@@ -25,3 +25,5 @@ export type Images = Database['public']['Tables']['business-images']['Row'];
 export type OpinionsData = Database["public"]["Tables"]["opinions"]["Row"];
 
 export type PositionsData = Database["public"]["Tables"]["positions"]["Row"]
+
+export type BusinessTypeData = Database["public"]["Tables"]["business-types"]["Row"]
