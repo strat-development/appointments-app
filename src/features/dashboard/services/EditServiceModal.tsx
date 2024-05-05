@@ -60,10 +60,10 @@ export const EditServiceModal = ({ isOpen, onClose, serviceName, serviceId, serv
         {
             onSuccess: () => {
                 queryClient.invalidateQueries(['services', serviceId]);
-                toast.success('Service deleted!')
+                toast.success('Service deleted successfully!')
             },
             onError: () => {
-                toast.error('Error deleting the position!')
+                toast.error('Error deleting the service!')
             }
         }
     );
@@ -75,7 +75,7 @@ export const EditServiceModal = ({ isOpen, onClose, serviceName, serviceId, serv
                 <div>
                     <label htmlFor="Service">Service</label>
                     <Input
-                        id="position"
+                        id="service"
                         label="Service"
                         type="text"
                         placeholder="Service name"
@@ -141,7 +141,7 @@ export const EditServiceModal = ({ isOpen, onClose, serviceName, serviceId, serv
     return (
         <Modal isOpen={isOpen}
             onClose={handleClose}
-            title='Edit position'
+            title='Edit service'
             body={bodyContent}
         />
     );

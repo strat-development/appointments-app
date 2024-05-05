@@ -5,7 +5,7 @@ import { Database } from "@/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 
 interface EditSocialsModalProps {
     isOpen: boolean;
@@ -20,6 +20,7 @@ export const EditSocialsModal = ({ onClose, isOpen }: EditSocialsModalProps) => 
     const supabase = createClientComponentClient<Database>();
     const { businessId } = useBusinessContext()
     const [socials, setSocials] = useState<Socials>({} as Socials);
+    const queryClient = useQueryClient();
    
     const editSocialsMutation = useMutation(
         async () => {
@@ -33,6 +34,7 @@ export const EditSocialsModal = ({ onClose, isOpen }: EditSocialsModalProps) => 
         {
             onSuccess: () => {
                 toast.success('Socials updated');
+                queryClient.invalidateQueries('socials');
             },
             onError: () => {
                 toast.error('Error updating socials');

@@ -34,8 +34,7 @@ export const AddClientModal = ({ isOpen, onClose }: NewClientModalProps) => {
         {
             onSuccess: () => {
                 queryClient.invalidateQueries(['clients', clientNames]);
-
-                toast.success('Client added!')
+                toast.success('Client added successfully!');
             },
 
             onError: () => {

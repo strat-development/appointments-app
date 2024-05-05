@@ -42,8 +42,7 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, visitId }:
         {
             onSuccess: () => {
                 queryClient.invalidateQueries(['visits', userId]);
-
-                toast.success('Visit added!')
+                toast.success('Visit added successfully!')
             },
 
             onError: () => {

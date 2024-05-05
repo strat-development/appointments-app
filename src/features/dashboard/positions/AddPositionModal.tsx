@@ -29,12 +29,11 @@ export const AddPositionModal = ({ isOpen, onClose }: NewPositionModalProps) => 
         {
             onSuccess: () => {
                 queryClient.invalidateQueries(['positions', businessId]);
-
-                toast.success('Visit added!')
+                toast.success('Position added successfully!')
             },
 
             onError: () => {
-                toast.error('Error adding the visit!')
+                toast.error('Error adding the Position!')
             }
         }
     );

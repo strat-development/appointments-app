@@ -6,6 +6,7 @@ import { Images } from "@/types/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
 export const DeleteImagesModal = () => {
@@ -64,6 +65,7 @@ export const DeleteImagesModal = () => {
         },
         {
             onSuccess: () => {
+                toast.success('Images deleted successfully');
                 queryClient.invalidateQueries('business-images');
             }
         }

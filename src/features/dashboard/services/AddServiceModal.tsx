@@ -16,10 +16,21 @@ interface NewServiceModalProps {
 export const AddServiceModal = ({ isOpen, onClose }: NewServiceModalProps) => {
     const supabase = createClientComponentClient<Database>();
     const queryClient = useQueryClient();
-    const {businessId} = useBusinessContext();
+    const { businessId } = useBusinessContext();
     const [serviceNames, setServiceNames] = useState<string[]>(['']);
     const [prices, setPrices] = useState<string[]>(['']);
     const [durations, setDurations] = useState<string[]>(['']);
+
+    const clearStates = () => {
+        setServiceNames(['']);
+        setPrices(['']);
+        setDurations(['']);
+    }
+
+    const handleClose = () => {
+        clearStates();
+        onClose();
+    }
 
     const addNewService = useMutation(
         async (newService: ServicesData[]) => {
@@ -31,12 +42,11 @@ export const AddServiceModal = ({ isOpen, onClose }: NewServiceModalProps) => {
         {
             onSuccess: () => {
                 queryClient.invalidateQueries(['services', businessId]);
-
-                toast.success('Visit added!')
+                toast.success('Service added successfully!')
             },
 
             onError: () => {
-                toast.error('Error adding the visit!')
+                toast.error('Error adding the service!')
             }
         }
     );
@@ -103,7 +113,7 @@ export const AddServiceModal = ({ isOpen, onClose }: NewServiceModalProps) => {
                                 service_id: index + 1,
                             } as ServicesData))
                         );
-                        onClose();
+                        handleClose();
                     }}>
                     Add services
                 </button>
@@ -113,7 +123,7 @@ export const AddServiceModal = ({ isOpen, onClose }: NewServiceModalProps) => {
 
     return (
         <Modal isOpen={isOpen}
-            onClose={onClose}
+            onClose={handleClose}
             title='New services'
             body={bodyContent}
         />

@@ -23,6 +23,17 @@ export const AddEmployeeModal = ({ isOpen, onClose }: NewEmployeeModalProps) => 
     const { userId } = useUserContext();
     const { businessName } = useBusinessContext();
 
+    const clearStates = () => {
+        setEmployeeNames(['']);
+        setEmails(['']);
+        setPhoneNumbers(['']);
+    }
+
+    const handleClose = () => {
+        clearStates();
+        onClose();
+    }
+
     const addNewEmployee = useMutation(
         async (newEmployee: EmployeesData[]) => {
             await supabase
@@ -32,9 +43,8 @@ export const AddEmployeeModal = ({ isOpen, onClose }: NewEmployeeModalProps) => 
         },
         {
             onSuccess: () => {
-                queryClient.invalidateQueries(['employees', userId]);
-
-                toast.success('Employee added!')
+                queryClient.invalidateQueries(['employees', businessName]);
+                toast.success('Employee added successfully!')
             },
 
             onError: () => {
@@ -104,7 +114,7 @@ export const AddEmployeeModal = ({ isOpen, onClose }: NewEmployeeModalProps) => 
                                 employer_id: userId
                             } as EmployeesData))
                         );
-                        onClose();
+                        handleClose();
                     }}>
                     Add employee
                 </button>
@@ -114,7 +124,7 @@ export const AddEmployeeModal = ({ isOpen, onClose }: NewEmployeeModalProps) => 
 
     return (
         <Modal isOpen={isOpen}
-            onClose={onClose}
+            onClose={handleClose}
             title='New employee'
             body={bodyContent}
         />

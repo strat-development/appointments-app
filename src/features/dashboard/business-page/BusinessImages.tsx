@@ -56,7 +56,7 @@ export const BusinessImages = ({ businessSlugId }: BusinessSlugIdProps) => {
             <div className="flex flex-col gap-32">
                 <div>
                     <div className="max-w-[800px] rounded-2xl relative z-10">
-                        <Swiper className='h-[500px] rounded-2xl  relative z-10'
+                        <Swiper className='h-[500px] rounded-2xl relative z-10'
                             spaceBetween={0}
                             slidesPerView={1}>
                             {imageUrls.map((image, index) => (

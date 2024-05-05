@@ -159,6 +159,7 @@ export default function StatisticInfo() {
                     servicesNameMap.set(service.service_id, service.title)
                 });
                 setServiceName(servicesNameMap)
+                
             } else {
                 console.log("Something went wrong with downloanding service data");
             }

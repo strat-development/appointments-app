@@ -15,7 +15,7 @@ export const UploadImagesButton = () => {
     const [files, setFiles] = useState<File[]>([]);
     const queryClient = useQueryClient();
 
-    
+
     const uploadFiles = async (files: File[]) => {
         const uploadPromises = files.map((file) => {
             const path = `${businessId}${Math.random()}.${file.name.split('.').pop()}`;
@@ -54,17 +54,18 @@ export const UploadImagesButton = () => {
         },
         {
             onSuccess: () => {
+                toast.success('Images uploaded successfully!');
                 queryClient.invalidateQueries(['business-images']);
             },
             onError: () => {
-                alert('Error updating the data!');
+                toast.error('Error uploading images');
             },
         }
     );
 
     return (
         <>
-            <div className="w-full border-[.5px] border-black/10">
+            <div className="w-fit flex gap-4">
                 <div className='flex flex-col gap-2'>
                     <input
                         type="file"
@@ -83,20 +84,20 @@ export const UploadImagesButton = () => {
                     </label>
                     {files.map((file, index) => <p key={index}>{file.name}</p>)}
                 </div>
+                <button onClick={() => {
+                    if (files.length > 0) {
+                        uploadFiles(files)
+                            .then((paths) => {
+                                return businessImagesMutation.mutateAsync(paths);
+                            })
+                            .catch((error) => console.error('Error uploading files:', error));
+                    } else {
+                        toast.error('Please upload a file')
+                    }
+                }}>
+                    Send
+                </button >
             </div>
-            <button onClick={() => {
-                if (files.length > 0) {
-                    uploadFiles(files)
-                        .then((paths) => {
-                            return businessImagesMutation.mutateAsync(paths);
-                        })
-                        .catch((error) => console.error('Error uploading files:', error));
-                } else {
-                    toast.error('Please upload a file')
-                }
-            }}>
-                Send
-            </button >
         </>
     )
 }

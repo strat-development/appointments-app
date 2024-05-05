@@ -1,6 +1,7 @@
 import { Database } from "@/types/supabase";
 import { BusinessSlugIdProps } from "@/types/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import toast from "react-hot-toast";
 import { useMutation, useQueryClient } from "react-query";
 
 interface BookVisitButtonProps {
@@ -46,6 +47,7 @@ export const BookVisitButton = ({
         },
         {
             onSuccess: () => {
+                toast.success('Visit booked successfully');
                 queryClient.invalidateQueries('visits');
             }
         }

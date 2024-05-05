@@ -36,8 +36,7 @@ export const EditClientModal = ({ isOpen, onClose, clientName, clientId }: NewCl
         {
             onSuccess: () => {
                 queryClient.invalidateQueries(['clients', clientId]);
-
-                toast.success('Visit added!')
+                toast.success('Visit added successfully!')
             },
 
             onError: () => {

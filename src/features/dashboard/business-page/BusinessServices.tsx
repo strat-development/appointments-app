@@ -4,12 +4,14 @@ import { useQuery } from "react-query";
 import { BookVisitModal } from "./visits-booking/BookVisitModal";
 import { useState } from "react";
 import { BusinessSlugIdProps, ServicesData } from "@/types/types";
+import { useUserContext } from "@/providers/userContextProvider";
 
 
 
 export const BusinessServices = ({ businessSlugId }: BusinessSlugIdProps) => {
     const supabase = createClientComponentClient<Database>();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const { userRole } = useUserContext();
     const handleClose = () => {
         setIsModalOpen(false);
     }
@@ -39,10 +41,12 @@ export const BusinessServices = ({ businessSlugId }: BusinessSlugIdProps) => {
                             <p>{service.price}</p>
                         </div>
                     </div>
-                    <button value={service.title}
-                        onClick={() => setIsModalOpen(true)}>
-                        Book
-                    </button>
+                    {!userRole &&
+                        <button value={service.title}
+                            onClick={() => setIsModalOpen(true)}>
+                            Book
+                        </button>
+                    }
                 </div>
             ))}
             <BookVisitModal businessSlugId={businessSlugId}

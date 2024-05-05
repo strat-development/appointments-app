@@ -3,12 +3,13 @@
 import { Auth } from "@supabase/auth-ui-react";
 import { Modal } from "./Modal"
 import { useSessionContext } from "@supabase/auth-helpers-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/types/supabase";
 import { useModal } from "@/hooks/useModal";
+import toast from "react-hot-toast";
 
 
 export const AuthModal = () => {
@@ -35,6 +36,10 @@ export const AuthModal = () => {
                                 id: session.user.id ?? ''
                             },
                         )
+
+                    if (error && status !== 406) {
+                        toast.error('Error logging in!')
+                    }
                 };
             createProfil();
         }

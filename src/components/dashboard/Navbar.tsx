@@ -9,6 +9,7 @@ import { useUserContext } from "@/providers/userContextProvider";
 import { useEffect, useState } from "react";
 import { UserDataModal } from "./UserDataModal";
 import { useBusinessContext } from "@/providers/businessContextProvider";
+import toast from "react-hot-toast";
 
 interface NavbarProps {
     className?: string;
@@ -121,6 +122,7 @@ export const Navbar = ({ className }: NavbarProps) => {
                                     onClick={async () => {
                                         await supabase.auth.signOut();
                                         clearUserRole();
+                                        toast.success('Logged out successfully!')
 
                                         router.push('/')
                                     }}

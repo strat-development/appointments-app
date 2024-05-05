@@ -4,7 +4,7 @@ import { useBusinessContext } from "@/providers/businessContextProvider";
 import { Database } from "@/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 
 interface EditOpeningHoursModalProps {
     isOpen: boolean;
@@ -19,6 +19,7 @@ export const EditOpeningHoursModal = ({ onClose, isOpen }: EditOpeningHoursModal
     const supabase = createClientComponentClient<Database>();
     const { businessId } = useBusinessContext()
     const [openingHours, setOpeningHours] = useState<OpeningHours>({} as OpeningHours);
+    const queryClient = useQueryClient();
 
 
     const openingHoursMutation = useMutation(
@@ -34,6 +35,8 @@ export const EditOpeningHoursModal = ({ onClose, isOpen }: EditOpeningHoursModal
         {
             onSuccess: () => {
                 console.log('Opening hours updated')
+                queryClient.invalidateQueries('business-opening-hours')
+
             },
             onError: () => {
                 console.log('Error updating opening hours')

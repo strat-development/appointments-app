@@ -57,7 +57,7 @@ export const EditEmployeeModal = ({ isOpen, onClose, employeeName, employeeId, e
         {
             onSuccess: () => {
                 queryClient.invalidateQueries(['employees', employeeId]);
-                toast.success('Employee deleted!')
+                toast.success('Employee deleted successfully!')
             },
             onError: () => {
                 toast.error('Error deleting the position!')

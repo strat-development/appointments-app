@@ -67,8 +67,7 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
         {
             onSuccess: () => {
                 queryClient.invalidateQueries(['visits', userId]);
-
-                toast.success('Visit added!')
+                toast.success('Visit added successfully!')
             },
 
             onError: () => {

@@ -28,7 +28,7 @@ export const ServicesSection = () => {
     const {businessName, businessId} = useBusinessContext();
 
     useQuery(
-        ['services', businessName],
+        ['services', businessId],
         async () => {
             const { data, error, status } = await supabase
                 .from("services")
