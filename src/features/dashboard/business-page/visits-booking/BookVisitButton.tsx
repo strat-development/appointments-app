@@ -1,6 +1,7 @@
 import { Database } from "@/types/supabase";
 import { BusinessSlugIdProps } from "@/types/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useEffect } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { NavigationType, useNavigate } from "react-router-dom";
 
@@ -17,10 +18,10 @@ export const BookVisitButton = ({
     startTime,
     endTime,
     selectedService,
+    navigate
 }: BookVisitButtonProps) => {
     const supabase = createClientComponentClient<Database>();
     const queryClient = useQueryClient();
-
     const bookVistiMutation = useMutation(
         async () => {
             try {
@@ -47,8 +48,9 @@ export const BookVisitButton = ({
         },
         {
             onSuccess: () => {
-                const navigate = useNavigate();
-                navigate('localhost:3001/api/mail');
+                console.log("huhuuhhuhuj");
+                const navigate = useNavigate()
+                navigate('localhost:3001/api/mail',{state:{clientId:"123",businessId:"123",mailTemplate:"123"}});
                 queryClient.invalidateQueries('visits');
             }
         }
