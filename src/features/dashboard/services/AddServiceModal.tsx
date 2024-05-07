@@ -107,7 +107,7 @@ export const AddServiceModal = ({ isOpen, onClose }: NewServiceModalProps) => {
                         addNewService.mutateAsync(
                             serviceNames.map((serviceName, index) => ({
                                 title: serviceName,
-                                price: Number(prices[index]),
+                                price: prices[index].toString(),
                                 duration: durations[index],
                                 business_id: businessId,
                                 service_id: index + 1,

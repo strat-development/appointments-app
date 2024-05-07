@@ -1,4 +1,5 @@
 "use client"
+
 import { useBusinessContext } from "@/providers/businessContextProvider";
 import { useUserContext } from "@/providers/userContextProvider";
 import { Database } from "@/types/supabase";
@@ -58,17 +59,14 @@ export default function StatisticInfo() {
                     .from("services")
                     .select("service_id,price,title")
                     .eq("business_id", businessId)
-                if (error) {
-                    console.log(error);
-                }
                 if (services) {
                     services.forEach((service) => {
-                        servicesMap.set(service.service_id, service.price)
-                        servicesNameMap.set(service.service_id, service.title)
+                        servicesMap.set(service.service_id, parseFloat(service.price));
+                        servicesNameMap.set(service.service_id, service.title);
                     });
-                    setServiceName(servicesNameMap)
+                    setServiceName(servicesNameMap);
                 } else {
-                    console.log("Something went wrong with downloanding service data");
+                    console.log("Something went wrong with downloading service data");
                 }
             };
             getServicesForBusiness();
@@ -155,7 +153,7 @@ export default function StatisticInfo() {
             }
             if (services) {
                 services.forEach((service) => {
-                    servicesMap.set(service.service_id, service.price)
+                    servicesMap.set(service.service_id, service.price as any)
                     servicesNameMap.set(service.service_id, service.title)
                 });
                 setServiceName(servicesNameMap)

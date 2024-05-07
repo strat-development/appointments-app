@@ -19,13 +19,13 @@ export default function BusinessPagesBrowser({
     const [businessPages, setBusinessPages] = useState<BusinessData[]>([]);
 
 
-    if (params.slug === "all") {
-        const { data: businessPagesData, isLoading, isError } = useQuery(
-            ['businessPages'],
-            async () => {
-                const { data, error, status } = await supabase
-                    .from("business-type-info-linker")
-                    .select(`
+
+    const { data: allBusinessPagesData } = useQuery(
+        ['businessPages'],
+        async () => {
+            const { data, error, status } = await supabase
+                .from("business-type-info-linker")
+                .select(`
                     business-info (
                         business_name,
                         business_address,
@@ -33,53 +33,64 @@ export default function BusinessPagesBrowser({
                     )
                 `)
 
-                if (error && status !== 406) {
-                    throw error;
-                }
-
-                if (data) {
-                    const mappedData = data.map((item: any) => item['business-info']);
-                    const uniqueData = Array.from(new Set(mappedData.map((item: any) => item.id)))
-                        .map(id => {
-                            return mappedData.find((item: any) => item.id === id);
-                        });
-                    setBusinessPages(uniqueData as BusinessData[]);
-                }
+            if (error && status !== 406) {
+                throw error;
             }
-        )
-    } else {
-        const { data: businessPagesData, isLoading, isError } = useQuery(
-            ['businessPages'],
-            async () => {
-                const { data, error, status } = await supabase
-                    .from("business-type-info-linker")
-                    .select(`
+
+            if (data) {
+                const mappedData = data.map((item: any) => item['business-info']);
+                const uniqueData = Array.from(new Set(mappedData.map((item: any) => item.id)))
+                    .map(id => {
+                        return mappedData.find((item: any) => item.id === id);
+                    });
+                setBusinessPages(uniqueData as BusinessData[]);
+            }
+        },
+        {
+            enabled: params.slug === "all",
+        }
+    )
+
+    const { data: businessPagesDataNotAll, isLoading: isLoadingNotAll, isError: isErrorNotAll } = useQuery(
+        ['businessPagesNotAll'],
+        async () => {
+            const { data, error, status } = await supabase
+                .from("business-type-info-linker")
+                .select(`
                     business-info (
                         business_name,
                         business_address,
                         id
                     )
                 `)
-                    .eq("business_type_id", params.slug)
+                .eq('business_type_id', params.slug)
 
-                if (error && status !== 406) {
-                    throw error;
-                }
-
-                if (data) {
-                    const mappedData = data.map((item: any) => item['business-info']);
-                    setBusinessPages(mappedData as BusinessData[]);
-                }
+            if (error && status !== 406) {
+                throw error;
             }
-        );
-    }
+
+            if (data) {
+                const mappedData = data.map((item: any) => item['business-info']);
+                const uniqueData = Array.from(new Set(mappedData.map((item: any) => item.id)))
+                    .map(id => {
+                        return mappedData.find((item: any) => item.id === id);
+                    });
+                setBusinessPages(uniqueData as BusinessData[]);
+            }
+        },
+        {
+            enabled: params.slug !== "all",
+        }
+    );
+
 
     return (
         <>
             <Navbar />
             <div className="relative top-24">
                 {businessPages.map((businessPage) => (
-                    <Link href={`/business-page/${businessPage.id}`}>
+                    <Link key={businessPage.id} 
+                    href={`/business-page/${businessPage.id}`}>
                         <div className="border-[.5px] rounded-2xl p-4 flex justify-between"
                             key={businessPage.id}>
                             <div className="flex flex-col gap-2">

@@ -57,13 +57,14 @@ export const OpinionForm = ({ businessSlugId }: BusinessSlugIdProps) => {
                         placeholder="Your opinion"
                         className="border-[.5px] rounded-2xl p-2 outline-none" />
                     <button onClick={() => {
-                        AddOpinionMutation.mutateAsync({
-                            business_id: businessSlugId || "",
+                        AddOpinionMutation.mutateAsync([{
+                            id: businessSlugId || "",
                             user_name: fullName,
                             opinion_rating: rating,
                             opinion_text: opinion,
                             created_at: opinionDate,
-                        })
+                            business_id: ""
+                        }])
 
                         setFullName("");
                         setOpinion("");

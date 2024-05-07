@@ -109,8 +109,10 @@ export const EditServiceModal = ({ isOpen, onClose, serviceName, serviceId, serv
                     onClick={() => {
                         editPosition.mutateAsync({
                             title: serviceNames,
-                            price: price,
-                            duration: duration
+                            price: parseFloat(price).toString(),
+                            duration: duration,
+                            business_id: "",
+                            service_id: 0
                         } as ServicesData);
                         handleClose();
                     }}>

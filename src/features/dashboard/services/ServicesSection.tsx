@@ -25,7 +25,7 @@ export const ServicesSection = () => {
     const [servicePrice, setServicePrice] = useState<string>("");
     const [serviceDuration, setServiceDuration] = useState<string>("");
     const filteredData = isData.filter(item => item.title && item.title.includes(searchPrompt));
-    const {businessName, businessId} = useBusinessContext();
+    const { businessName, businessId } = useBusinessContext();
 
     useQuery(
         ['services', businessId],
