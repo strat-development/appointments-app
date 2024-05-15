@@ -39,7 +39,7 @@ export const OpinionForm = ({ businessSlugId }: BusinessSlugIdProps) => {
         <div className="flex flex-col gap-4 mt-16">
             <h1 className="text-xl font-bold">Add your opinion</h1>
             <div className="border-[.5px] rounded-2xl p-4 flex justify-between">
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 w-full">
                     <div className="flex gap-4">
                         <input onChange={(e) => setFullName(e.target.value)}
                             type="text"
@@ -55,7 +55,7 @@ export const OpinionForm = ({ businessSlugId }: BusinessSlugIdProps) => {
                     </div>
                     <textarea onChange={(e) => setOpinion(e.target.value)}
                         placeholder="Your opinion"
-                        className="border-[.5px] rounded-2xl p-2 outline-none" />
+                        className="border-[.5px] rounded-2xl p-2 outline-none min-h-[300px]" />
                     <button onClick={() => {
                         AddOpinionMutation.mutateAsync([{
                             id: businessSlugId || "",

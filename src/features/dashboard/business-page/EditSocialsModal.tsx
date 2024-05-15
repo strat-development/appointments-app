@@ -21,7 +21,7 @@ export const EditSocialsModal = ({ onClose, isOpen }: EditSocialsModalProps) => 
     const { businessId } = useBusinessContext()
     const [socials, setSocials] = useState<Socials>({} as Socials);
     const queryClient = useQueryClient();
-   
+
     const editSocialsMutation = useMutation(
         async () => {
             await supabase
@@ -63,20 +63,22 @@ export const EditSocialsModal = ({ onClose, isOpen }: EditSocialsModalProps) => 
     }
 
     const bodyContent = (
-        <div>
+        <div className="flex flex-col gap-4">
             {socialMedia.map((social) => {
                 return (
-                    <div key={social}>
+                    <div className="flex flex-col gap-2"
+                        key={social}>
                         <label htmlFor={social}>{social}</label>
                         <input type="checkbox" id={social} onChange={(e) => handleNoSocialChange(social, e)} />
                         <input type="text" onChange={(e) => handleSocialChange(social, 'link', e)} placeholder="Socials link..." />
                     </div>
                 )
             })}
-            <button onClick={async () => {
-                await editSocialsMutation.mutateAsync();
-                onClose();
-            }}>
+            <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-violet-600 to-violet-500 text-white w-full"
+                onClick={async () => {
+                    await editSocialsMutation.mutateAsync();
+                    onClose();
+                }}>
                 Save
             </button>
         </div>

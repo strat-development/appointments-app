@@ -41,8 +41,6 @@ export const BusinessOpinions = ({ businessSlugId }: BusinessSlugIdProps) => {
         loadOpinions.refetch();
     }, [opinionsPerPage]);
 
-    console.log(opinions.length);
-
     return (
         <>
             <div className="flex flex-col gap-4 mb-24">
@@ -54,14 +52,14 @@ export const BusinessOpinions = ({ businessSlugId }: BusinessSlugIdProps) => {
                         key={opinion.id}>
                         <div className="flex flex-col gap-2">
                             <div className="flex gap-4">
-                                <h2>{opinion.user_name}</h2>
+                                <h2 className="text-lg max-[150px] truncate">{opinion.user_name}</h2>
                                 <Rating
                                     name="rating"
                                     value={opinion.opinion_rating}
                                     readOnly
                                 />
                             </div>
-                            <p>{opinion.opinion_text}</p>
+                            <p className="text-black/70 max-w-[450px]">{opinion.opinion_text}</p>
                         </div>
                         <p className="text-black/70">{opinion.created_at}</p>
                     </div>

@@ -43,7 +43,7 @@ export const BusinessDataModal = ({ onClose, isOpen }:BusinesDataModalProps) => 
     const bodyContent = (
         <>
             <div className="flex flex-col gap-4">
-                <div>
+                <div className="flex flex-col gap-2">
                     <label htmlFor="user name">Business name</label>
                     <Input
                         id="business name"

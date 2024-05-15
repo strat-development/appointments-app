@@ -42,7 +42,8 @@ export const AddPositionModal = ({ isOpen, onClose }: NewPositionModalProps) => 
         <>
             <div className="flex flex-col gap-4">
                 {positionNames.map((positionName, index) => (
-                    <div key={index}>
+                    <div className="flex flex-col gap-2" 
+                    key={index}>
                         <label htmlFor={`Position ${index + 1}`}>Position {index + 1}</label>
                         <Input
                             id={`position ${index + 1}`}

@@ -34,11 +34,11 @@ export const BookVisitButton = ({
                             service_id: selectedService,
                         }
                     ]);
-    
+
                 if (error) {
                     throw error;
                 }
-    
+
                 return data;
             } catch (error) {
                 console.error(error);
@@ -54,9 +54,9 @@ export const BookVisitButton = ({
     );
 
     return (
-        <div>
-            <button onClick={() => bookVistiMutation.mutateAsync()} 
-            className="p-2 border-[1px]">Book a visit</button>
-        </div>
+        <>
+            <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-violet-600 to-violet-500 text-white w-full"
+                onClick={() => bookVistiMutation.mutateAsync()}>Book a visit</button>
+        </>
     )
 }

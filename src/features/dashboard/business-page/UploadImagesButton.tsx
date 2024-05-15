@@ -26,9 +26,9 @@ export const UploadImagesButton = () => {
 
         responses.forEach((response, index) => {
             if (response.error) {
-                console.error(`Error uploading file ${files[index].name}:`, response.error.message);
+                toast.error(`Error uploading file ${files[index].name}:`);
             } else {
-                console.log(`File ${files[index].name} uploaded successfully`);
+                toast.success(`File ${files[index].name} uploaded successfully`);
             }
         });
 
@@ -84,7 +84,8 @@ export const UploadImagesButton = () => {
                     </label>
                     {files.map((file, index) => <p key={index}>{file.name}</p>)}
                 </div>
-                <button onClick={() => {
+                <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-violet-600 to-violet-500 text-white w-full" 
+                onClick={() => {
                     if (files.length > 0) {
                         uploadFiles(files)
                             .then((paths) => {

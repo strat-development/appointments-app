@@ -4,6 +4,7 @@ import { useBusinessContext } from "@/providers/businessContextProvider";
 import { Database } from "@/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { useMutation, useQueryClient } from "react-query";
 
 interface EditOpeningHoursModalProps {
@@ -34,12 +35,12 @@ export const EditOpeningHoursModal = ({ onClose, isOpen }: EditOpeningHoursModal
         },
         {
             onSuccess: () => {
-                console.log('Opening hours updated')
+                toast.success('Opening hours updated')
                 queryClient.invalidateQueries('business-opening-hours')
 
             },
             onError: () => {
-                console.log('Error updating opening hours')
+                toast.error('Error updating opening hours')
             }
         }
     )
@@ -65,44 +66,46 @@ export const EditOpeningHoursModal = ({ onClose, isOpen }: EditOpeningHoursModal
     }
 
     const bodyContent = (
-        <div>
-            {daysOfWeek.map(day => (
-                <div key={day} className="flex justify-between items-center">
-                    <p>{day}</p>
-                    <div className="flex gap-2">
-                        <input
-                            type="time"
-                            name={`${day}Start`}
-                            id={`${day}Start`}
-                            onChange={event => handleTimeChange(day, 'start', event)}
-                        />
-                        <span>-</span>
-                        <input
-                            type="time"
-                            name={`${day}End`}
-                            id={`${day}End`}
-                            onChange={event => handleTimeChange(day, 'end', event)}
-                        />
+        <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4">
+                {daysOfWeek.map(day => (
+                    <div key={day} className="grid grid-cols-3 justify-items-center items-center">
+                        <p>{day}</p>
+                        <div className="flex gap-4">
+                            <input
+                                type="time"
+                                name={`${day}Start`}
+                                id={`${day}Start`}
+                                onChange={event => handleTimeChange(day, 'start', event)}
+                            />
+                            <span>-</span>
+                            <input
+                                type="time"
+                                name={`${day}End`}
+                                id={`${day}End`}
+                                onChange={event => handleTimeChange(day, 'end', event)}
+                            />
+                        </div>
+                        <div className="flex gap-2 hover:bg-red-500/70 hover:text-white p-2 rounded-full transition">
+                            <input
+                                type="checkbox"
+                                name={`${day}Closed`}
+                                id={`${day}Closed`}
+                                onChange={event => handleClosedChange(day, event)}
+                            />
+                            <label htmlFor={`${day}Closed`}>Closed</label>
+                        </div>
                     </div>
-                    <div>
-                        <input
-                            type="checkbox"
-                            name={`${day}Closed`}
-                            id={`${day}Closed`}
-                            onChange={event => handleClosedChange(day, event)}
-                        />
-                        <label htmlFor={`${day}Closed`}>Closed</label>
-                    </div>
-                </div>
-            ))}
-            <button onClick={async () => {
-                await openingHoursMutation.mutateAsync();
-                onClose();
-            }}>
+                ))}
+            </div>
+            <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-violet-600 to-violet-500 text-white w-full"
+                onClick={async () => {
+                    await openingHoursMutation.mutateAsync();
+                    onClose();
+                }}>
                 Save
             </button>
         </div>
-
     )
 
     return (

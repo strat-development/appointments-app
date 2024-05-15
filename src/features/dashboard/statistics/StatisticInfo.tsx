@@ -7,6 +7,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 import { PieChart } from "./PieChart";
 import "@/styles/statistic.css"
+import toast from "react-hot-toast";
 
 export default function StatisticInfo() {
     const { businessId } = useBusinessContext();
@@ -44,7 +45,6 @@ export default function StatisticInfo() {
                     getCurrentMonthProfit(clientsData);
                     getEveryServiceCount(clientsData);
                 } else {
-                    console.log("Missing Data");
                     setMonthlyClinets(0);
                 }
             };
@@ -66,7 +66,7 @@ export default function StatisticInfo() {
                     });
                     setServiceName(servicesNameMap);
                 } else {
-                    console.log("Something went wrong with downloading service data");
+                    toast.error("Something went wrong with downloading service data");
                 }
             };
             getServicesForBusiness();
@@ -78,7 +78,7 @@ export default function StatisticInfo() {
             if (servicesMap.has(visit.service_id as any)) {
                 profit += parseFloat(servicesMap.get(visit.service_id as any) as any);
             } else {
-                console.log("You dont have acces to this service");
+                toast.error("You dont have acces to this service");
             }
         })
         setCurrentProfit(profit)
@@ -136,7 +136,6 @@ export default function StatisticInfo() {
                 getCurrentMonthProfit(clientsData);
                 getEveryServiceCount(clientsData);
             } else {
-                console.log("Missing Data");
                 setMonthlyClinets(0);
             }
         }
@@ -159,7 +158,7 @@ export default function StatisticInfo() {
                 setServiceName(servicesNameMap)
                 
             } else {
-                console.log("Something went wrong with downloanding service data");
+                toast.error("Something went wrong with downloanding service data");
             }
         }
     }

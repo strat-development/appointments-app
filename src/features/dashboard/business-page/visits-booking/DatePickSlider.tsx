@@ -1,5 +1,5 @@
 import { Database } from "@/types/supabase";
-import { BusinessSlugIdProps, VisitsData } from "@/types/types";
+import { BusinessSlugIdProps, ServicesData, VisitsData } from "@/types/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { ArrowLeft, ArrowRight } from "iconsax-react";
 import { useEffect, useRef, useState } from "react";
@@ -7,9 +7,10 @@ import { HoursPickerSlider } from "./HoursPickerSlider";
 
 interface DatePickSliderProps {
     businessSlugId: BusinessSlugIdProps["businessSlugId"];
+    selectedService?: ServicesData[];
 }
 
-export const DatePickSlider = ({ businessSlugId }: DatePickSliderProps) => {
+export const DatePickSlider = ({ businessSlugId, selectedService }: DatePickSliderProps) => {
     const today = new Date();
     const [currentPage, setCurrentPage] = useState(0);
     const [visits, setVisits] = useState<VisitsData[]>([]);
@@ -81,7 +82,7 @@ export const DatePickSlider = ({ businessSlugId }: DatePickSliderProps) => {
     return (
         <div className="flex flex-col items-center gap-8" ref={sliderRef}>
             <div className="text-xl capitalize">{new Date(today.getFullYear(), pages[currentPage][0].month).toLocaleString('default', { month: 'long' })}</div>
-            <div className="w-[600px] flex gap-16">
+            <div className="w-[700px] flex items-center justify-center gap-16">
                 {currentPage > 0 &&
                     <button onClick={handlePrev} className="text-black">
                         <ArrowLeft />
@@ -103,7 +104,9 @@ export const DatePickSlider = ({ businessSlugId }: DatePickSliderProps) => {
             </div>
             <HoursPickerSlider selectedDate={selectedDate}
                 businessSlugId={businessSlugId}
-                visits={visits} />
+                visits={visits}
+                selectedService={selectedService} 
+                />
         </div>
     )
 }

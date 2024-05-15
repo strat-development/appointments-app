@@ -35,7 +35,7 @@ export const EditServiceModal = ({ isOpen, onClose, serviceName, serviceId, serv
             await supabase
                 .from("services")
                 .update(newService)
-                .eq("id", serviceId);
+                .eq("service_id", serviceId);
         },
         {
             onSuccess: () => {
@@ -55,7 +55,7 @@ export const EditServiceModal = ({ isOpen, onClose, serviceName, serviceId, serv
             await supabase
                 .from("services")
                 .delete()
-                .eq("id", serviceId);
+                .eq("service_id", serviceId);
         },
         {
             onSuccess: () => {
@@ -71,8 +71,7 @@ export const EditServiceModal = ({ isOpen, onClose, serviceName, serviceId, serv
     const bodyContent = (
         <>
             <div className="flex flex-col gap-4">
-
-                <div>
+                <div className="flex flex-col gap-2">
                     <label htmlFor="Service">Service</label>
                     <Input
                         id="service"
@@ -112,7 +111,7 @@ export const EditServiceModal = ({ isOpen, onClose, serviceName, serviceId, serv
                             price: parseFloat(price).toString(),
                             duration: duration,
                             business_id: "",
-                            service_id: 0
+                            service_id: serviceId
                         } as ServicesData);
                         handleClose();
                     }}>

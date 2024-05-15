@@ -88,10 +88,10 @@ export const DeleteImagesModal = () => {
 
     const bodyContent = (
         <>
-            <div className="flex flex-col gap-4 items-start ">
+            <div className="flex flex-col gap-4 items-start">
                 <div className="grid grid-cols-4 gap-4">
                     {imageUrls.map((image, index) => (
-                        <div key={index} className="flex gap-4 items-center">
+                        <div key={index} className="flex gap-2 items-center">
                             <input
                                 type="checkbox"
                                 value={image.publicUrl}

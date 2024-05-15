@@ -37,7 +37,7 @@ export const OpeningHoursModal = ({ onClose, isOpen }: OpeningHoursModalProps) =
                 queryClient.invalidateQueries('business-opening-hours');
             },
             onError: () => {
-               toast.error('Error updating opening hours');
+                toast.error('Error updating opening hours');
             }
         }
     )
@@ -63,43 +63,44 @@ export const OpeningHoursModal = ({ onClose, isOpen }: OpeningHoursModalProps) =
     }
 
     const bodyContent = (
-        <div>
-            {daysOfWeek.map(day => (
-                <div key={day} className="flex justify-between items-center">
-                    <p>{day}</p>
-                    <div className="flex gap-2">
-                        <input
-                            type="time"
-                            name={`${day}Start`}
-                            id={`${day}Start`}
-                            onChange={event => handleTimeChange(day, 'start', event)}
-                        />
-                        <span>-</span>
-                        <input
-                            type="time"
-                            name={`${day}End`}
-                            id={`${day}End`}
-                            onChange={event => handleTimeChange(day, 'end', event)}
-                        />
+        <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4">
+                {daysOfWeek.map(day => (
+                    <div key={day} className="flex justify-between items-center">
+                        <p>{day}</p>
+                        <div className="flex gap-2">
+                            <input
+                                type="time"
+                                name={`${day}Start`}
+                                id={`${day}Start`}
+                                onChange={event => handleTimeChange(day, 'start', event)}
+                            />
+                            <span>-</span>
+                            <input
+                                type="time"
+                                name={`${day}End`}
+                                id={`${day}End`}
+                                onChange={event => handleTimeChange(day, 'end', event)}
+                            />
+                        </div>
+                        <div>
+                            <input
+                                type="checkbox"
+                                name={`${day}Closed`}
+                                id={`${day}Closed`}
+                                onChange={event => handleClosedChange(day, event)}
+                            />
+                            <label htmlFor={`${day}Closed`}>Closed</label>
+                        </div>
                     </div>
-                    <div>
-                        <input
-                            type="checkbox"
-                            name={`${day}Closed`}
-                            id={`${day}Closed`}
-                            onChange={event => handleClosedChange(day, event)}
-                        />
-                        <label htmlFor={`${day}Closed`}>Closed</label>
-                    </div>
-                </div>
-            ))}
+                ))}
+            </div>
             <button onClick={async () => {
                 await openingHoursMutation.mutateAsync();
             }}>
                 Save
             </button>
         </div>
-
     )
 
     return (

@@ -35,20 +35,12 @@ export const Navbar = ({ className }: NavbarProps) => {
     })
 
 
-    const ClientsLinks = [
+    const AppointmentsLinks = [
         {
             name: "Schedule",
             link: "/dashboard/schedule",
             icon: <Calendar size="24" />
         },
-        {
-            name: "Subscription",
-            link: "/dashboard/subscription",
-            icon: <Card size="24" />
-        }
-    ]
-
-    const Links = [
         {
             name: "Statistics",
             link: "/dashboard/statistics",
@@ -59,6 +51,9 @@ export const Navbar = ({ className }: NavbarProps) => {
             link: "/dashboard/clients",
             icon: <Profile2User size="24" />
         },
+    ]
+
+    const ManagamentLinks = [
         {
             name: "Business page",
             link: `/dashboard/${businessId}`,
@@ -79,6 +74,11 @@ export const Navbar = ({ className }: NavbarProps) => {
             link: "/dashboard/positions",
             icon: <ChemicalGlass size="24" />
         },
+        {
+            name: "Subscription",
+            link: "/dashboard/subscription",
+            icon: <Card size="24" />
+        },
     ]
 
     return (
@@ -98,16 +98,18 @@ export const Navbar = ({ className }: NavbarProps) => {
                             </div>
                         </div>
                         <div className="flex flex-col gap-4 max-[1024px]:flex-row max-[1024px]:w-full max-[1024px]:justify-between max-[1024px]:gap-0">
-                            {ClientsLinks.map((link, index) => (
+                            <h3 className="text-xl font-bold max-[1024px]:hidden">Appointments</h3>
+                            {AppointmentsLinks.map((link, index) => (
                                 <Link className={currentRoute === link.link ? activeStyle : linkStyle}
                                     href={link.link} key={index}>
                                     {link.icon}
                                     <p className="max-[1024px]:hidden">{link.name}</p>
                                 </Link>
                             ))}
+                            <h3 className="text-xl font-bold max-[1024px]:hidden">Management</h3>
                             {(userRole === "Employer" || userRole === "Employee") && (
                                 <>
-                                    {Links.map((link, index) => (
+                                    {ManagamentLinks.map((link, index) => (
                                         <Link className={currentRoute === link.link ? activeStyle : linkStyle}
                                             href={link.link} key={index}>
                                             {link.icon}
@@ -116,9 +118,8 @@ export const Navbar = ({ className }: NavbarProps) => {
                                     ))}
                                 </>
                             )}
-
                             <div className="flex flex-col gap-4 self-start">
-                                <button className="max-[1024px]:hidden p-2 transition rounded-full hover:text-white hover:bg-gradient-to-b hover:from-violet-600 hover:to-violet-500 text-[#404040] flex self-end gap-4"
+                                <button className="p-2 transition rounded-full hover:text-white hover:bg-gradient-to-b hover:from-violet-600 hover:to-violet-500 text-[#404040] flex self-end gap-4"
                                     onClick={async () => {
                                         await supabase.auth.signOut();
                                         clearUserRole();

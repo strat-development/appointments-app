@@ -4,7 +4,7 @@ import { Database } from "@/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useBusinessContext } from "@/providers/businessContextProvider";
 import { useState } from "react";
-import { Edit, Facebook, Instagram } from "iconsax-react";
+import { Facebook, Instagram } from "iconsax-react";
 import { IoLogoTwitter } from "react-icons/io";
 import Link from "next/link";
 import { EditSocialsModal } from "./EditSocialsModal";
@@ -59,12 +59,16 @@ export const Socials = ({ businessSlugId }: BusinessSlugIdProps) => {
                     <div className="flex justify-evenly items-center w-full">
                         {parsedSocials && Object.entries(parsedSocials).map(([socialsType, value]) => {
                             const socialsAsObj = value as { link: string };
-                            const Icon = socialMediaIcons[socialsType as SocialMediaTypes]; // Cast socialsType to SocialMediaTypes
+                            const Icon = socialMediaIcons[socialsType as SocialMediaTypes];
                             return (
                                 <div className="flex flex-col gap-2 items-center"
                                     key={socialsType}>
-                                    {Icon && <Link href={socialsAsObj.link}>{Icon}</Link>} {/* Render the icon with the link */}
-                                    <h3>{socialsType}</h3>
+                                    {Icon && <Link href={socialsAsObj.link}>
+                                        <div className="flex flex-col gap-2 items-center">
+                                            {Icon}
+                                            <h3>{socialsType}</h3>
+                                        </div>
+                                    </Link>}
                                 </div>
                             );
                         })}

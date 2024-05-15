@@ -20,7 +20,7 @@ export const AddSocialsModal = ({ onClose, isOpen }: AddSocialsModalProps) => {
     const supabase = createClientComponentClient<Database>();
     const { businessId } = useBusinessContext()
     const [socials, setSocials] = useState<Socials>({} as Socials);
-   
+
     const addSocialsMutation = useMutation(
         async () => {
             await supabase
@@ -62,10 +62,11 @@ export const AddSocialsModal = ({ onClose, isOpen }: AddSocialsModalProps) => {
     }
 
     const bodyContent = (
-        <div>
+        <div className="flex flex-col gap-4">
             {socialMedia.map((social) => {
                 return (
-                    <div key={social}>
+                    <div className="flex flex-col gap-2"
+                        key={social}>
                         <label htmlFor={social}>{social}</label>
                         <input type="checkbox" id={social} onChange={(e) => handleNoSocialChange(social, e)} />
                         <input type="text" onChange={(e) => handleSocialChange(social, 'link', e)} placeholder="Socials link..." />

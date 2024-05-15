@@ -1,4 +1,4 @@
-import { BusinessSlugIdProps, OpeningHoursData, VisitsData } from "@/types/types";
+import { BusinessSlugIdProps, OpeningHoursData, ServicesData, VisitsData } from "@/types/types";
 import { useState } from "react";
 import { SelectWorkerService } from "./SelectWorkerService";
 import { useQuery } from "react-query";
@@ -10,9 +10,10 @@ interface HoursPickerSliderProps {
     visits: VisitsData[];
     businessSlugId: BusinessSlugIdProps["businessSlugId"];
     selectedDate: string | null;
+    selectedService?: ServicesData[];
 }
 
-export const HoursPickerSlider = ({ visits, businessSlugId, selectedDate }: HoursPickerSliderProps) => {
+export const HoursPickerSlider = ({ visits, businessSlugId, selectedDate, selectedService }: HoursPickerSliderProps) => {
     const [selectedStartTime, setSelectedStartTime] = useState<string>("");
     const [selectedEndTime, setSelectedEndTime] = useState<string>("");
     const supabase = createClientComponentClient<Database>();
@@ -65,6 +66,10 @@ export const HoursPickerSlider = ({ visits, businessSlugId, selectedDate }: Hour
     const dayOfWeek = format(selectedDateObj, 'EEEE');
     const hoursForDay = parsedOpeningHours[dayOfWeek];
 
+    if (!hoursForDay || !hoursForDay.start || !hoursForDay.end) {
+        return <div>Opening hours not available...</div>;
+    }
+
     const timeSlots = generateTimeSlots(hoursForDay.start, hoursForDay.end);
     const bookedTimes = visits.map(visit => {
         const visitDate = new Date(visit.start_time ?? "");
@@ -84,18 +89,27 @@ export const HoursPickerSlider = ({ visits, businessSlugId, selectedDate }: Hour
     return (
         <>
             <div className="flex gap-4 overflow-x-scroll w-[600px]">
-                {availableTimeSlots.map((slot, index) => (
-                    <button key={slot} onClick={() => {
-                        handleTimeSlotClick(slot, index)
-                    }}>
-                        {slot}
-                    </button>
-                ))}
+                {availableTimeSlots.map((slot, index) => {
+                    const startTime = new Date(`${selectedDate}T${slot}:00Z`).toISOString();
+                    const isSelected = startTime === selectedStartTime;
+                    return (
+                        <button
+                            className={`p-2 my-2 border-[1px] rounded-md transition ${isSelected ? 'bg-violet-200' : 'hover:bg-violet-200'}`}
+                            key={slot}
+                            onClick={() => {
+                                handleTimeSlotClick(slot, index)
+                            }}
+                        >
+                            {slot}
+                        </button>
+                    );
+                })}
             </div>
             <SelectWorkerService
                 businessSlugId={businessSlugId}
                 startTime={selectedStartTime}
                 endTime={selectedEndTime}
+                selectedService={selectedService}
             />
         </>
     )

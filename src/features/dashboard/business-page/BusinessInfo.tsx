@@ -6,7 +6,7 @@ import { Socials } from "./Socials";
 export const BusinessInfo = ({businessSlugId}: BusinessSlugIdProps) => {
     return (
         <div className="relative z-[999999]">
-            <div className="flex flex-col gap-8 w-[400px] sticky top-[128px]">
+            <div className="flex flex-col gap-8 min-w-[400px] sticky top-[128px]">
                 <div className="flex items-center justify-center w-full border-[.5px] rounded-2xl p-4">
                     <OpeningHours businessSlugId={businessSlugId} />
                 </div>

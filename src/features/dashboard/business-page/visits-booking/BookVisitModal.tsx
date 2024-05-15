@@ -1,19 +1,19 @@
 import { Modal } from "@/components/Modal"
 import { Database } from "@/types/supabase";
-import { BusinessSlugIdProps, VisitsData } from "@/types/types";
+import { BusinessSlugIdProps, ServicesData, VisitsData } from "@/types/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { DatePickSlider } from "./DatePickSlider";
-import { SelectWorkerService } from "./SelectWorkerService";
 
 interface BookVisitModalProps {
     isOpen: boolean;
     onClose: () => void;
     businessSlugId: BusinessSlugIdProps["businessSlugId"];
+    selectedService?: ServicesData[];
 }
 
-export const BookVisitModal = ({ onClose, isOpen, businessSlugId }: BookVisitModalProps) => {
+export const BookVisitModal = ({ onClose, isOpen, businessSlugId, selectedService }: BookVisitModalProps) => {
     const supabase = createClientComponentClient<Database>();
     const [businessData, setBusinessData] = useState<VisitsData>();
 
@@ -36,10 +36,12 @@ export const BookVisitModal = ({ onClose, isOpen, businessSlugId }: BookVisitMod
     )
 
     const bodyContent = (
-        <div>
+        <div className="flex flex-col gap-4">
             <h2>{businessData?.employee}</h2>
             <div>
-                <DatePickSlider businessSlugId={businessSlugId} />
+                <DatePickSlider businessSlugId={businessSlugId}
+                    selectedService={selectedService}
+                />
             </div>
         </div>
     )

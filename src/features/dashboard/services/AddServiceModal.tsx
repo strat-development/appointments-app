@@ -55,7 +55,8 @@ export const AddServiceModal = ({ isOpen, onClose }: NewServiceModalProps) => {
         <>
             <div className="flex flex-col gap-4">
                 {serviceNames.map((serviceName, index) => (
-                    <div key={index}>
+                    <div className="flex flex-col gap-2" 
+                    key={index}>
                         <label htmlFor={`Service ${index + 1}`}>Service {index + 1}</label>
                         <Input
                             id={`service ${index + 1}`}

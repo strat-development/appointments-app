@@ -44,7 +44,7 @@ export const UserDataModal = ({ onClose, isOpen }: UserDataModalProps) => {
     const bodyContent = (
         <>
             <div className="flex flex-col gap-4">
-                <div>
+                <div className="flex flex-col gap-2">
                     <label htmlFor="user name">Full name</label>
                     <Input
                         id="user name"
@@ -73,6 +73,7 @@ export const UserDataModal = ({ onClose, isOpen }: UserDataModalProps) => {
                         value={userPhoneNumber || ''}
                     />
                 </div>
+
                 <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-violet-600 to-violet-500 text-white w-full"
                     onClick={() => {
                         addUserData.mutateAsync([{

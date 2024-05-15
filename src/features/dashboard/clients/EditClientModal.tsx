@@ -12,18 +12,21 @@ interface NewClientModalProps {
     onClose: () => void;
     clientName: string;
     clientId: string;
+    clientEmail: string;
+    clientPhoneNumber: string;
 }
 
-export const EditClientModal = ({ isOpen, onClose, clientName, clientId }: NewClientModalProps) => {
+export const EditClientModal = ({ isOpen, onClose, clientName, clientId, clientEmail, clientPhoneNumber }: NewClientModalProps) => {
     const supabase = createClientComponentClient<Database>();
     const queryClient = useQueryClient();
     const [clientNames, setclientNames] = useState<string>(clientName);
-    const [phoneNumbers, setPhoneNumbers] = useState<string>('');
-    const [emails, setEmails] = useState<string>('');
+    const [phoneNumbers, setPhoneNumbers] = useState<string>(clientPhoneNumber);
+    const [emails, setEmails] = useState<string>(clientEmail);
 
     useEffect(() => {
         setclientNames(clientName);
-
+        setPhoneNumbers(clientPhoneNumber);
+        setEmails(clientEmail);
     }, [clientName]);
 
     const editClient = useMutation(
@@ -45,12 +48,12 @@ export const EditClientModal = ({ isOpen, onClose, clientName, clientId }: NewCl
         }
     );
 
-    const deleteclientMutation = useMutation(
+    const deleteClientMutation = useMutation(
         async () => {
             await supabase
                 .from("clients")
                 .delete()
-                .eq("id", clientId);
+                .eq("client_id", clientId);
         },
         {
             onSuccess: () => {
@@ -66,8 +69,7 @@ export const EditClientModal = ({ isOpen, onClose, clientName, clientId }: NewCl
     const bodyContent = (
         <>
             <div className="flex flex-col gap-4">
-
-                <div>
+                <div className="flex flex-col gap-2">
                     <label htmlFor="client">client</label>
                     <Input
                         id="Client"
@@ -90,10 +92,10 @@ export const EditClientModal = ({ isOpen, onClose, clientName, clientId }: NewCl
                         value={phoneNumbers}
                     />
                     <Input
-                        id="phone number"
-                        label="Phone number"
+                        id="email"
+                        label="Email"
                         type="text"
-                        placeholder="Client phone number"
+                        placeholder="Client email"
                         onChange={(e) => {
                             setEmails(e.target.value);
                         }}
@@ -113,7 +115,7 @@ export const EditClientModal = ({ isOpen, onClose, clientName, clientId }: NewCl
                 </button>
                 <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-red-600 to-red-500 text-white w-full"
                     onClick={() => {
-                        deleteclientMutation.mutate();
+                        deleteClientMutation.mutate();
                         handleClose();
                     }}>
                     Delete

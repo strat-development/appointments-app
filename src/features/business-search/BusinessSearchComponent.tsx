@@ -49,7 +49,6 @@ export const BusinessSearchComponent = () => {
             }
 
             if (data) {
-                console.log(data);
                 setBusinessType(data as BusinessTypeData[]);
             }
         },

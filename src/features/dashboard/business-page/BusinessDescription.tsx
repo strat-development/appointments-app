@@ -27,9 +27,9 @@ export const BusinessDescription = ({ businessSlugId }: BusinessSlugIdProps) => 
     return (
         <>
             {isLoading ? <div>Loading...</div> : (
-                <div>
-                    <h1>{businessInfoData?.business_name}</h1>
-                    <p>{businessInfoData?.business_address}</p>
+                <div className="flex flex-col gap-2">
+                    <h1 className="text-xl font-semibold">{businessInfoData?.business_name}</h1>
+                    <p className="text-black/70">{businessInfoData?.business_address}</p>
                 </div>
             )}
         </>

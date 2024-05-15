@@ -67,8 +67,7 @@ export const EditPositionModal = ({ isOpen, onClose, positionName, positionId }:
     const bodyContent = (
         <>
             <div className="flex flex-col gap-4">
-
-                <div>
+                <div className="flex flex-col gap2">
                     <label htmlFor="Position">Position</label>
                     <Input
                         id="postition"

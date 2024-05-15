@@ -23,7 +23,6 @@ export const BusinessTypeFilter = () => {
             }
 
             if (data) {
-                console.log(data);
                 setBusinessType(data as BusinessTypeData[]);
             }
         },

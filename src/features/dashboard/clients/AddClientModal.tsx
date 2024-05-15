@@ -6,7 +6,6 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import toast from "react-hot-toast";
 import { Database } from "@/types/supabase";
 import { useBusinessContext } from "@/providers/businessContextProvider";
-import { useUserContext } from "@/providers/userContextProvider";
 import { ClientsData } from "@/types/types";
 
 interface NewClientModalProps {
@@ -21,8 +20,7 @@ export const AddClientModal = ({ isOpen, onClose }: NewClientModalProps) => {
     const [emails, setEmails] = useState<string[]>(['']);
     const [notes, setNotes] = useState<string[]>(['']);
     const [phoneNumbers, setPhoneNumbers] = useState<string[]>(['']);
-    const { businessName, businessId } = useBusinessContext();
-    const { userId } = useUserContext();
+    const { businessId } = useBusinessContext();
 
     const addNewClient = useMutation(
         async (newClient: ClientsData[]) => {
@@ -33,8 +31,8 @@ export const AddClientModal = ({ isOpen, onClose }: NewClientModalProps) => {
         },
         {
             onSuccess: () => {
-                queryClient.invalidateQueries(['clients', clientNames]);
                 toast.success('Client added successfully!');
+                queryClient.invalidateQueries(['clients', clientNames]);
             },
 
             onError: () => {
@@ -47,7 +45,8 @@ export const AddClientModal = ({ isOpen, onClose }: NewClientModalProps) => {
         <>
             <div className="flex flex-col gap-4">
                 {clientNames.map((client, index) => (
-                    <div key={index}>
+                    <div className="flex flex-col gap-2" 
+                    key={index}>
                         <label htmlFor={`Client ${index + 1}`}>Client {index + 1}</label>
                         <Input
                             id={`client ${index + 1}`}
@@ -83,7 +82,7 @@ export const AddClientModal = ({ isOpen, onClose }: NewClientModalProps) => {
                                 newPhoneNumber[index] = e.target.value;
                                 setPhoneNumbers(newPhoneNumber);
                             }}
-                            value={emails[index] || ''}
+                            value={phoneNumbers[index] || ''}
                         />
                         <textarea className="w-full rounded-2xl border-[.5px] outline-none"
                             id={`note ${index + 1}`}
@@ -110,13 +109,9 @@ export const AddClientModal = ({ isOpen, onClose }: NewClientModalProps) => {
                             clientNames.map((client, index) => ({
                                 full_name: client,
                                 email: emails[index],
-                                description: notes[index],
-                                business_name: businessName,
                                 business_id: businessId,
                                 phone_number: phoneNumbers[index],
-                                employee_id: userId,
                                 client_description: notes[index],
-                                client_id: '',
                                 label: "",
                                 visit_count: 0
                             } as ClientsData))

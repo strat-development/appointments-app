@@ -58,7 +58,14 @@ export const BusinessImages = ({ businessSlugId }: BusinessSlugIdProps) => {
                     <div className="max-w-[800px] rounded-2xl relative z-10">
                         <Swiper className='h-[500px] rounded-2xl relative z-10'
                             spaceBetween={0}
-                            slidesPerView={1}>
+                            slidesPerView={1}
+                            autoplay={
+                                {
+                                    delay: 100,
+                                    disableOnInteraction: false
+                                }
+
+                            }>
                             {imageUrls.map((image, index) => (
                                 <SwiperSlide key={index}>
                                     <Image src={image.publicUrl} alt="Business image" fill={true} />

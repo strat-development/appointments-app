@@ -166,7 +166,7 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, visitId }:
                         <option key={service.service_id} value={service.service_id}>{service.title}</option>
                     ))}
                 </select>
-                <div>
+                <div className="flex flex-col gap-2">
                     <label htmlFor="Start time">Time</label>
                     <div className="flex gap-4 items-center">
                         <Input

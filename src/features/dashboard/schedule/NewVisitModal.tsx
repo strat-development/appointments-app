@@ -267,6 +267,7 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
                                 client_id: '',
                                 full_name: client || '',
                                 visit_count: 0,
+                                business_id: businessId,
                             } as ClientsData);
                         }
 

@@ -57,7 +57,7 @@ export const AddEmployeeModal = ({ isOpen, onClose }: NewEmployeeModalProps) => 
         <>
             <div className="flex flex-col gap-4">
                 {employeeNames.map((employeeName, index) => (
-                    <div key={index}>
+                    <div className="flex flex-col gap-2" key={index}>
                         <label htmlFor={`Employee ${index + 1}`}>Employee {index + 1}</label>
                         <Input
                             id={`employee ${index + 1}`}
@@ -125,7 +125,7 @@ export const AddEmployeeModal = ({ isOpen, onClose }: NewEmployeeModalProps) => 
     return (
         <Modal isOpen={isOpen}
             onClose={handleClose}
-            title='New employee'
+            title=''
             body={bodyContent}
         />
     );
