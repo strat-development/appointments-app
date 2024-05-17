@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 import Fuse from "fuse.js";
 import { h } from "@fullcalendar/core/preact.js";
+import { Star1 } from "iconsax-react";
 
 export const BusinessSearchComponent = () => {
     const supabase = createClientComponentClient<Database>();
@@ -56,25 +57,32 @@ export const BusinessSearchComponent = () => {
 
     return (
         <div className="flex flex-col items-start gap-4 relative top-36 w-fit">
-            <div className="flex items-center gap-4">
-                <input className="border-[1px] p-2 rounded-full"
-                    onChange={(e) => handleInput(e.target.value)}
-                    type="text" placeholder="Search for a business" />
-                <button onClick={handleSearch}>Search</button>
-            </div>
-            <div className="suggestions">
-                {suggestions.map((suggestion) => (
-                    <Link href={`/business-browse-page/${suggestion.id}`} key={suggestion.id}>
-                        {suggestion['business-type']}
-                    </Link>
-                ))}
-            </div>
-            <div className="border-[1px] w-full p-4 flex flex-wrap gap-4 rounded-md">
-                {businessType.map((type) => (
-                    <Link href={`/business-browse-page/${type.id}`} key={type.id}>
-                        <p>{type["business-type"]}</p>
-                    </Link>
-                ))}
+            <div className="relatve flex items-end gap-4">
+                <div className="flex flex-col gap-4">
+                    <label className="w-[350px] text-black/70 text-lg tracking-wide"
+                        htmlFor="search">
+                        Search for the best businesses and services in your area
+                    </label>
+                    <input className="border-[1px] w-[350px] p-2 rounded-xl outline-none"
+                        id="search"
+                        onChange={(e) => handleInput(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                        type="text" placeholder="Search for a business or service" />
+                </div>
+                <button className="bg-gradient-to-b from-violet-600 to-violet-500 text-white px-4 py-2 rounded-xl"
+                    onClick={handleSearch}>Search</button>
+                {suggestions.length > 0 && (
+                    <div className="suggestions absolute top-32 p-4 flex flex-col gap-4 max-h-[350px] w-[350px] overflow-auto border-[1px] rounded-xl bg-white">
+                        {suggestions.map((suggestion) => (
+                            <div className="flex gap-2 pb-2 border-b-[1px]">
+                                <Star1 />
+                                <Link href={`/business-browse-page/${suggestion.id}`} key={suggestion.id}>
+                                    {suggestion['business-type']}
+                                </Link>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     )

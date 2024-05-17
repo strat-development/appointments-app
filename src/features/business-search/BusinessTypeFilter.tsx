@@ -5,14 +5,12 @@ import Link from "next/link";
 import { useState } from "react";
 import { useQuery } from "react-query";
 
-
-
 export const BusinessTypeFilter = () => {
     const supabase = createClientComponentClient<Database>();
     const [businessType, setBusinessType] = useState<BusinessTypeData[]>([]);
 
     const { data: businessTypeData, isLoading, isError } = useQuery(
-        ['businessType'],
+        ['businessTypeData'],
         async () => {
             const { data, error, status } = await supabase
                 .from("business-types")
@@ -28,10 +26,13 @@ export const BusinessTypeFilter = () => {
         },
     );
 
+    console.log(businessType)
+
     return (
-        <div className="relative top-36 w-fit">
+        <div className="relative flex justify-between text-black/70 self-center w-full p-4 gap-4 rounded-md overflow-auto">
             {businessType.map((type) => (
-                <Link href={`/business-browse-page/${type.id}`} key={type.id}>
+                <Link className="hover:text-black transition w-fit" 
+                href={`/business-browse-page/${type.id}`} key={type.id}>
                     <p>{type["business-type"]}</p>
                 </Link>
             ))}
