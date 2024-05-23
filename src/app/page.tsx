@@ -9,13 +9,15 @@ export default function Home() {
 	return (
 		<div>
 			<Navbar />
-			<main className="flex flex-col gap-8 max-w-[1200px] mt-20 mx-auto">
-				<div className="flex flex-col justify-between h-[600px]">
-					<div className="flex w-full justify-between items-center">
+			<main className="flex flex-col items-center gap-8 max-w-[1200px] mt-16 m-auto">
+				<div className="flex flex-col justify-between items-center w-screen bg-violet-200/50">
+					<div className="flex gap-16 max-w-[1200px] w-full h-[500px] justify-between">
 						<BusinessSearchComponent />
 						<FavouriteBusinessesSection />
 					</div>
-					<BusinessTypeFilter />
+					<div className="flex justify-between max-w-[1200px] w-full">
+						<BusinessTypeFilter />
+					</div>
 				</div>
 			</main>
 		</div>

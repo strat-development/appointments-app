@@ -26,8 +26,6 @@ export const BusinessTypeFilter = () => {
         },
     );
 
-    console.log(businessType)
-
     return (
         <div className="relative flex justify-between text-black/70 self-center w-full p-4 gap-4 rounded-md overflow-auto">
             {businessType.map((type) => (

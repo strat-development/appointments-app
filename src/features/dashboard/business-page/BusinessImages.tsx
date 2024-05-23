@@ -54,8 +54,7 @@ export const BusinessImages = ({ businessSlugId }: BusinessSlugIdProps) => {
     return (
         <>
             <div className="flex flex-col gap-32">
-                <div>
-                    <div className="max-w-[800px] rounded-2xl relative z-10">
+                    <div className="w-[775px] border-[1px] rounded-2xl relative z-10">
                         <Swiper className='h-[500px] rounded-2xl relative z-10'
                             spaceBetween={0}
                             slidesPerView={1}
@@ -79,7 +78,6 @@ export const BusinessImages = ({ businessSlugId }: BusinessSlugIdProps) => {
                             <DeleteImagesModal />
                         </>
                     )}
-                </div>
             </div>
         </>
     );

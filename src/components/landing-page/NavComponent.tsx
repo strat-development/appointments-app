@@ -21,19 +21,22 @@ export const NavComponent = () => {
                 <Link href="/" className="text-3xl font-sans font-semibold text-[#1b0b3b] m-0 max-lg:text-2xl">
                     <Image src="/Visio_logo.svg" width={100} height={100} alt="logo" />
                 </Link>
+                <div className="flex gap-16 text-black/70">
+                    <Link href="/">
+                        About
+                    </Link>
+                    <Link href="/">
+                        Contact
+                    </Link>
+                    <Link href={`/business-browse-page/${"all"}`}>
+                        Businesess
+                    </Link>
+                    <Link href="/business-landing">
+                        Visio PRO
+                    </Link>
+                </div>
                 {!userRole && (
                     <>
-                        <div className="flex gap-16 text-black/70">
-                            <Link href="/">
-                                About
-                            </Link>
-                            <Link href="/">
-                                Contact
-                            </Link>
-                            <Link href={`/business-browse-page/${"all"}`}>
-                                Businesess
-                            </Link>
-                        </div>
                         <div className="flex gap-4">
                             <button onClick={authModal.onOpen}
                                 className="flex rounded-xl text-black/70 border-[1px] font-medium border-black/20 items-center justify-center px-8 py-2 hover:scale-95 duration-300 max-lg:text-sm max-lg:py-1 max-sm:hidden">
@@ -48,28 +51,17 @@ export const NavComponent = () => {
                 )}
                 {userRole && (
                     <>
-                        <div className="flex gap-16">
-                            <Link href="/">
-                                About
-                            </Link>
-                            <Link href="/">
-                                Contact
-                            </Link>
-                            <Link href="/business-browse-page">
-                                Businesess
-                            </Link>
-                        </div>
                         <div className="flex gap-4">
                             <Link href="/dashboard/schedule" className="bg-gradient-to-b from-violet-600 to-violet-500 text-white px-8 py-2 rounded-xl font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:text-sm">
                                 Dashboard
                             </Link>
                             <button className="flex rounded-xl text-black/70 border-[1px] font-medium border-black/20 items-center justify-center px-8 py-2 hover:scale-95 duration-300 max-lg:text-sm max-lg:py-1 max-sm:hidden"
-                            onClick={async () => {
-                                await supabase.auth.signOut();
-                                router.refresh()
+                                onClick={async () => {
+                                    await supabase.auth.signOut();
+                                    router.refresh()
 
-                                clearUserRole();
-                            }}>
+                                    clearUserRole();
+                                }}>
                                 Logout
                             </button>
                         </div>
