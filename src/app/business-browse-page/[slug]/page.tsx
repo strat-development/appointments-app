@@ -1,5 +1,6 @@
 "use client"
 
+import { Footer } from "@/components/landing-page/Footer";
 import { Navbar } from "@/components/landing-page/Navbar";
 import { Database } from "@/types/supabase";
 import { BusinessData, Images } from "@/types/types";
@@ -125,24 +126,27 @@ export default function BusinessPagesBrowser({
     return (
         <>
             <Navbar />
-            <div className="relative top-24 grid grid-cols-3 gap-8 max-w-[1200px] w-full mx-auto">
-                {businessPages.map((businessPage) => (
-                    <Link key={businessPage.id}
-                        href={`/business-page/${businessPage.id}`}>
-                        <div className="border-[.5px] rounded-2xl p-4 flex justify-between"
-                            key={businessPage.id}>
-                            <div className="flex flex-col gap-2">
-                                <div className="max-h-[200px]">
-                                    <p>{imageUrls.find((image) => image.businessId === businessPage.id)?.publicUrl || ''}</p>
-                                </div>
-                                <div className="flex gap-4">
-                                    <p>{businessPage.business_name}</p>
-                                    <p>{businessPage.business_address}</p>
+            <div className="flex flex-col items-center">
+                <div className="relative top-24 grid grid-cols-3 gap-8 max-w-[1200px] w-full mx-auto">
+                    {businessPages.map((businessPage) => (
+                        <Link key={businessPage.id}
+                            href={`/business-page/${businessPage.id}`}>
+                            <div className="border-[.5px] rounded-2xl p-4 flex justify-between"
+                                key={businessPage.id}>
+                                <div className="flex flex-col gap-2">
+                                    <div className="max-h-[200px]">
+                                        <p>{imageUrls.find((image) => image.businessId === businessPage.id)?.publicUrl || ''}</p>
+                                    </div>
+                                    <div className="flex gap-4">
+                                        <p>{businessPage.business_name}</p>
+                                        <p>{businessPage.business_address}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </Link>
-                ))}
+                        </Link>
+                    ))}
+                </div>
+                <Footer />
             </div>
         </>
     )
