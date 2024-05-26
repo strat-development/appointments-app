@@ -6,6 +6,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import toast from "react-hot-toast";
 import { Database } from "@/types/supabase";
 import { ServicesData } from "@/types/types";
+import { useBusinessContext } from "@/providers/businessContextProvider";
 
 interface NewServiceModalProps {
     isOpen: boolean;
@@ -22,6 +23,7 @@ export const EditServiceModal = ({ isOpen, onClose, serviceName, serviceId, serv
     const [serviceNames, setServiceNames] = useState<string>(serviceName);
     const [price, setPrice] = useState<string>(servicePrice);
     const [duration, setDuration] = useState<string>(serviceDuration);
+    const { businessId } = useBusinessContext();
 
     useEffect(() => {
         setServiceNames(serviceName);
@@ -110,7 +112,7 @@ export const EditServiceModal = ({ isOpen, onClose, serviceName, serviceId, serv
                             title: serviceNames,
                             price: parseFloat(price).toString(),
                             duration: duration,
-                            business_id: "",
+                            business_id: businessId,
                             service_id: serviceId
                         } as ServicesData);
                         handleClose();

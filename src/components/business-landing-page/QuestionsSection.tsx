@@ -11,7 +11,7 @@ const AccordionDemo = () => (
             <h2 className="text-5xl font-semibold tracking-wider text-transparent bg-gradient-to-b from-[#5100D6] to-[#A168FF] bg-clip-text">
                 Frequently asked questions
             </h2>
-            <Accordion.Root className="AccordionRoot" type="single" defaultValue="item-1" collapsible>
+            <Accordion.Root className="AccordionRoot" type="single" collapsible>
                 <Accordion.Item className="AccordionItem" value="item-1">
                     <AccordionTrigger className="AccordionTrigger">
                         <div className='flex gap-4 items-center'>
@@ -19,7 +19,7 @@ const AccordionDemo = () => (
                             For whom is “Visio” the best option?
                         </div>
                     </AccordionTrigger>
-                    <AccordionContent className="AccordionContent">Yes. It adheres to the WAI-ARIA design pattern.</AccordionContent>
+                    <AccordionContent className="AccordionContent">“Visio” is a great option for those who runs a business and those who just want to get the best service available in their location.</AccordionContent>
                 </Accordion.Item>
                 <Accordion.Item className="AccordionItem" value="item-2">
                     <AccordionTrigger className="AccordionTrigger">
@@ -29,23 +29,23 @@ const AccordionDemo = () => (
                         </div>
                     </AccordionTrigger>
                     <AccordionContent className="AccordionContent">
-                        Yes. It's unstyled by default, giving you freedom over the look and feel.
+                        Yes, all notifications are completely free.
                     </AccordionContent>
                 </Accordion.Item>
                 <Accordion.Item className="AccordionItem" value="item-3">
                     <AccordionTrigger className="AccordionTrigger">
                         <div className='flex gap-4 items-center'>
                             <MagicStar className="AccordionIcon text-violet-500" />
-                            Are clients availiable to book a visit by yourself?
+                            Are clients availiable to book a visit by themselves?
                         </div>
                     </AccordionTrigger>
                     <Accordion.Content className="AccordionContent">
                         <div className="AccordionContentText">
-                            Yes! You can animate the Accordion with CSS or JavaScript.
+                            Yes! You can book as a client or even unregistered user.
                         </div>
                     </Accordion.Content>
                 </Accordion.Item>
-                <Accordion.Item className="AccordionItem" value="item-3">
+                <Accordion.Item className="AccordionItem" value="item-4">
                     <AccordionTrigger className="AccordionTrigger">
                         <div className='flex gap-4 items-center'>
                             <MagicStar className="AccordionIcon text-violet-500" />
@@ -54,33 +54,20 @@ const AccordionDemo = () => (
                     </AccordionTrigger>
                     <Accordion.Content className="AccordionContent">
                         <div className="AccordionContentText">
-                            Yes! You can animate the Accordion with CSS or JavaScript.
+                            No you don't need to have a business to use “Visio” if you are a client.
                         </div>
                     </Accordion.Content>
                 </Accordion.Item>
-                <Accordion.Item className="AccordionItem" value="item-3">
+                <Accordion.Item className="AccordionItem" value="item-6">
                     <AccordionTrigger className="AccordionTrigger">
                         <div className='flex gap-4 items-center'>
                             <MagicStar className="AccordionIcon text-violet-500" />
-                            Do I have to provide card details for subscription?
+                            Will I be able to delete account at any moment?
                         </div>
                     </AccordionTrigger>
                     <Accordion.Content className="AccordionContent">
                         <div className="AccordionContentText">
-                            Yes! You can animate the Accordion with CSS or JavaScript.
-                        </div>
-                    </Accordion.Content>
-                </Accordion.Item>
-                <Accordion.Item className="AccordionItem" value="item-3">
-                    <AccordionTrigger className="AccordionTrigger">
-                        <div className='flex gap-4 items-center'>
-                            <MagicStar className="AccordionIcon text-violet-500" />
-                            Will I be able to unsubscribe at any moment?
-                        </div>
-                    </AccordionTrigger>
-                    <Accordion.Content className="AccordionContent">
-                        <div className="AccordionContentText">
-                            Yes! You can animate the Accordion with CSS or JavaScript.
+                            Yes, you can delete your account at any moment you want.
                         </div>
                     </Accordion.Content>
                 </Accordion.Item>

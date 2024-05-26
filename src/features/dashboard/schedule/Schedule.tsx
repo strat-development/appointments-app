@@ -56,25 +56,25 @@ export const Schedule = () => {
 
     const handleDateSelect = async (selectInfo: DateSelectArg) => {
         setIsModalOpen(true);
-    
+
         const newVisits = {
             start_time: selectInfo.startStr,
             end_time: selectInfo.endStr,
         };
-    
+
         setNewVisits(newVisits as VisitsData);
     };
-    
+
     const handleEventClick = (clickInfo: EventClickArg) => {
         setIsEditModalOpen(true);
-    
+
         const event = clickInfo.event;
-    
+
         const newVisits = {
             start_time: clickInfo.event.startStr,
             end_time: clickInfo.event.endStr,
         };
-    
+
         setNewVisits(newVisits as VisitsData);
         setEventId(event.id);
     };
@@ -87,26 +87,12 @@ export const Schedule = () => {
                 <h1 className="z-[23423423] text-3xl text-center font-bold text-[#404040] w-[85%]">For better user experience switch to PC</h1>
             </div>
 
-            <div className="p-4 border-[1px] rounded-lg bg-white w-full h-[80vh] overflow-y-auto flex flex-col gap-8">
+            <div className="w-full h-[80vh] overflow-y-auto flex flex-col gap-8">
+                <div className="flex items-start justify-start self-start w-full border-b-[1px] pb-4 gap-2">
+                    <Calendar className="w-6 h-6 text-violet-500" />
+                    <p className="text-lg font-medium">Schedule</p>
+                </div>
                 <div className="p-4 border-[1px] rounded-lg bg-white w-full h-[80vh] overflow-y-auto flex flex-col gap-8 max-[1024px]:hidden">
-                    <div className="flex flex-col gap-4">
-                        {userName && (
-                            <div className="flex flex-col justify-end">
-                                <h1 className="text-3xl font-bold truncate min-[768px]:text-4xl">
-                                    Hello, <span className="bg-clip-text text-transparent bg-gradient-to-b from-violet-600 to-violet-500">{userName}</span>
-                                </h1>
-
-                                {isData.length > 0 && (
-                                    <p className="text-lg font-semibold text-black/70 min-[768px]:text-xl">Here is your schedule!</p>
-                                )}
-
-                                {isData.length === 0 && (
-                                    <p className="text-lg font-semibold text-black/70 min-[768px]:text-xl">No visits yet</p>
-                                )}
-                            </div>
-                        )}
-                    </div>
-
                     <FullCalendar
                         height={650}
                         plugins={[

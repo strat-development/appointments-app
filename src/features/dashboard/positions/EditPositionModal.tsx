@@ -31,7 +31,7 @@ export const EditPositionModal = ({ isOpen, onClose, positionName, positionId }:
             await supabase
                 .from("positions")
                 .update(newPosition)
-                .eq("id", positionId);
+                .eq("position_id", positionId);
         },
         {
             onSuccess: () => {
@@ -51,7 +51,7 @@ export const EditPositionModal = ({ isOpen, onClose, positionName, positionId }:
             await supabase
                 .from("positions")
                 .delete()
-                .eq("id", positionId);
+                .eq("position_id", positionId);
         },
         {
             onSuccess: () => {

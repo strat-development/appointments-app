@@ -17,7 +17,7 @@ export const EmployeesSection = () => {
     const supabase = createClientComponentClient<Database>();
     const [isData, setIsData] = useState<EmployeesData[]>([])
     const queryClient = useQueryClient();
-    const { userName, userId } = useUserContext();
+    const { userId } = useUserContext();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [searchPrompt, setSearchPrompt] = useState("");
@@ -61,7 +61,7 @@ export const EmployeesSection = () => {
                 </div>
                 <div className="p-4 border-[1px] rounded-lg bg-white w-full h-[80vh] overflow-y-auto flex flex-col gap-8">
                     <div className="flex flex-col gap-4">
-                        {userName && (
+                        {userId && (
                             <div className="flex flex-col justify-end">
                                 <div className="flex justify-between">
                                     <div className="flex flex-col gap-4">
@@ -85,7 +85,7 @@ export const EmployeesSection = () => {
                         )}
                     </div>
                     {isData.length === 0 && (
-                        <p className="text-lg font-semibold text-black/70 min-[768px]:text-xl">No clients added</p>
+                        <p className="text-lg font-semibold text-black/70 min-[768px]:text-xl">No employees added</p>
                     )}
 
                     <div className="grid grid-cols-4 gap-8 max-[1460px]:grid-cols-3 max-[1200px]:grid-cols-2 max-[640px]:grid-cols-1">

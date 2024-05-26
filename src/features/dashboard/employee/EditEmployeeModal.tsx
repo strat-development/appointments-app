@@ -32,7 +32,7 @@ export const EditEmployeeModal = ({ isOpen, onClose, employeeName, employeeId, e
             await supabase
                 .from("employees")
                 .update(newEmployee)
-                .eq("id", employeeId);
+                .eq("employee_id", employeeId);
         },
         {
             onSuccess: () => {
@@ -52,7 +52,7 @@ export const EditEmployeeModal = ({ isOpen, onClose, employeeName, employeeId, e
             await supabase
                 .from("employees")
                 .delete()
-                .eq("id", employeeId);
+                .eq("employee_id", employeeId);
         },
         {
             onSuccess: () => {

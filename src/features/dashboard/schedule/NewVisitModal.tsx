@@ -39,7 +39,7 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
             const { data, error, status } = await supabase
                 .from("clients")
                 .select("*")
-                .eq("business_name", businessName)
+                .eq("business_id", businessId)
 
             if (error && status !== 406) {
                 throw error;
@@ -133,7 +133,7 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
         <>
             <div className="flex flex-col gap-4">
                 <label htmlFor="Client">Client</label>
-                {addingNewClient === false && existingClients.length > 0 && (
+                {(addingNewClient === false) && (
                     <>
                         <select
                             id="Client"
@@ -166,7 +166,7 @@ export const NewVisitModal = ({ isOpen, onClose, startTime, endTime }: NewVisitM
                     </>
                 )}
 
-                {(addingNewClient === true || existingClients.length == 0) && (
+                {(addingNewClient === true) && (
                     <>
                         <Input
                             id="client"

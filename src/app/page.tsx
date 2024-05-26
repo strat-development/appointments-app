@@ -8,9 +8,9 @@ import { BusinessTypeFilter } from "@/features/business-search/BusinessTypeFilte
 
 export default function Home() {
 	return (
-		<div>
+		<div className="overflow-hidden">
 			<Navbar />
-			<div className="flex flex-col items-center gap-8 max-w-[1200px] mt-16 m-auto">
+			<div className="flex flex-col items-center gap-8 mt-16 m-auto">
 				<div className="flex flex-col justify-between items-center w-screen bg-violet-200/50">
 					<div className="flex gap-16 max-w-[1200px] w-full h-[500px] justify-between">
 						<BusinessSearchComponent />
