@@ -1,0 +1,11 @@
+.checkbox-checked {
+    opacity: .5;
+    transition: all .3s;
+}
+
+.closed-checkbox-checked {
+    opacity: .7;
+    transition: all .3s;
+    background-color: rgb(239 68 68);
+    color: white;
+}

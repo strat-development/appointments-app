@@ -73,12 +73,7 @@ export const Navbar = ({ className }: NavbarProps) => {
             name: "Positions",
             link: "/dashboard/positions",
             icon: <ChemicalGlass size="24" />
-        },
-        {
-            name: "Subscription",
-            link: "/dashboard/subscription",
-            icon: <Card size="24" />
-        },
+        }
     ]
 
     return (

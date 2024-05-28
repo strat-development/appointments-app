@@ -2,9 +2,12 @@ import { Modal } from "@/components/Modal";
 import { socialMedia } from "@/consts/consts";
 import { useBusinessContext } from "@/providers/businessContextProvider";
 import { Database } from "@/types/supabase";
+import { SocialMediaTypes } from "@/types/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Facebook, Instagram } from "iconsax-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { IoLogoTwitter } from "react-icons/io";
 import { useMutation, useQueryClient } from "react-query";
 
 interface EditSocialsModalProps {
@@ -21,6 +24,11 @@ export const EditSocialsModal = ({ onClose, isOpen }: EditSocialsModalProps) => 
     const { businessId } = useBusinessContext()
     const [socials, setSocials] = useState<Socials>({} as Socials);
     const queryClient = useQueryClient();
+    const socialMediaIcons: Record<SocialMediaTypes, JSX.Element> = {
+        Facebook: <Facebook />,
+        Instagram: <Instagram />,
+        Twitter: <IoLogoTwitter />,
+    };
 
     const editSocialsMutation = useMutation(
         async () => {
@@ -52,25 +60,18 @@ export const EditSocialsModal = ({ onClose, isOpen }: EditSocialsModalProps) => 
         }));
     };
 
-    const handleNoSocialChange = (day: string, event: React.ChangeEvent<HTMLInputElement>) => {
-        setSocials(prevState => ({
-            ...prevState,
-            [day]: {
-                ...prevState[day],
-                closed: event.target.checked,
-            },
-        }));
-    }
-
     const bodyContent = (
-        <div className="flex flex-col gap-4">
+        <div className="flex items-center flex-col gap-4">
             {socialMedia.map((social) => {
+                const Icon = socialMediaIcons[social as SocialMediaTypes];
+
                 return (
-                    <div className="flex flex-col gap-2"
+                    <div className="flex items-center gap-4 cursor-pointer"
                         key={social}>
-                        <label htmlFor={social}>{social}</label>
-                        <input type="checkbox" id={social} onChange={(e) => handleNoSocialChange(social, e)} />
-                        <input type="text" onChange={(e) => handleSocialChange(social, 'link', e)} placeholder="Socials link..." />
+                        <label className="text-2xl"
+                            htmlFor={social}>{Icon}</label>
+                        <input className="outline-none p-2 border-[1px] rounded-full"
+                            type="text" onChange={(e) => handleSocialChange(social, 'link', e)} placeholder={`${social} link...`} />
                     </div>
                 )
             })}

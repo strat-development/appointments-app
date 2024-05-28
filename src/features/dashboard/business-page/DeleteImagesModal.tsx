@@ -8,6 +8,8 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import "./../../../styles/checkboxes.css";
+import { IoMdCheckbox } from "react-icons/io";
 
 export const DeleteImagesModal = () => {
     const supabase = createClientComponentClient<Database>();
@@ -89,12 +91,14 @@ export const DeleteImagesModal = () => {
     const bodyContent = (
         <>
             <div className="flex flex-col gap-4 items-start">
-                <div className="grid grid-cols-4 gap-4">
+                <div className="grid grid-cols-4 gap-8">
                     {imageUrls.map((image, index) => (
-                        <div key={index} className="flex gap-2 items-center">
+                        <label className="relative cursor-pointer" 
+                        key={index}>
                             <input
                                 type="checkbox"
                                 value={image.publicUrl}
+                                className="hidden"
                                 onChange={(e) => {
                                     if (e.target.checked) {
                                         setSelectedImages(prevSelectedImages => [...prevSelectedImages, image.publicUrl]);
@@ -103,16 +107,18 @@ export const DeleteImagesModal = () => {
                                     }
                                 }}
                             />
-                            <Image src={image.publicUrl} width={100} height={100} alt="Business image" className="w-20 h-20" />
-                        </div>
+                            <Image src={image.publicUrl} width={100} height={100} alt="Business image" className={`w-32 h-32 rounded-lg ${selectedImages.includes(image.publicUrl) ? 'checkbox-checked' : ''}`} />
+                            <IoMdCheckbox className={`absolute top-2 right-2 w-6 h-6 text-violet-500 transition duration-300 ${selectedImages.includes(image.publicUrl) ? 'opacity-100' : 'opacity-0'}`} />  
+                        </label>
                     ))}
                 </div>
-                <button onClick={() => {
-                    deleteSelectedImagesMutation.mutateAsync();
-                    deleteImaegsFromStorageMutation.mutateAsync();
-                    setIsModalOpen(false);
-                }}>
-                    Delete selected images
+                <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-red-600 to-red-500 text-white w-fit"
+                    onClick={() => {
+                        deleteSelectedImagesMutation.mutateAsync();
+                        deleteImaegsFromStorageMutation.mutateAsync();
+                        setIsModalOpen(false);
+                    }}>
+                    Delete images
                 </button>
             </div>
         </>
@@ -126,7 +132,8 @@ export const DeleteImagesModal = () => {
                 title='Select images to delete'
                 body={bodyContent}
             />
-            <button onClick={() => setIsModalOpen(true)}>
+            <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-red-600 to-red-500 text-white w-fit h-fit"
+                onClick={() => setIsModalOpen(true)}>
                 Delete images
             </button>
         </>

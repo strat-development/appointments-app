@@ -65,8 +65,8 @@ export const UploadImagesButton = () => {
 
     return (
         <>
-            <div className="w-fit flex gap-4">
-                <div className='flex flex-col gap-2'>
+            <div className="flex gap-4">
+                <div className='flex justify-center flex-col gap-2'>
                     <input
                         type="file"
                         id="file"
@@ -82,20 +82,33 @@ export const UploadImagesButton = () => {
                         <DocumentUpload className='text-violet-600' />
                         <span>Select files</span>
                     </label>
-                    {files.map((file, index) => <p key={index}>{file.name}</p>)}
+                    {files.length > 0 && (
+                        <div className="flex flex-col gap-2 border-[1px] p-2 rounded-lg">
+                            {files.map((file, index) =>
+                                <div className="border-b-[1px] text-black/70">
+                                    <p className="w-[80%] truncate" 
+                                    key={index}>{file.name}</p>
+                                </div>
+                            )}
+                            <button onClick={() => setFiles([])} 
+                            className="hover:text-red-500/70 transition">
+                                Clear
+                            </button>
+                        </div>
+                    )}
                 </div>
-                <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-violet-600 to-violet-500 text-white w-full" 
-                onClick={() => {
-                    if (files.length > 0) {
-                        uploadFiles(files)
-                            .then((paths) => {
-                                return businessImagesMutation.mutateAsync(paths);
-                            })
-                            .catch((error) => console.error('Error uploading files:', error));
-                    } else {
-                        toast.error('Please upload a file')
-                    }
-                }}>
+                <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-violet-600 to-violet-500 text-white w-fit h-fit"
+                    onClick={() => {
+                        if (files.length > 0) {
+                            uploadFiles(files)
+                                .then((paths) => {
+                                    return businessImagesMutation.mutateAsync(paths);
+                                })
+                                .catch((error) => console.error('Error uploading files:', error));
+                        } else {
+                            toast.error('Please upload a file')
+                        }
+                    }}>
                     Send
                 </button >
             </div>

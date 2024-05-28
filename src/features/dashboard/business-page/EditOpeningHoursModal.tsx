@@ -5,6 +5,7 @@ import { Database } from "@/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { IoMdCheckmark } from "react-icons/io";
 import { useMutation, useQueryClient } from "react-query";
 
 interface EditOpeningHoursModalProps {
@@ -86,15 +87,16 @@ export const EditOpeningHoursModal = ({ onClose, isOpen }: EditOpeningHoursModal
                                 onChange={event => handleTimeChange(day, 'end', event)}
                             />
                         </div>
-                        <div className="flex gap-2 hover:bg-red-500/70 hover:text-white p-2 rounded-full transition">
-                            <input
-                                type="checkbox"
-                                name={`${day}Closed`}
-                                id={`${day}Closed`}
-                                onChange={event => handleClosedChange(day, event)}
-                            />
-                            <label htmlFor={`${day}Closed`}>Closed</label>
+                        <div className="flex items-center gap-2">
+                            <label className={`flex gap-2 cursor-pointer hover:bg-red-500/70 hover:text-white p-2 rounded-full transition ${openingHours[day]?.closed ? 'closed-checkbox-checked' : ""}`} htmlFor={`${day}Closed`}>Closed</label>
                         </div>
+                        <input
+                            className="hidden"
+                            type="checkbox"
+                            name={`${day}Closed`}
+                            id={`${day}Closed`}
+                            onChange={event => handleClosedChange(day, event)}
+                        />
                     </div>
                 ))}
             </div>
