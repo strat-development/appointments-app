@@ -80,7 +80,7 @@ export const UploadImagesButton = () => {
                     />
                     <label htmlFor="file" className="flex items-center gap-2 text-black cursor-pointer">
                         <DocumentUpload className='text-violet-600' />
-                        <span>Select files</span>
+                        <span className="max-[600px]:hidden">Select files</span>
                     </label>
                     {files.length > 0 && (
                         <div className="flex flex-col gap-2 border-[1px] p-2 rounded-lg">

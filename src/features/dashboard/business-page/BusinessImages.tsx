@@ -53,9 +53,9 @@ export const BusinessImages = ({ businessSlugId }: BusinessSlugIdProps) => {
 
     return (
         <>
-            <div className="flex flex-col gap-8">
-                <div className="w-[775px] border-[1px] rounded-2xl relative z-10">
-                    <Swiper className='h-[500px] rounded-2xl relative z-10'
+            <div className="flex flex-col gap-8 z-10">
+                <div className="w-[775px] max-[820px]:max-w-[600px] max-[648px]:max-w-[480px] max-[524px]:max-w-[460px] max-[492px]:max-w-[400px] max-[440px]:max-w-[340px] max-[360px]:max-w-[296px] border-[1px] rounded-2xl relative z-10">
+                    <Swiper className='h-[500px] max-[820px]:h-[400px] max-[648px]:h-[300px] max-[524px]:h-[270px] max-[360px]:h-[220px] rounded-2xl'
                         spaceBetween={0}
                         slidesPerView={1}
                         autoplay={

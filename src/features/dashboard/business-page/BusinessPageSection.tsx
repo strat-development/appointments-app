@@ -8,7 +8,7 @@ import { BusinessDescription } from "./BusinessDescription";
 
 export const BusinessPageSection = ({businessSlugId}: BusinessSlugIdProps) => {
     return (
-        <div className="flex flex-col py-8 rounded-2xl w-full h-screen">
+        <div className="flex flex-col py-8 rounded-2xl mx-auto">
             <div className="flex flex-col items-center gap-4">
                 <div className="flex gap-8 max-[1200px]:flex-col">
                     <div className="flex flex-col gap-8">

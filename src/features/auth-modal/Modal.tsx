@@ -22,8 +22,8 @@ export const Modal: React.FC<ModalProps> = ({
             defaultOpen={isOpen}
             onOpenChange={onChange}>
             <Dialog.Portal>
-                <Dialog.Overlay className="fixed z-[999999] inset-0 bg-violet-50 backdrop-blur-sm" />
-                <Dialog.Content className='fixed z-[999999] bg-violet-100 drop-shadow-md border top-[50%] left-[50%] max-h-full h-full w-full translate-x-[-50%] translate-y-[-50%] rounded-lg p-[25px] focus:outline-none md:w-[90vw] md:max-w-[450px] md:h-auto md:max-h-[85vh]'>
+                <Dialog.Overlay className="fixed z-[9999999999] inset-0 backdrop-blur-sm bg-white/50" />
+                <Dialog.Content className='fixed z-[9999999999] drop-shadow-md bg-white border top-[50%] left-[50%] max-h-full h-full w-full translate-x-[-50%] translate-y-[-50%] rounded-lg p-[25px] focus:outline-none md:w-[90vw] md:max-w-[450px] md:h-auto md:max-h-[85vh]'>
                     <Dialog.Title className='text-xl text-violet-600 text-center font-bold mb-4'>
                         {title}
                     </Dialog.Title>

@@ -55,8 +55,8 @@ export const Socials = ({ businessSlugId }: BusinessSlugIdProps) => {
             {isLoading ?
                 <div>Loading...</div>
                 :
-                <div className="w-full flex flex-col gap-4">
-                    <div className="flex justify-evenly items-center w-full">
+                <div className="w-full flex flex-col gap-4 max-[1024px]:mb-24">
+                    <div className="flex gap-8 items-center w-full">
                         {parsedSocials && Object.entries(parsedSocials).map(([socialsType, value]) => {
                             const socialsAsObj = value as { link: string };
                             const Icon = socialMediaIcons[socialsType as SocialMediaTypes];

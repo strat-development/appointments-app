@@ -20,8 +20,8 @@ export const Navbar = ({ className }: NavbarProps) => {
     const supabase = createClientComponentClient<Database>();
     const { userRole, userName, clearUserRole } = useUserContext();
     const { businessId } = useBusinessContext();
-    const linkStyle = "p-2 transition rounded-full hover:text-white hover:bg-gradient-to-b hover:from-violet-600 hover:to-violet-500 text-[#404040] flex gap-4"
-    const activeStyle = "p-2 transition rounded-full text-white bg-gradient-to-b from-violet-600 to-violet-500 flex gap-4"
+    const linkStyle = "p-2 transition rounded-full hover:text-white hover:bg-gradient-to-b hover:from-violet-600 hover:to-violet-500 text-[#404040] flex gap-4 max-[480px]:p-1"
+    const activeStyle = "p-2 transition rounded-full text-white bg-gradient-to-b from-violet-600 to-violet-500 flex gap-4 max-[480px]:p-1"
     const currentRoute = usePathname();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const closeModal = () => {
@@ -39,17 +39,17 @@ export const Navbar = ({ className }: NavbarProps) => {
         {
             name: "Schedule",
             link: "/dashboard/schedule",
-            icon: <Calendar size="24" />
+            icon: <Calendar className="max-[480px]:w-[20px]" size="24" />
         },
         {
             name: "Statistics",
             link: "/dashboard/statistics",
-            icon: <StatusUp size="24" />
+            icon: <StatusUp className="max-[480px]:w-[20px]" size="24" />
         },
         {
             name: "Clients",
             link: "/dashboard/clients",
-            icon: <Profile2User size="24" />
+            icon: <Profile2User className="max-[480px]:w-[20px]" size="24" />
         },
     ]
 
@@ -57,28 +57,28 @@ export const Navbar = ({ className }: NavbarProps) => {
         {
             name: "Business page",
             link: `/dashboard/${businessId}`,
-            icon: <Shop size="24" />
+            icon: <Shop className="max-[480px]:w-[20px]" size="24" />
         },
         {
             name: "Employees",
             link: "/dashboard/employees",
-            icon: <People size="24" />
+            icon: <People className="max-[480px]:w-[20px]" size="24" />
         },
         {
             name: "Services and prices",
             link: "/dashboard/services",
-            icon: <Coin1 size="24" />
+            icon: <Coin1 className="max-[480px]:w-[20px]" size="24" />
         },
         {
             name: "Positions",
             link: "/dashboard/positions",
-            icon: <ChemicalGlass size="24" />
+            icon: <ChemicalGlass className="max-[480px]:w-[20px]" size="24" />
         }
     ]
 
     return (
         <>
-            <div className="bg-white h-screen z-[99] flex flex-col justify-center border-r-[1px] max-[1024px]:h-fit max-[1024px]:fixed max-[1024px]:bottom-0 max-[1024px]:w-full">
+            <div className="bg-white h-screen z-[222222222] flex flex-col justify-center border-r-[1px] max-[1024px]:h-fit max-[1024px]:fixed max-[1024px]:bottom-0 max-[1024px]:w-full">
                 <div className="flex flex-col justify-between items-start h-[80vh] w-[300px] px-8 max-[1024px]:flex-row max-[1024px]:h-fit max-[1024px]:px-6 max-[1024px]:py-4 max-[1024px]:shadow-[0_0px_10px_0px_rgba(0,0,0,0.1)] max-[1024px]:w-screen max-[320px]:px-2">
                     <div className="flex flex-col gap-8 max-[1024px]:justify-between max-[1024px]:w-full">
                         <div className="flex items-center gap-4 max-[1024px]:hidden">
@@ -114,7 +114,7 @@ export const Navbar = ({ className }: NavbarProps) => {
                                 </>
                             )}
                             <div className="flex flex-col gap-4 self-start">
-                                <button className="p-2 transition rounded-full hover:text-white hover:bg-gradient-to-b hover:from-violet-600 hover:to-violet-500 text-[#404040] flex self-end gap-4"
+                                <button className="p-2 transition rounded-full hover:text-white hover:bg-gradient-to-b hover:from-violet-600 hover:to-violet-500 text-[#404040] flex self-end gap-4 max-[480px]:p-1"
                                     onClick={async () => {
                                         await supabase.auth.signOut();
                                         clearUserRole();
@@ -123,7 +123,7 @@ export const Navbar = ({ className }: NavbarProps) => {
                                         router.push('/')
                                     }}
                                     type="submit">
-                                    <LogoutCurve size="24" />
+                                    <LogoutCurve className="max-[480px]:w-[20px]"  size="24" />
                                     <p className="max-[1024px]:hidden">Log out</p>
                                 </button>
                             </div>

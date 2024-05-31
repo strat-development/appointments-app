@@ -44,24 +44,22 @@ export const BusinessOpinions = ({ businessSlugId }: BusinessSlugIdProps) => {
     return (
         <>
             <div className="flex flex-col gap-4 mb-24">
-                <>
                     <h1 className="text-xl font-bold">Opinions</h1>
-                </>
                 {opinions.map((opinion) => (
                     <div className="border-[.5px] rounded-2xl p-4 flex justify-between"
                         key={opinion.id}>
                         <div className="flex flex-col gap-2">
-                            <div className="flex gap-4">
-                                <h2 className="text-lg max-[150px] truncate">{opinion.user_name}</h2>
-                                <Rating
+                            <div className="flex items-center gap-4">
+                                <h2 className="text-lg max-w-[150px] truncate max-[480px]:max-w-[96px] max-[480px]:text-base">{opinion.user_name}</h2>
+                                <Rating className="max-[768px]:text-base"
                                     name="rating"
                                     value={opinion.opinion_rating}
                                     readOnly
                                 />
                             </div>
-                            <p className="text-black/70 max-w-[450px]">{opinion.opinion_text}</p>
+                            <p className="text-black/70 max-w-[450px] max-[480px]:text-sm">{opinion.opinion_text}</p>
                         </div>
-                        <p className="text-black/70">{opinion.created_at}</p>
+                        <p className="text-black/70 max-[480px]:text-sm">{opinion.created_at}</p>
                     </div>
                 ))}
                 {opinions.length > 9 && (

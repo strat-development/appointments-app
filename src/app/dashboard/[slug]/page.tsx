@@ -15,7 +15,7 @@ export default function BusinessPage({
     return (
         <div className="flex gap-16 items-center">
             <Navbar />
-            <main className="w-full max-[480px]:p-0">
+            <main className="w-full max-[1200px]:p-4">
                 <BusinessPageSection businessSlugId={businessSlugId} />
             </main>
         </div>

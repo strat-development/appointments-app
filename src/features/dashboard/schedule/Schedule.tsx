@@ -7,13 +7,13 @@ import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import { DateSelectArg, EventClickArg } from "@fullcalendar/core"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Database } from "@/types/supabase"
 import { useQuery, useQueryClient } from "react-query"
 import { Calendar } from "iconsax-react"
 import "@/styles/schedule.css"
 import { useUserContext } from "@/providers/userContextProvider"
-import { handleEvents, renderEventContent } from "@/actions/schedule/EventHandlets"
+import { handleEvents, renderEventContent } from "@/actions/schedule/EventHandlers"
 import { NewVisitModal } from "./NewVisitModal"
 import { EditVisitModal } from "./EditVisitModal"
 import { VisitsData } from "@/types/types"
@@ -22,11 +22,25 @@ export const Schedule = () => {
     const supabase = createClientComponentClient<Database>();
     const [isData, setIsData] = useState<VisitsData[]>([])
     const queryClient = useQueryClient();
-    const { userName, userId } = useUserContext();
+    const { userId } = useUserContext();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [eventId, setEventId] = useState<string>("")
     const [newVisits, setNewVisits] = useState<VisitsData | null>(null);
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setScreenWidth(window.innerWidth);
+        };
+    
+        window.addEventListener('resize', handleResize);
+    
+        
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     const { data: hoursData, isLoading, isError } = useQuery(
         ['visits', userId],
@@ -82,17 +96,12 @@ export const Schedule = () => {
 
     return (
         <>
-            <div className="min-[1024px]:hidden relative h-screen flex flex-col items-center justify-center text-violet-600">
-                <Calendar className="absolute z-0 opacity-10" size={164} />
-                <h1 className="z-[23423423] text-3xl text-center font-bold text-[#404040] w-[85%]">For better user experience switch to PC</h1>
-            </div>
-
-            <div className="w-full h-[80vh] overflow-y-auto flex flex-col gap-8">
+            <div className="w-full h-[80vh] overflow-y-auto flex flex-col gap-8 max-[768px]:overflow-y-scroll">
                 <div className="flex items-start justify-start self-start w-full border-b-[1px] pb-4 gap-2">
                     <Calendar className="w-6 h-6 text-violet-500" />
                     <p className="text-lg font-medium">Schedule</p>
                 </div>
-                <div className="p-4 border-[1px] rounded-lg bg-white w-full h-[80vh] overflow-y-auto flex flex-col gap-8 max-[1024px]:hidden">
+                <div className="p-4 border-[1px] rounded-lg bg-white w-full h-[80vh] overflow-y-auto flex flex-col gap-8">
                     <FullCalendar
                         height={650}
                         plugins={[
@@ -104,9 +113,9 @@ export const Schedule = () => {
                         headerToolbar={{
                             right: 'today prev,next',
                             center: 'title',
-                            left: 'timeGridDay,timeGridWeek,dayGridMonth',
+                            left: `${screenWidth < 768 ? "timeGridDay" : "timeGridDay,timeGridWeek,dayGridMonth"}`,
                         }}
-                        initialView="timeGridWeek"
+                        initialView="timeGridDay"
                         navLinks={true}
                         forceEventDuration={true}
                         defaultAllDayEventDuration={{ hour: 8 }}

@@ -1,0 +1,9 @@
+.swiper-container {
+    height: 500px;
+}
+
+@media (max-width: 640px) {
+    .swiper-container {
+        height: 300px;
+    }
+}

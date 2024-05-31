@@ -36,14 +36,14 @@ th.fc-col-header-cell {
 .fc .fc-button-primary:focus,
 .fc .fc-button-primary:not(:disabled).fc-button-active,
 .fc .fc-button-primary:not(:disabled):active {
-    background-color: #854FF3;
-    border: none;
+    background-color: #854FF3 !important;
+    border: none !important;
     box-shadow: none !important;
 }
 
 .fc .fc-button-primary:not(:disabled).fc-button-active {
-    background-color: #8e5cf1;
-    border: none;
+    background-color: #8e5cf1 !important;
+    border: none !important;
 }
 
 th:last-child {
@@ -95,4 +95,14 @@ th:last-child {
 
 .fc .fc-scrollgrid {
     border-radius: 8px;
+}
+
+.fc .fc-toolbar-title {
+    color: rgba(0, 0, 0, .7);
+}
+
+@media screen and (max-width: 768px) {
+    .fc .fc-toolbar-title {
+        font-size: .5rem;
+    }
 }
