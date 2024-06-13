@@ -1,8 +1,9 @@
 import { Database } from "@/types/supabase";
 import { BusinessSlugIdProps } from "@/types/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import toast from "react-hot-toast";
+import { useEffect } from "react";
 import { useMutation, useQueryClient } from "react-query";
+import { NavigationType, useNavigate } from "react-router-dom";
 
 interface BookVisitButtonProps {
     businessSlugId: BusinessSlugIdProps["businessSlugId"];
@@ -10,6 +11,7 @@ interface BookVisitButtonProps {
     endTime: string;
     selectedService: number;
     selectedWorker: string;
+    navigate: NavigationType;
 }
 
 export const BookVisitButton = ({
@@ -17,10 +19,10 @@ export const BookVisitButton = ({
     startTime,
     endTime,
     selectedService,
+    navigate
 }: BookVisitButtonProps) => {
     const supabase = createClientComponentClient<Database>();
     const queryClient = useQueryClient();
-
     const bookVistiMutation = useMutation(
         async () => {
             try {
@@ -34,11 +36,11 @@ export const BookVisitButton = ({
                             service_id: selectedService,
                         }
                     ]);
-
+    
                 if (error) {
                     throw error;
                 }
-
+    
                 return data;
             } catch (error) {
                 console.error(error);
@@ -47,16 +49,18 @@ export const BookVisitButton = ({
         },
         {
             onSuccess: () => {
-                toast.success('Visit booked successfully');
+                console.log("huhuuhhuhuj");
+                const navigate = useNavigate()
+                navigate('localhost:3001/api/mail',{state:{clientId:"123",businessId:"123",mailTemplate:"123"}});
                 queryClient.invalidateQueries('visits');
             }
         }
     );
 
     return (
-        <>
-            <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-violet-600 to-violet-500 text-white w-full"
-                onClick={() => bookVistiMutation.mutateAsync()}>Book a visit</button>
-        </>
+        <div>
+            <button onClick={() => bookVistiMutation.mutateAsync()} 
+            className="p-2 border-[1px]">Book a visit</button>
+        </div>
     )
 }
