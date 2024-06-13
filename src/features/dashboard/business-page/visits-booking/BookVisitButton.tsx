@@ -49,7 +49,6 @@ export const BookVisitButton = ({
         },
         {
             onSuccess: () => {
-                console.log("huhuuhhuhuj");
                 const navigate = useNavigate()
                 navigate('localhost:3001/api/mail',{state:{clientId:"123",businessId:"123",mailTemplate:"123"}});
                 queryClient.invalidateQueries('visits');

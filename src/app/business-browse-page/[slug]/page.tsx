@@ -3,9 +3,8 @@
 import { Footer } from "@/components/landing-page/Footer";
 import { Navbar } from "@/components/landing-page/Navbar";
 import { Database } from "@/types/supabase";
-import { BusinessData, Images } from "@/types/types";
+import { BusinessData } from "@/types/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
@@ -120,8 +119,6 @@ export default function BusinessPagesBrowser({
                 .catch(console.error);
         }
     }, [images]);
-
-    console.log(imageUrls);
 
     return (
         <>
