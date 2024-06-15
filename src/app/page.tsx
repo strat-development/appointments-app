@@ -39,7 +39,7 @@ export default function Home() {
 			<div className="flex flex-col items-center gap-8 mt-16 m-auto">
 				<div className="flex flex-col justify-between items-center w-screen bg-violet-200/50">
 					<div className="flex gap-16 max-w-[1200px] w-full h-[500px] justify-between">
-						<BusinessSearchComponent />
+						<BusinessSearchComponent city={city} />
 						{userId && (
 							<FavouriteBusinessesSection />
 						)}
@@ -48,7 +48,7 @@ export default function Home() {
 						)}
 					</div>
 					<div className="flex justify-between max-w-[1200px] w-full">
-						<BusinessTypeFilter />
+						<BusinessTypeFilter city={city} />
 					</div>
 				</div>
 				<SuggestedBusinessesSection city={city} />

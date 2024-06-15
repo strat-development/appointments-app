@@ -6,10 +6,13 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import Fuse from "fuse.js";
-import { h } from "@fullcalendar/core/preact.js";
 import { Star1 } from "iconsax-react";
 
-export const BusinessSearchComponent = () => {
+interface BusinessSearchComponentProps {
+    city: string | null;
+}
+
+export const BusinessSearchComponent = ({ city }: BusinessSearchComponentProps) => {
     const supabase = createClientComponentClient<Database>();
     const [searchPrompt, setSearchPrompt] = useState<string>("");
     const [businessType, setBusinessType] = useState<BusinessTypeData[]>([]);
@@ -32,7 +35,7 @@ export const BusinessSearchComponent = () => {
         const result = fuse.search(searchPrompt);
         if (result.length > 0) {
             const bestMatch = result[0].item;
-            router.push(`/business-browse-page/${bestMatch.id}`);
+            router.push(`/business-browse-page/${bestMatch.id}?city=${city}`);
         }
     };
 
@@ -72,15 +75,18 @@ export const BusinessSearchComponent = () => {
                 <button className="bg-gradient-to-b from-violet-600 to-violet-500 text-white px-4 py-2 rounded-xl"
                     onClick={handleSearch}>Search</button>
                 {suggestions.length > 0 && (
-                    <div className="suggestions absolute top-32 p-4 flex flex-col gap-4 max-h-[350px] w-[350px] overflow-auto border-[1px] rounded-xl bg-white">
+                    <div className="suggestions absolute top-32 p-4 flex flex-col max-h-[350px] w-[350px] overflow-auto border-[1px] rounded-xl bg-white">
                         {suggestions.map((suggestion, index) => (
-                            <div key={index}  
-                            className="flex gap-2 pb-2 border-b-[1px]">
-                                <Star1 />
-                                <Link href={`/business-browse-page/${suggestion.id}`} key={suggestion.id}>
-                                    {suggestion['business-type']}
-                                </Link>
-                            </div>
+                            <Link href={`/business-browse-page/${suggestion.id}?city=${city}`}
+                                key={suggestion.id}>
+                                <div key={index}
+                                    className="flex gap-2 p-2 border-b-[1px] rounded-md hover:bg-black/5 transition duration-300">
+                                    <Star1 />
+                                    <p key={suggestion.id}>
+                                        {suggestion['business-type']}
+                                    </p>
+                                </div>
+                            </Link>
                         ))}
                     </div>
                 )}

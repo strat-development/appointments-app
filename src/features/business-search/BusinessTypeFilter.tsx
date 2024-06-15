@@ -5,7 +5,11 @@ import Link from "next/link";
 import { useState } from "react";
 import { useQuery } from "react-query";
 
-export const BusinessTypeFilter = () => {
+interface BusinessTypeFilterProps {
+    city: string | null;
+}
+
+export const BusinessTypeFilter = ({ city }: BusinessTypeFilterProps) => {
     const supabase = createClientComponentClient<Database>();
     const [businessType, setBusinessType] = useState<BusinessTypeData[]>([]);
 
@@ -30,7 +34,7 @@ export const BusinessTypeFilter = () => {
         <div className="relative flex justify-between text-black/70 self-center w-full p-4 gap-4 rounded-md overflow-auto">
             {businessType.map((type) => (
                 <Link className="hover:text-black transition w-fit" 
-                href={`/business-browse-page/${type.id}`} key={type.id}>
+                href={`/business-browse-page/${type.id}?city=${city}`} key={type.id}>
                     <p>{type["business-type"]}</p>
                 </Link>
             ))}
