@@ -1,6 +1,7 @@
 import { Database } from "@/types/supabase";
-import { Images } from "@/types/types";
+import { BusinessData, Images } from "@/types/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { set } from "date-fns";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
@@ -12,14 +13,45 @@ interface CityBusinessesSectionProps {
 export const CityBusinessesSection = ({ city }: CityBusinessesSectionProps) => {
     const supabase = createClientComponentClient<Database>();
     const [imageUrls, setImageUrls] = useState<{ businessId: string, publicUrl: string }[]>([]);
+    // const [suggestedBusinesses, setSuggestedBusinesses] = useState<BusinessData[]>([]);
+
 
     const { data: suggestedBusinesses, isLoading } = useQuery(
         ['business-info', city],
         async () => {
-            const { data, error } = await supabase
+            let countQuery = supabase
                 .from('business-info')
-                .select('*')
-                .eq('business_city', city ?? '')
+                .select('count');
+
+            if (city) {
+                countQuery = countQuery.eq('business_city', city);
+            }
+
+            const { data: countData, error: countError } = await countQuery as any;
+
+            const count = Number(countData?.[0]?.count) as number;
+
+            if (countError) {
+                throw countError;
+            }
+
+            if (isNaN(count)) {
+                throw new Error('Count is not a number.');
+            }
+
+            if (count === null) {
+                throw new Error('Count is null.');
+            }
+
+            let dataQuery = supabase
+                .from('business-info')
+                .select('*');
+
+            if (city) {
+                dataQuery = dataQuery.eq('business_city', city);
+            }
+
+            const { data, error } = await dataQuery;
 
             if (error) {
                 throw error;
@@ -27,7 +59,8 @@ export const CityBusinessesSection = ({ city }: CityBusinessesSectionProps) => {
 
             return data;
         }
-    )
+    );
+
 
     const { data: images } = useQuery<Images[]>(
         ['business-images'],
@@ -99,7 +132,12 @@ export const CityBusinessesSection = ({ city }: CityBusinessesSectionProps) => {
     return (
         <>
             <div className="flex flex-col gap-8 self-center w-full">
-                <h1 className="text-xl font-medium tracking-wide text-black/70">Suggested Businesses in {city}</h1>
+                {
+                    city &&
+                    <h1 className="text-xl font-medium tracking-wide text-black/70">Suggested businesses in {city}</h1>
+                    ||
+                    <h1 className="text-xl font-medium tracking-wide text-black/70">Discover new businesses</h1>
+                }
                 <div className="flex gap-4 ">
                     {suggestedBusinesses?.map((business) => {
                         const businessUrl = imageUrls.find((image) => image.businessId === business.id)?.publicUrl;

@@ -14,12 +14,41 @@ export const BusinessesInCity = ({ city }: BusinessesInCity) => {
     const [imageUrls, setImageUrls] = useState<{ businessId: string, publicUrl: string }[]>([]);
 
     const { data: suggestedBusinesses, isLoading } = useQuery(
-        ['business-info', city],
+        ['random-business-info', city],
         async () => {
-            const { data, error } = await supabase
+            let countQuery = supabase
                 .from('business-info')
-                .select('*')
-                .eq('business_city', city ?? '')
+                .select('count');
+
+            if (city) {
+                countQuery = countQuery.eq('business_city', city);
+            }
+
+            const { data: countData, error: countError } = await countQuery as any;
+
+            const count = Number(countData?.[0]?.count) as number;
+
+            if (countError) {
+                throw countError;
+            }
+
+            if (isNaN(count)) {
+                throw new Error('Count is not a number.');
+            }
+
+            if (count === null) {
+                throw new Error('Count is null.');
+            }
+
+            let dataQuery = supabase
+                .from('business-info')
+                .select('*');
+
+            if (city) {
+                dataQuery = dataQuery.eq('business_city', city);
+            }
+
+            const { data, error } = await dataQuery;
 
             if (error) {
                 throw error;
@@ -27,7 +56,8 @@ export const BusinessesInCity = ({ city }: BusinessesInCity) => {
 
             return data;
         }
-    )
+    );
+
 
     const { data: images } = useQuery<Images[]>(
         ['business-images'],
@@ -99,13 +129,22 @@ export const BusinessesInCity = ({ city }: BusinessesInCity) => {
     return (
         <>
             <div className="flex flex-col gap-8 self-center w-full">
-                <h1 className="text-xl font-medium tracking-wide text-black/70">Discover Businesses in {city}</h1>
+                {
+                    city &&
+                    <h1 className="text-xl font-medium tracking-wide text-black/70">Suggested businesses in {city}</h1>
+                    ||
+                    <h1 className="text-xl font-medium tracking-wide text-black/70">Discover new businesses</h1>
+                }
                 <div className="flex gap-8">
                     {suggestedBusinesses?.map((business) => {
                         const businessUrl = imageUrls.find((image) => image.businessId === business.id)?.publicUrl;
                         return (
                             <div key={business.id}>
-                                {businessUrl ? <Image className="rounded-xl object-cover h-[250px] w-[300px]" src={businessUrl as string} alt="" width={2000} height={1000} /> : <p>No image available</p>}
+                                <Image className="rounded-xl object-cover h-[250px] w-[300px]"
+                                    src={businessUrl as string}
+                                    alt=""
+                                    width={2000}
+                                    height={1000} />
                                 <div className="business-data">
                                     <h2>{business.business_name}</h2>
                                     <p>{business.business_address}</p>

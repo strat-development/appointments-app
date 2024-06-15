@@ -71,7 +71,7 @@ export const RandomBusinessInCity = ({ city }: RandomBusinessInCityProps) => {
             if (!businessTypesData) {
                 return;
             }
-    
+
             const { data, error } = await supabase
                 .from("business-type-info-linker")
                 .select(`
@@ -83,11 +83,11 @@ export const RandomBusinessInCity = ({ city }: RandomBusinessInCityProps) => {
                 `)
                 .eq('business_type_id', businessTypesData.id)
                 .eq('business_city_name', city || "")
-    
+
             if (error) {
                 throw error;
             }
-    
+
             return data;
         },
         {
@@ -101,15 +101,15 @@ export const RandomBusinessInCity = ({ city }: RandomBusinessInCityProps) => {
             if (!businessData) {
                 return;
             }
-    
+
             const { data, error } = await supabase
                 .from("business-images")
                 .select("*")
-    
+
             if (error) {
                 throw error;
             }
-    
+
             return data;
         },
         {
@@ -136,34 +136,38 @@ export const RandomBusinessInCity = ({ city }: RandomBusinessInCityProps) => {
 
     return (
         <>
-            <h1>
-                {businessTypesData?.["business-type"]} in {city}
-            </h1>
-            {businessData && (
-                <div>
-                    {isLoadingTypes && <p>Loading...</p>}
-                    {isErrorTypes && <p>Error loading business types</p>}
+            <div className="flex flex-col gap-8 self-center w-full">
+            <h1 className="text-xl font-medium tracking-wide text-black/70">
+                    {businessTypesData?.["business-type"]} in {city}
+                </h1>
+                {businessData.length > 0 && (
+                    <div className="flex gap-8">
+                        {isLoadingTypes && <p>Loading...</p>}
+                        {isErrorTypes && <p>Error loading business types</p>}
 
-                    {businessData.map((business: any) => (
-                        business["business-info"] ? (
-                            <div key={business.id}>
-                                <h2>{business["business-info"].business_name}</h2>
-                                <p>{business["business-info"].business_address}</p>
-                                <Image
-                                    src={imageUrls.find((image) => image.businessId === business["business-info"].id)?.publicUrl || "/images/placeholder.jpg"}
-                                    alt={business["business-info"].business_name}
-                                    width={200}
-                                    height={200}
-                                />
-                            </div>
-                        ) : (
-                            <p>No business data available for this type.</p>
-                        )
-                    ))}
-                </div>
-            ) || (
-                    <p>Loading...</p>
-                )}
+                        {businessData.map((business: any) => (
+                            business["business-info"] ? (
+                                <div key={business.id}>
+                                    <h2>{business["business-info"].business_name}</h2>
+                                    <p>{business["business-info"].business_address}</p>
+                                    <Image className="rounded-xl object-cover h-[250px] w-[300px]"
+                                        src={imageUrls.find((image) => image.businessId === business["business-info"].id)?.publicUrl || "/images/placeholder.jpg"}
+                                        alt={business["business-info"].business_name}
+                                        width={200}
+                                        height={200}
+                                    />
+                                </div>
+                            ) : (
+                                <p>No business data available for this type.</p>
+                            )
+                        ))}
+                    </div>
+                ) || (
+                        <h1 className="text-xl text-black/50">
+                            Unfortunately no businesses of this type are available in {city} at the moment.
+                        </h1>
+                    )}
+            </div>
         </>
     )
 }

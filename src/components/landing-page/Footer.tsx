@@ -1,7 +1,15 @@
 import { ArchiveTick, Box2, Briefcase, Calendar, Call, Grid3, Instagram, MessageQuestion, Notification, ShieldSecurity, Star } from "iconsax-react"
 import Image from "next/image"
+import { ContactForm } from "../ContactForm"
+import { useState } from "react";
 
 export const Footer = () => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
     return (
         <>
             <footer className="w-full border-t-[1px] mt-36 mb-8">
@@ -47,7 +55,8 @@ export const Footer = () => {
                                     </li>
                                     <li className="flex gap-2 items-center">
                                         <Call className="text-[#5100D6]" size="18" />
-                                        <p className="text-black/70 text-sm">Contact</p>
+                                        <button onClick={() => setIsModalOpen(true)}
+                                            className="text-black/70 text-sm">Contact</button>
                                     </li>
                                 </ul>
                             </div>
@@ -77,6 +86,9 @@ export const Footer = () => {
                     </div>
                 </div>
             </footer>
+            <ContactForm isOpen={isModalOpen}
+                onClose={closeModal}
+            />
         </>
     )
 }
