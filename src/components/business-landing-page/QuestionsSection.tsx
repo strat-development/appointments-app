@@ -16,10 +16,10 @@ const AccordionDemo = () => (
                     <AccordionTrigger className="AccordionTrigger">
                         <div className='flex gap-4 items-center'>
                             <MagicStar className="AccordionIcon text-violet-500" />
-                            For whom is “Visio” the best option?
+                            For whom is &apos;Visio&apos; the best option?
                         </div>
                     </AccordionTrigger>
-                    <AccordionContent className="AccordionContent">“Visio” is a great option for those who runs a business and those who just want to get the best service available in their location.</AccordionContent>
+                    <AccordionContent className="AccordionContent">&apos;Visio&apos; is a great option for those who runs a business and those who just want to get the best service available in their location.</AccordionContent>
                 </Accordion.Item>
                 <Accordion.Item className="AccordionItem" value="item-2">
                     <AccordionTrigger className="AccordionTrigger">
@@ -49,12 +49,12 @@ const AccordionDemo = () => (
                     <AccordionTrigger className="AccordionTrigger">
                         <div className='flex gap-4 items-center'>
                             <MagicStar className="AccordionIcon text-violet-500" />
-                            Do I need to have a business to use “Visio”
+                            Do I need to have a business to use &apos;Visio&apos;
                         </div>
                     </AccordionTrigger>
                     <Accordion.Content className="AccordionContent">
                         <div className="AccordionContentText">
-                            No you don't need to have a business to use “Visio” if you are a client.
+                            No you don &apos; t need to have a business to use &apos;Visio&apos; if you are a client.
                         </div>
                     </Accordion.Content>
                 </Accordion.Item>
@@ -88,6 +88,7 @@ const AccordionTrigger = React.forwardRef(({ children, className, ...props }: { 
         </Accordion.Trigger>
     </Accordion.Header>
 ));
+AccordionTrigger.displayName = 'AccordionTrigger';
 
 const AccordionContent = React.forwardRef(({ children, className, ...props }: { children: React.ReactNode, className: string }, forwardedRef: React.Ref<HTMLDivElement> | undefined) => (
     <Accordion.Content
@@ -95,8 +96,10 @@ const AccordionContent = React.forwardRef(({ children, className, ...props }: { 
         {...props}
         ref={forwardedRef}
     >
-        <div className="AccordionContentText">{children}</div>
+        {children}
     </Accordion.Content>
 ));
+
+AccordionContent.displayName = 'AccordionContent';
 
 export default AccordionDemo;

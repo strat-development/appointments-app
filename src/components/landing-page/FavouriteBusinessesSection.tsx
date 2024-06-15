@@ -3,6 +3,7 @@ import { Database } from "@/types/supabase";
 import { Images } from "@/types/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 
@@ -102,15 +103,17 @@ export const FavouriteBusinessesSection = () => {
                     {favouriteBusinesses?.map((business) => {
                         const businessUrl = imageUrls.find((image) => image.businessId === business.business_id)?.publicUrl;
                         return (
-                            <div className="flex flex-col gap-4">
-                                <div key={business.business_id}>
-                                    {businessUrl ? <Image className="h-[250px] w-[300px] rounded-xl object-cover" src={businessUrl as string} alt="" width={2000} height={1000} /> : <p>No image available</p>}
+                            <Link key={business.business_id} href={`/business-page/${business.business_id}`}>
+                                <div className="flex flex-col gap-4">
+                                    <div>
+                                        {businessUrl ? <Image className="h-[250px] w-[300px] rounded-xl object-cover" src={businessUrl as string} alt="" width={2000} height={1000} /> : <p>No image available</p>}
+                                    </div>
+                                    <div className="flex flex-col gap-2">
+                                        <p>{businessData?.find((data) => data.id === business.business_id)?.business_name}</p>
+                                        <p>{businessData?.find((data) => data.id === business.business_id)?.business_address}</p>
+                                    </div>
                                 </div>
-                                <div className="flex flex-col gap-2">
-                                    <p>{businessData?.find((data) => data.id === business.business_id)?.business_name}</p>
-                                    <p>{businessData?.find((data) => data.id === business.business_id)?.business_address}</p>
-                                </div>
-                            </div>
+                            </Link>
                         );
                     })}
                 </div>

@@ -137,7 +137,7 @@ export const RandomBusinessInCity = ({ city }: RandomBusinessInCityProps) => {
     return (
         <>
             <div className="flex flex-col gap-8 self-center w-full">
-            <h1 className="text-xl font-medium tracking-wide text-black/70">
+                <h1 className="text-xl font-medium tracking-wide text-black/70">
                     {businessTypesData?.["business-type"]} in {city}
                 </h1>
                 {businessData.length > 0 && (
@@ -158,7 +158,7 @@ export const RandomBusinessInCity = ({ city }: RandomBusinessInCityProps) => {
                                     />
                                 </div>
                             ) : (
-                                <p>No business data available for this type.</p>
+                                <p key={business.id}>No business data available for this type.</p>
                             )
                         ))}
                     </div>

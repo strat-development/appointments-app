@@ -7,6 +7,6 @@ import { NavComponent } from "./NavComponent";
 
 export const Navbar = () => {
     return (
-        <IonNav className="h-[70px] fixed z-[222222222]" root={() => <NavComponent />} />
+        <IonNav className="fixed h-[80px] z-[222222222]" root={() => <NavComponent />} />
     )
 }

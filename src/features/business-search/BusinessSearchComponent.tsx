@@ -73,8 +73,9 @@ export const BusinessSearchComponent = () => {
                     onClick={handleSearch}>Search</button>
                 {suggestions.length > 0 && (
                     <div className="suggestions absolute top-32 p-4 flex flex-col gap-4 max-h-[350px] w-[350px] overflow-auto border-[1px] rounded-xl bg-white">
-                        {suggestions.map((suggestion) => (
-                            <div className="flex gap-2 pb-2 border-b-[1px]">
+                        {suggestions.map((suggestion, index) => (
+                            <div key={index}  
+                            className="flex gap-2 pb-2 border-b-[1px]">
                                 <Star1 />
                                 <Link href={`/business-browse-page/${suggestion.id}`} key={suggestion.id}>
                                     {suggestion['business-type']}

@@ -27,7 +27,7 @@ export const Schedule = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [eventId, setEventId] = useState<string>("")
     const [newVisits, setNewVisits] = useState<VisitsData | null>(null);
-    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+    const [screenWidth, setScreenWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
 
     useEffect(() => {
         const handleResize = () => {

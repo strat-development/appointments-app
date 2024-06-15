@@ -85,7 +85,8 @@ export const UploadImagesButton = () => {
                     {files.length > 0 && (
                         <div className="flex flex-col gap-2 border-[1px] p-2 rounded-lg">
                             {files.map((file, index) =>
-                                <div className="border-b-[1px] text-black/70">
+                                <div key={index}
+                                 className="border-b-[1px] text-black/70">
                                     <p className="w-[80%] truncate" 
                                     key={index}>{file.name}</p>
                                 </div>

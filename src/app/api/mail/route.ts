@@ -5,15 +5,15 @@ import { NewAppointmentEmailTemplate } from "@/emails/NewAppointmentEmailTemplat
  
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const location = useLocation();
+// const location = useLocation();
+// let userId = location.state.userId;
 
-let userId = location.state.userId;
 export  async function POST(request: Request, res: Response) {
     // const {email,userFirstname} = await request.json();
     const {data,error}=await resend.emails.send({
         from: "Dawid <onboarding@resend.dev>",
         to:"dawidsd123@gmail.com",
-        subject:userId,
+        subject:"",
         text: "", 
         react:NewAppointmentEmailTemplate({ firstName: 'John' })
     })

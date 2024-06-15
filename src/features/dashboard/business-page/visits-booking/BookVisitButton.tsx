@@ -11,7 +11,7 @@ interface BookVisitButtonProps {
     endTime: string;
     selectedService: number;
     selectedWorker: string;
-    navigate: NavigationType;
+    navigate?: NavigationType;
 }
 
 export const BookVisitButton = ({
@@ -23,6 +23,7 @@ export const BookVisitButton = ({
 }: BookVisitButtonProps) => {
     const supabase = createClientComponentClient<Database>();
     const queryClient = useQueryClient();
+    const navigation = useNavigate();
     const bookVistiMutation = useMutation(
         async () => {
             try {
@@ -49,8 +50,7 @@ export const BookVisitButton = ({
         },
         {
             onSuccess: () => {
-                const navigate = useNavigate()
-                navigate('localhost:3001/api/mail',{state:{clientId:"123",businessId:"123",mailTemplate:"123"}});
+                navigation('localhost:3001/api/mail',{state:{clientId:"123",businessId:"123",mailTemplate:"123"}});
                 queryClient.invalidateQueries('visits');
             }
         }

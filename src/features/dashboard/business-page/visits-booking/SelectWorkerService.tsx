@@ -101,8 +101,7 @@ export const SelectWorkerService = ({ businessSlugId, startTime, endTime, select
                     selectedService={Number(selectedService)}
                     selectedWorker={selectedWorker}
                     startTime={startTime}
-                    endTime={endTime}
-                />
+                    endTime={endTime} />
             </div>
         </div>
     )

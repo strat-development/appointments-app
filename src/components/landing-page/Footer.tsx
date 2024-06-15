@@ -1,3 +1,5 @@
+"use client"
+
 import { ArchiveTick, Box2, Briefcase, Calendar, Call, Grid3, Instagram, MessageQuestion, Notification, ShieldSecurity, Star } from "iconsax-react"
 import Image from "next/image"
 import { ContactForm } from "../ContactForm"
