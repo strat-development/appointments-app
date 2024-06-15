@@ -8,11 +8,12 @@ import { useEffect, useState } from "react";
 import { PieChart } from "./PieChart";
 import "@/styles/statistic.css"
 import toast from "react-hot-toast";
+import { Graph } from "iconsax-react";
+import CountUp from 'react-countup';
 
 export default function StatisticInfo() {
     const { businessId } = useBusinessContext();
     const [monthlyClients, setMonthlyClinets] = useState<number>();
-    let profit = 0.0;
     const [everyServiceCount, setEveryServiceCount] = useState<Map<number, number>>();
     const [serviceName, setServiceName] = useState<Map<number, string>>();
     const [currentProfit, setCurrentProfit] = useState<number>(0);
@@ -74,6 +75,7 @@ export default function StatisticInfo() {
     }, [userId, supabase]);
 
     const getCurrentMonthProfit = (clientsData: { service_id: number | null; end_time: string | null; }[]) => {
+        let profit = 0;
         clientsData.forEach((visit) => {
             if (servicesMap.has(visit.service_id as any)) {
                 profit += parseFloat(servicesMap.get(visit.service_id as any) as any);
@@ -156,7 +158,7 @@ export default function StatisticInfo() {
                     servicesNameMap.set(service.service_id, service.title)
                 });
                 setServiceName(servicesNameMap)
-                
+
             } else {
                 toast.error("Something went wrong with downloanding service data");
             }
@@ -165,34 +167,57 @@ export default function StatisticInfo() {
 
     return (
         <>
-            <main className="flex min-h-screen flex-col items-center justify-between">
-                <div style={{ width: "500px", height: "300px" }}>
-                    <PieChart serviceNameMap={serviceName || new Map<number, string>()} serviceCountMap={everyServiceCount || new Map<number, number>()} />
-                    profit w tym miesiacu :{currentProfit}<br></br>
-                    wizyty w tym miesiacu :{monthlyClients} <br /><br />
+            <div className="p-4 rounded-lg bg-white w-full h-[80vh] overflow-y-auto flex flex-col gap-8">
+                <div className="flex items-start justify-start self-start w-full border-b-[1px] pb-4 gap-2">
+                    <Graph className="w-6 h-6 text-violet-500" />
+                    <p className="text-lg font-medium">Statistics</p>
                 </div>
-                <div className="flex items-center justify-between w-[500px] h-[300px] bg-[#f5f5f5]">
-                    <input type="date" id="datePicker"
-                        min="2021-01-01"
-                        max="2099-12-31"
-                        onChange={(e) => {
-                            setSelectedFirstDate(new Date(e.target.value));
-                        }}
-                    />
-                    <input type="date" id="datePicker"
-                        min="2021-01-01"
-                        max="2099-12-31"
-                        onChange={(e) => {
-                            setSelectedSecondDate(new Date(e.target.value));
-                        }}
-                    />
-                    <button onClick={() => {
-                        getVisitsInSelectedRange();
-                        getClientsInSelectedRange();
-                        getServicesInSelectedRange();
-                    }}>Wybierz</button>
+                <div className="p-4 relative border-[1px] rounded-lg bg-white w-full h-[80vh] overflow-y-auto flex flex-col items-center justify-center gap-8">
+                    <div className="absolute top-4 self-center flex items-center gap-8 w-fit h-fit">
+                        <input className="py-2 px-4 border-[1px] rounded-md cursor-pointer"
+                            type="date" id="datePicker"
+                            min="2021-01-01"
+                            max="2099-12-31"
+                            onChange={(e) => {
+                                setSelectedFirstDate(new Date(e.target.value));
+                            }}
+                        />
+                        <input className="py-2 px-4 border-[1px] rounded-md cursor-pointer"
+                            type="date" id="datePicker"
+                            min="2021-01-01"
+                            max="2099-12-31"
+                            onChange={(e) => {
+                                setSelectedSecondDate(new Date(e.target.value));
+                            }}
+                        />
+                        <button className="py-2 px-4 border-[1px] border-violet-500 rounded-md text-violet-500 hover:bg-violet-500 hover:text-white transition-all duration-300"
+                            onClick={() => {
+                                getVisitsInSelectedRange();
+                                getClientsInSelectedRange();
+                                getServicesInSelectedRange();
+                            }}>Select</button>
+                    </div>
+                    <div className="flex gap-16 border-[1px] w-fit p-8 rounded-md">
+                        <div className="flex flex-col gap-8">
+                            <div className="flex flex-col gap-4 items-center border-b-[1px] p-8">
+                                <h1 className="text-7xl font-bold text-black/70">
+                                    <CountUp end={monthlyClients as number} duration={1.5} />
+                                </h1>
+                                <p className="text-lg font-medium text-black/50">Monthly clients</p>
+                            </div>
+                            <div className="flex flex-col gap-4 items-center">
+                                <h1 className="text-7xl font-bold text-black/70">
+                                    <CountUp end={currentProfit} duration={1.5} />
+                                </h1>
+                                <p className="text-lg font-medium text-black/50">Current profit</p>
+                            </div>
+                        </div>
+                        <div className="w-fit" >
+                            <PieChart serviceNameMap={serviceName || new Map<number, string>()} serviceCountMap={everyServiceCount || new Map<number, number>()} />
+                        </div>
+                    </div>
                 </div>
-            </main>
+            </div>
         </>
     );
 }
