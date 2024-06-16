@@ -10,10 +10,12 @@ import "@/styles/statistic.css"
 import toast from "react-hot-toast";
 import { Graph } from "iconsax-react";
 import CountUp from 'react-countup';
+import { StatisticsTable } from "./StatisticsTable";
+import { ServicesData, VisitsData } from "@/types/types";
 
 export default function StatisticInfo() {
     const { businessId } = useBusinessContext();
-    const [monthlyClients, setMonthlyClinets] = useState<number>();
+    const [monthlyClients, setMothlyClients] = useState<number>();
     const [everyServiceCount, setEveryServiceCount] = useState<Map<number, number>>();
     const [serviceName, setServiceName] = useState<Map<number, string>>();
     const [currentProfit, setCurrentProfit] = useState<number>(0);
@@ -27,13 +29,16 @@ export default function StatisticInfo() {
     const supabase = createClientComponentClient<Database>();
     const [selectedFirstDate, setSelectedFirstDate] = useState<Date | null>(null);
     const [selectedSecondDate, setSelectedSecondDate] = useState<Date | null>(null);
+    const [visitsData, setVisitsData] = useState<VisitsData[]>([]);
+    const [servicesData, setServicesData] = useState<ServicesData[]>([]);
+
 
     useEffect(() => {
         if (userId) {
             const getMonthlyClients = async () => {
                 const { data: clientsData, error } = await supabase
                     .from("visits")
-                    .select("service_id,end_time", { count: 'exact' })
+                    .select("service_id,end_time, client_name", { count: 'exact' })
                     .eq("business_id", businessId)
                     .eq("status", "Finished")
                     .gt('end_time', firstDayOfCurrentMonth)
@@ -42,11 +47,12 @@ export default function StatisticInfo() {
                     console.log(error);
                 }
                 if (clientsData) {
-                    setMonthlyClinets(clientsData.length);
+                    setMothlyClients(clientsData.length);
                     getCurrentMonthProfit(clientsData);
                     getEveryServiceCount(clientsData);
+                    setVisitsData(clientsData as VisitsData[]);
                 } else {
-                    setMonthlyClinets(0);
+                    setMothlyClients(0);
                 }
             };
             getMonthlyClients();
@@ -66,6 +72,8 @@ export default function StatisticInfo() {
                         servicesNameMap.set(service.service_id, service.title);
                     });
                     setServiceName(servicesNameMap);
+                    setServicesData(services as ServicesData[]);
+
                 } else {
                     toast.error("Something went wrong with downloading service data");
                 }
@@ -103,26 +111,6 @@ export default function StatisticInfo() {
 
     const getVisitsInSelectedRange = async () => {
         if (selectedFirstDate && selectedSecondDate) {
-            const { data: visitsData, error } = await supabase
-                .from("visits")
-                .select("service_id,end_time", { count: 'exact' })
-                .eq("business_id", businessId)
-                .eq("status", "Finished")
-                .gt('end_time', selectedFirstDate.toISOString())
-                .lt('end_time', selectedSecondDate.toISOString())
-            if (error) {
-                console.log(error);
-            }
-            if (visitsData) {
-
-            } else {
-                console.log("Missing Data");
-            }
-        }
-    }
-
-    const getClientsInSelectedRange = async () => {
-        if (selectedFirstDate && selectedSecondDate) {
             const { data: clientsData, error } = await supabase
                 .from("visits")
                 .select("service_id,end_time", { count: 'exact' })
@@ -134,11 +122,12 @@ export default function StatisticInfo() {
                 console.log(error);
             }
             if (clientsData) {
-                setMonthlyClinets(clientsData.length);
+                setMothlyClients(clientsData.length);
                 getCurrentMonthProfit(clientsData);
                 getEveryServiceCount(clientsData);
+                setVisitsData(clientsData as VisitsData[]);
             } else {
-                setMonthlyClinets(0);
+                setMothlyClients(0);
             }
         }
     }
@@ -157,7 +146,9 @@ export default function StatisticInfo() {
                     servicesMap.set(service.service_id, service.price as any)
                     servicesNameMap.set(service.service_id, service.title)
                 });
+
                 setServiceName(servicesNameMap)
+                setServicesData(services as ServicesData[]);
 
             } else {
                 toast.error("Something went wrong with downloanding service data");
@@ -167,12 +158,12 @@ export default function StatisticInfo() {
 
     return (
         <>
-            <div className="p-4 rounded-lg bg-white w-full h-[80vh] overflow-y-auto flex flex-col gap-8">
+            <div className="p-4 rounded-lg bg-white w-full h-[90vh] overflow-y-auto flex flex-col gap-8">
                 <div className="flex items-start justify-start self-start w-full border-b-[1px] pb-4 gap-2">
                     <Graph className="w-6 h-6 text-violet-500" />
                     <p className="text-lg font-medium">Statistics</p>
                 </div>
-                <div className="p-4 relative border-[1px] rounded-lg bg-white w-full h-[80vh] overflow-y-auto flex flex-col items-center justify-center gap-8">
+                <div className="relative border-[1px] rounded-lg p-4 bg-white w-full h-[90vh] overflow-y-auto flex flex-col items-center justify-center gap-8">
                     <div className="absolute top-4 self-center flex items-center gap-8 w-fit h-fit">
                         <input className="py-2 px-4 border-[1px] rounded-md cursor-pointer"
                             type="date" id="datePicker"
@@ -193,11 +184,10 @@ export default function StatisticInfo() {
                         <button className="py-2 px-4 border-[1px] border-violet-500 rounded-md text-violet-500 hover:bg-violet-500 hover:text-white transition-all duration-300"
                             onClick={() => {
                                 getVisitsInSelectedRange();
-                                getClientsInSelectedRange();
                                 getServicesInSelectedRange();
                             }}>Select</button>
                     </div>
-                    <div className="flex gap-16 border-[1px] w-fit p-8 rounded-md">
+                    <div className="flex gap-16 border-[1px] w-full h-full mt-16 p-8 rounded-md">
                         <div className="flex flex-col gap-8">
                             <div className="flex flex-col gap-4 items-center border-b-[1px] p-8">
                                 <h1 className="text-7xl font-bold text-black/70">
@@ -215,6 +205,9 @@ export default function StatisticInfo() {
                         <div className="w-fit" >
                             <PieChart serviceNameMap={serviceName || new Map<number, string>()} serviceCountMap={everyServiceCount || new Map<number, number>()} />
                         </div>
+                        <StatisticsTable visitsData={visitsData}
+                            servicesData={servicesData}
+                        />
                     </div>
                 </div>
             </div>

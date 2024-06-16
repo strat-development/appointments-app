@@ -3,17 +3,17 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
-interface StatisticInfoProps{
-  serviceCountMap:Map<number,number>;
-  serviceNameMap:Map<number,string>;
+interface StatisticInfoProps {
+  serviceCountMap: Map<number, number>;
+  serviceNameMap: Map<number, string>;
 }
 
 
-export function PieChart({serviceCountMap,serviceNameMap}:StatisticInfoProps) {
+export function PieChart({ serviceCountMap, serviceNameMap }: StatisticInfoProps) {
   const services: string[] = [];
-  const countServices: number[]=[];
-  serviceCountMap.forEach((value,key)=>{
-    let serviceName=serviceNameMap.get(key);
+  const countServices: number[] = [];
+  serviceCountMap.forEach((value, key) => {
+    let serviceName = serviceNameMap.get(key);
 
     if (serviceName !== undefined) {
       services.push(serviceName);
@@ -21,7 +21,7 @@ export function PieChart({serviceCountMap,serviceNameMap}:StatisticInfoProps) {
     }
   })
 
-  
+
   const data = {
     labels: services,
     datasets: [
