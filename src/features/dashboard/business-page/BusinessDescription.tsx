@@ -3,9 +3,9 @@ import { Database } from "@/types/supabase";
 import { BusinessData, BusinessSlugIdProps } from "@/types/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Heart, Share } from "iconsax-react";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useMutation, useQuery } from "react-query";
+import { useQuery } from "react-query";
 
 export const BusinessDescription = ({ businessSlugId }: BusinessSlugIdProps) => {
     const supabase = createClientComponentClient<Database>();

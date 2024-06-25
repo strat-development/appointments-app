@@ -6,6 +6,7 @@ import { OpeningHoursModal } from "./OpeningHoursModal";
 import { EditOpeningHoursModal } from "./EditOpeningHoursModal";
 import { useUserContext } from "@/providers/userContextProvider";
 import { BusinessSlugIdProps, OpeningHoursData } from "@/types/types";
+import { isDashboardPage } from "@/types/consts";
 
 export const OpeningHours = ({businessSlugId}: BusinessSlugIdProps) => {
     const supabase = createClientComponentClient<Database>();
@@ -55,12 +56,13 @@ export const OpeningHours = ({businessSlugId}: BusinessSlugIdProps) => {
                         );
                     })}
                 </div>
-                {!openingHours && userRole === "Employer" && (
+                
+                {isDashboardPage && !openingHours && userRole === "Employer" && (
                     <button onClick={() => setIsModalOpen(true)}>
                         Add hours
                     </button>
                 )} 
-                {openingHours && userRole === "Employer" && (
+                {isDashboardPage && openingHours && userRole === "Employer" && (
                     <button onClick={() => setIsEditModalOpen(true)}>
                         Edit hours
                     </button>

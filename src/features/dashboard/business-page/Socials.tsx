@@ -10,6 +10,7 @@ import Link from "next/link";
 import { EditSocialsModal } from "./EditSocialsModal";
 import { useUserContext } from "@/providers/userContextProvider";
 import { BusinessSlugIdProps, SocialMediaTypes, SocialsData } from "@/types/types";
+import { isDashboardPage } from "@/types/consts";
 
 export const Socials = ({ businessSlugId }: BusinessSlugIdProps) => {
     const supabase = createClientComponentClient<Database>();
@@ -74,12 +75,12 @@ export const Socials = ({ businessSlugId }: BusinessSlugIdProps) => {
                         })}
                     </div>
                     <div>
-                        {!socials && userRole === "Employer" && (
+                        {isDashboardPage && !socials && userRole === "Employer" && (
                             < button onClick={() => setIsModalOpen(true)}>
                                 Add Socials
                             </button>
                         )}
-                        {socials && userRole === "Employer" && (
+                        {isDashboardPage && socials && userRole === "Employer" && (
                             <button onClick={() => setIsEditModalOpen(true)}>
                                 Edit Socials
                             </button>

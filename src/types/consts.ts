@@ -1,0 +1,1 @@
+export const isDashboardPage = window.location.pathname.startsWith('/dashboard/');

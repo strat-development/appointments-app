@@ -9,6 +9,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { DeleteImagesModal } from "./DeleteImagesModal";
 import { useUserContext } from "@/providers/userContextProvider";
 import { BusinessSlugIdProps, Images } from "@/types/types";
+import { isDashboardPage } from "@/types/consts";
 
 export const BusinessImages = ({ businessSlugId }: BusinessSlugIdProps) => {
     const supabase = createClientComponentClient<Database>();
@@ -72,7 +73,7 @@ export const BusinessImages = ({ businessSlugId }: BusinessSlugIdProps) => {
                         ))}
                     </Swiper>
                 </div>
-                {userRole === 'Employer' && (
+                {isDashboardPage && userRole === "Employer" && (
                     <>
                         <div className="flex gap-4">
                             <UploadImagesButton />

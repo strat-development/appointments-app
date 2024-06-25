@@ -9,6 +9,8 @@ import { AuthModal } from "@/features/auth-modal/AuthModal";
 import { QueryClient, QueryClientProvider } from 'react-query'
 import BusinessContextProvider, { BusinessContext } from "@/providers/businessContextProvider";
 import "./globals.css";
+import { Suspense } from "react";
+import Loading from "./loading";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -29,9 +31,11 @@ export default function RootLayout({
           <QueryClientProvider client={queryClient}>
             <UserContextProvider>
               <BusinessContextProvider>
-              <ModalProvider />
-              <AuthModal />
-              {children}
+                <ModalProvider />
+                <AuthModal />
+                <Suspense fallback={<Loading />}>
+                  {children}
+                </Suspense>
               </BusinessContextProvider>
             </UserContextProvider>
           </QueryClientProvider>

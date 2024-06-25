@@ -2,10 +2,12 @@
 
 import { Footer } from "@/components/landing-page/Footer";
 import { Navbar } from "@/components/landing-page/Navbar";
+import { useUserContext } from "@/providers/userContextProvider";
 import { Database } from "@/types/supabase";
 import { BusinessData } from "@/types/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 
@@ -19,6 +21,12 @@ export default function BusinessPagesBrowser({
     const supabase = createClientComponentClient<Database>();
     const [businessPages, setBusinessPages] = useState<BusinessData[]>([]);
     const [imageUrls, setImageUrls] = useState<{ businessId: string, publicUrl: string }[]>([]);
+    const { userRole } = useUserContext();
+    const router = useRouter();
+
+    if (userRole === 'Employer') {
+        router.push('/dashboard/schedule');
+    }
 
     const { data: allBusinessPagesData } = useQuery(
         ['businessPages'],

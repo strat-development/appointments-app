@@ -7,7 +7,7 @@ import { ArrowDown2, MagicStar } from 'iconsax-react';
 
 const AccordionDemo = () => (
     <>
-        <div className='flex flex-col items-center gap-16'>
+        <div className='flex flex-col items-center gap-16' id="FAQ">
             <h2 className="text-5xl font-semibold tracking-wider text-transparent bg-gradient-to-b from-[#5100D6] to-[#A168FF] bg-clip-text">
                 Frequently asked questions
             </h2>
@@ -19,7 +19,13 @@ const AccordionDemo = () => (
                             For whom is &apos;Visio&apos; the best option?
                         </div>
                     </AccordionTrigger>
-                    <AccordionContent className="AccordionContent">&apos;Visio&apos; is a great option for those who runs a business and those who just want to get the best service available in their location.</AccordionContent>
+                    <AccordionContent className="AccordionContent">
+                        <div>
+                            <p className="AccordionContentText">
+                                &apos;Visio&apos; is a great option for those who runs a business and those who just want to get the best service available in their location.
+                            </p>
+                        </div>
+                    </AccordionContent>
                 </Accordion.Item>
                 <Accordion.Item className="AccordionItem" value="item-2">
                     <AccordionTrigger className="AccordionTrigger">
@@ -29,7 +35,9 @@ const AccordionDemo = () => (
                         </div>
                     </AccordionTrigger>
                     <AccordionContent className="AccordionContent">
-                        Yes, all notifications are completely free.
+                        <div className="AccordionContentText">
+                            Yes, all notifications are completely free.
+                        </div>
                     </AccordionContent>
                 </Accordion.Item>
                 <Accordion.Item className="AccordionItem" value="item-3">

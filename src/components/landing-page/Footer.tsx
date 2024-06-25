@@ -4,10 +4,11 @@ import { ArchiveTick, Box2, Briefcase, Calendar, Call, Grid3, Instagram, Message
 import Image from "next/image"
 import { ContactForm } from "../ContactForm"
 import { useState } from "react";
+import Link from "next/link";
 
 export const Footer = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    
+
     const closeModal = () => {
         setIsModalOpen(false);
     };
@@ -25,22 +26,30 @@ export const Footer = () => {
                                     <h4 className="text-lg font-semibold text-black/70">Functionality</h4>
                                 </div>
                                 <ul className="flex flex-col gap-4">
-                                    <li className="flex gap-2 items-center">
-                                        <Calendar className="text-[#5100D6]" size="18" />
-                                        <p className="text-black/70 text-sm">Schedule</p>
-                                    </li>
-                                    <li className="flex gap-2 items-center">
-                                        <Notification className="text-[#5100D6]" size="18" />
-                                        <p className="text-black/70 text-sm">Notifications</p>
-                                    </li>
-                                    <li className="flex gap-2 items-center">
-                                        <ArchiveTick className="text-[#5100D6]" size="18" />
-                                        <p className="text-black/70 text-sm">On-line appointments</p>
-                                    </li>
-                                    <li className="flex gap-2 items-center">
-                                        <Briefcase className="text-[#5100D6]" size="18" />
-                                        <p className="text-black/70 text-sm">Business management</p>
-                                    </li>
+                                    <Link href="/schedule-features">
+                                        <li className="flex gap-2 items-center">
+                                            <Calendar className="text-[#5100D6]" size="18" />
+                                            <p className="text-black/70 text-sm">Schedule</p>
+                                        </li>
+                                    </Link>
+                                    <Link href="/notifications-features">
+                                        <li className="flex gap-2 items-center">
+                                            <Notification className="text-[#5100D6]" size="18" />
+                                            <p className="text-black/70 text-sm">Notifications</p>
+                                        </li>
+                                    </Link>
+                                    <Link href="/business-page-features">
+                                        <li className="flex gap-2 items-center">
+                                            <ArchiveTick className="text-[#5100D6]" size="18" />
+                                            <p className="text-black/70 text-sm">On-line appointments</p>
+                                        </li>
+                                    </Link>
+                                    <Link href="/positions-features">
+                                        <li className="flex gap-2 items-center">
+                                            <Briefcase className="text-[#5100D6]" size="18" />
+                                            <p className="text-black/70 text-sm">Business management</p>
+                                        </li>
+                                    </Link>
                                 </ul>
                             </div>
                         </div>
@@ -51,10 +60,12 @@ export const Footer = () => {
                                     <h4 className="text-lg font-semibold text-black/70">Product</h4>
                                 </div>
                                 <ul className="flex flex-col gap-4">
-                                    <li className="flex gap-2 items-center">
-                                        <MessageQuestion className="text-[#5100D6]" size="18" />
-                                        <p className="text-black/70 text-sm">FAQ</p>
-                                    </li>
+                                    <Link href="/business-landing/#FAQ">
+                                        <li className="flex gap-2 items-center">
+                                            <MessageQuestion className="text-[#5100D6]" size="18" />
+                                            <p className="text-black/70 text-sm">FAQ</p>
+                                        </li>
+                                    </Link>
                                     <li className="flex gap-2 items-center">
                                         <Call className="text-[#5100D6]" size="18" />
                                         <button onClick={() => setIsModalOpen(true)}

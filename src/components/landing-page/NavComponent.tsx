@@ -8,19 +8,12 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/types/supabase";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { ContactForm } from "../ContactForm";
-import { useState } from "react";
 
 export const NavComponent = () => {
     const authModal = useModal();
     const { userRole, clearUserRole } = useUserContext();
     const supabase = createClientComponentClient<Database>();
     const router = useRouter();
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
 
     return (
         <>
@@ -33,9 +26,6 @@ export const NavComponent = () => {
                         <Link href="/">
                             About
                         </Link>
-                        <button onClick={() => setIsModalOpen(true)}>
-                            Contact
-                        </button>
                         <Link href={`/business-browse-page/${"all"}`}>
                             Businesess
                         </Link>
@@ -82,9 +72,6 @@ export const NavComponent = () => {
                     <AuthModal />
                 </nav>
             </header>
-            {/* <ContactForm isOpen={isModalOpen}
-                onClose={closeModal}
-            /> */}
         </>
     );
 };
