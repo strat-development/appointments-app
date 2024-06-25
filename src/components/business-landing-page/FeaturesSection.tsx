@@ -39,7 +39,7 @@ export const FeaturesSection = () => {
                                 </p>
                             </div>
                             <Link className="p-2 bg-gradient-to-b from-violet-600 to-violet-500 rounded-lg h-fit hover:opacity-90 transition duration-300"
-                                href="/schedule-features">
+                                href="/positions-features">
                                 <ArrowUp className="text-white rotate-45" />
                             </Link>
                         </div>
@@ -59,7 +59,7 @@ export const FeaturesSection = () => {
                                 </p>
                             </div>
                             <Link className="p-2 bg-gradient-to-b from-violet-600 to-violet-500 rounded-lg h-fit hover:opacity-90 transition duration-300"
-                                href="/schedule-features">
+                                href="/business-page-features">
                                 <ArrowUp className="text-white rotate-45" />
                             </Link>
                         </div>
@@ -95,7 +95,7 @@ export const FeaturesSection = () => {
                                 </p>
                             </div>
                             <Link className="p-2 bg-gradient-to-b from-violet-600 to-violet-500 rounded-lg h-fit hover:opacity-90 transition duration-300"
-                                href="/schedule-features">
+                                href="/positions-features">
                                 <ArrowUp className="text-white rotate-45" />
                             </Link>
                         </div>

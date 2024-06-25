@@ -73,7 +73,7 @@ export const StatisticsTable: React.FC<StatisticsTableProps> = ({
                     <thead className="border-b-[.5px] p-4">
                         <tr>
                             <th className="text-center p-2 text-lg text-[#737373]">Client Name</th>
-                            <th className="text-center p-2 text-lg text-[#737373]">End Time</th>
+                            <th className="text-center p-2 text-lg text-[#737373]">Visit Date</th>
                             <th className="text-center p-2 text-lg text-[#737373]">Service</th>
                             <th className="text-center p-2 text-lg text-[#737373]">Price</th>
                         </tr>
@@ -82,7 +82,7 @@ export const StatisticsTable: React.FC<StatisticsTableProps> = ({
                         {displayedData.map((data, index) => (
                             <tr className="border-b-[.5px]" key={index}>
                                 <td className="text-center font-normal p-2">{data.client_name}</td>
-                                <td className="text-center font-normal p-2">{data.end_time}</td>
+                                <td className="text-center font-normal p-2">{data.end_time?.split('T')[0]}</td>
                                 <td className="text-center font-normal p-2">{data.service?.title}</td>
                                 <td className="text-center font-normal p-2">{data.service?.price}</td>
                             </tr>

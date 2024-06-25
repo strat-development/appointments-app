@@ -124,7 +124,7 @@ export default function BusinessPagesBrowser({
         <>
             <Navbar />
             <div className="flex flex-col items-center">
-                <div className="relative top-24 grid grid-cols-3 gap-8 max-w-[1200px] w-full mx-auto">
+                <div className="relative top-24 grid grid-cols-3 gap-8 max-w-[1200px] w-full min-h-[60vh] mx-auto">
                     {businessPages.map((businessPage) => (
                         <Link key={businessPage.id}
                             href={`/business-page/${businessPage.id}`}>

@@ -7,7 +7,7 @@ export default function ScheduleFeaturesPage() {
     return (
         <div className="overflow-hidden">
             <Navbar />
-            <div className="flex flex-col items-center gap-32 mt-32 px-4 m-auto">
+            <div className="flex flex-col items-center gap-32 mt-32 px-16 m-auto">
                 <div className="flex justify-between gap-8 items-center">
                     <Image className="w-[55%] shadow-xl rounded-xl"
                         src="/Schedule/ScheduleView.png" width={2000} height={2000} alt="calendar" />
@@ -33,7 +33,7 @@ export default function ScheduleFeaturesPage() {
                 <div className="flex justify-between gap-8 items-center">
                     <div className="flex justify-end w-full">
                         <div className="flex flex-col gap-4 justify-self-center w-fit">
-                            <h1 className="text-4xl tracking-wider font-bold text-[#5100D6]">Detailed visist form</h1>
+                            <h1 className="text-4xl tracking-wider font-bold text-[#5100D6]">Detailed visits form</h1>
                             <p className="text-black/70 w-[500px]">
                                 We are strive to improve our visit form to make it as convinient as possible for you.
                             </p>
@@ -60,7 +60,6 @@ export default function ScheduleFeaturesPage() {
                     <Image className="w-[55%] shadow-xl rounded-xl"
                         src="/Schedule/ScheduleVisitModal.png" width={2000} height={2000} alt="calendar" />
                 </div>
-
             </div>
             <Footer />
         </div>

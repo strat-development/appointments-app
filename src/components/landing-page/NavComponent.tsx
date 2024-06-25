@@ -24,9 +24,6 @@ export const NavComponent = () => {
 
     return (
         <>
-            <ContactForm isOpen={isModalOpen}
-                onClose={closeModal}
-            />
             <header className="border-b-[1px] w-full z-[222222222] backdrop-blur-xl max-lg:px-8 max-[1200px]:px-8 max-[480px]:px-4 bg-white">
                 <nav className="m-auto flex items-center justify-between py-4 max-w-[1200px]">
                     <Link href="/" className="text-3xl font-sans font-semibold text-[#1b0b3b] m-0 max-lg:text-2xl">
@@ -85,6 +82,9 @@ export const NavComponent = () => {
                     <AuthModal />
                 </nav>
             </header>
+            {/* <ContactForm isOpen={isModalOpen}
+                onClose={closeModal}
+            /> */}
         </>
     );
 };

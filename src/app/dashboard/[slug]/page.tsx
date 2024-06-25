@@ -13,9 +13,9 @@ export default function BusinessPage({
     const businessSlugId = params.slug
 
     return (
-        <div className="flex gap-16 items-center">
+        <div className="flex gap-16 items-start">
             <Navbar />
-            <main className="w-full max-[1200px]:p-4">
+            <main className="w-full max-w-[1200px] max-[1200px]:p-4">
                 <BusinessPageSection businessSlugId={businessSlugId} />
             </main>
         </div>
