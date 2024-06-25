@@ -18,7 +18,7 @@ export const Footer = () => {
             <footer className="w-full border-t-[1px] mt-36 mb-8">
                 <div className="max-w-[1200px] mx-auto w-full flex flex-col gap-12 mt-8">
                     <Image src="/Visio_logo.svg" width={75} height={75} alt="logo" />
-                    <div className="flex justify-between">
+                    <div className="flex justify-between flex-wrap gap-16">
                         <div className="flex justify-between">
                             <div className="flex flex-col gap-8">
                                 <div className="flex gap-2 items-center">

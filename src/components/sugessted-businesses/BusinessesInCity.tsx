@@ -2,6 +2,7 @@ import { Database } from "@/types/supabase";
 import { Images } from "@/types/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 
@@ -128,28 +129,37 @@ export const BusinessesInCity = ({ city }: BusinessesInCity) => {
 
     return (
         <>
-            <div className="flex flex-col gap-8 self-center w-full">
+            <div className="flex flex-col gap-4 self-center w-full overflow-hidden">
                 {
                     city &&
                     <h1 className="text-xl font-medium tracking-wide text-black/70">Suggested businesses in {city}</h1>
                     ||
                     <h1 className="text-xl font-medium tracking-wide text-black/70">Discover new businesses</h1>
                 }
-                <div className="flex gap-8">
+                <div className="flex gap-4 overflow-x-auto">
                     {suggestedBusinesses?.map((business) => {
                         const businessUrl = imageUrls.find((image) => image.businessId === business.id)?.publicUrl;
                         return (
-                            <div key={business.id}>
-                                <Image className="rounded-xl object-cover h-[250px] w-[300px]"
-                                    src={businessUrl as string}
-                                    alt=""
-                                    width={2000}
-                                    height={1000} />
-                                <div className="business-data">
-                                    <h2>{business.business_name}</h2>
-                                    <p>{business.business_address}</p>
+                            <Link href={`/business/${business.id}`} passHref>
+                                <div key={business.id} className="flex flex-col gap-4 min-w-[350px] border-[1px] bg-white p-4 rounded-xl shadow-md">
+                                    {imageUrls.find((image) => image.businessId === business.id)?.publicUrl ? (
+                                        <Image className="rounded-xl object-cover h-[250px] w-full"
+                                            src={businessUrl as string}
+                                            alt={business.business_name as string}
+                                            width={2000}
+                                            height={1000}
+                                        />
+                                    ) : (
+                                        <div className="h-[250px] w-full border-[1px] flex items-center justify-center rounded-lg bg-black/10">
+                                            <p className="text-xl text-black/70 font-semibold">No image available 😔</p>
+                                        </div>
+                                    )}
+                                    <div className="flex flex-col gap-2">
+                                        <h2 className="text-lg font-bold">{business.business_name}</h2>
+                                        <p className="text-black/70">{business.business_address}</p>
+                                    </div>
                                 </div>
-                            </div>
+                            </Link>
                         );
                     })}
                 </div>

@@ -31,7 +31,7 @@ export const BusinessTypeFilter = ({ city }: BusinessTypeFilterProps) => {
     );
 
     return (
-        <div className="relative flex justify-between text-black/70 self-center w-full p-4 gap-4 rounded-md overflow-auto">
+        <div className="relative flex justify-between text-black/70 self-center w-full p-4 gap-12 rounded-md overflow-auto overflow-x-auto max-lg:text-lg">
             {businessType.map((type) => (
                 <Link className="hover:text-black transition w-fit" 
                 href={`/business-browse-page/${type.id}?city=${city}`} key={type.id}>

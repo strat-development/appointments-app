@@ -59,38 +59,38 @@ export const BusinessSearchComponent = ({ city }: BusinessSearchComponentProps) 
     );
 
     return (
-        <div className="flex flex-col items-start gap-4 relative top-36 w-fit">
-            <div className="relatve flex items-end gap-4">
-                <div className="flex flex-col gap-4">
-                    <label className="w-[350px] text-black/70 text-lg tracking-wide"
-                        htmlFor="search">
-                        Search for the best businesses and services in your area
-                    </label>
-                    <input className="border-[1px] w-[350px] p-2 rounded-xl outline-none"
+        <div className="items-end gap-4 relative self-center w-fit max-[1024px]:mt-16 max-[1024px]:items-between max-[400px]:max-w-[380px] max-[1024px]:flex-col">
+            <div className="flex flex-col gap-8 w-full">
+                <label className="w-[350px] text-black/70 text-xl font-bold tracking-wide max-[1024px]:text-center max-[1024px]:text-2xl max-[1024px]:w-[400px] max-[1024px]:font-bold max-[580px]:text-xl max-[400px]:max-w-[320px]"
+                    htmlFor="search">
+                    Search for the best businesses and services in your area
+                </label>
+                <div className="flex gap-4 max-[1024px]:items-center">
+                    <input className="border-[1px] px-4 py-2 max-[1024px]:max-w-[500px] max-[1024px]:p-4 rounded-xl outline-none max-md:w-full max-[1024px]:w-full max-[400px]:w-[250px]"
                         id="search"
                         onChange={(e) => handleInput(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                         type="text" placeholder="Search for a business or service" />
+                    <button className="bg-gradient-to-b from-violet-600 to-violet-500 text-white py-2 px-4 max-[1024px]:p-4 rounded-xl"
+                        onClick={handleSearch}>Search</button>
                 </div>
-                <button className="bg-gradient-to-b from-violet-600 to-violet-500 text-white px-4 py-2 rounded-xl"
-                    onClick={handleSearch}>Search</button>
-                {suggestions.length > 0 && (
-                    <div className="suggestions absolute top-32 p-4 flex flex-col max-h-[350px] w-[350px] overflow-auto border-[1px] rounded-xl bg-white">
-                        {suggestions.map((suggestion, index) => (
-                            <Link href={`/business-browse-page/${suggestion.id}?city=${city}`}
-                                key={suggestion.id}>
-                                <div key={index}
-                                    className="flex gap-2 p-2 border-b-[1px] rounded-md hover:bg-black/5 transition duration-300">
-                                    <Star1 />
-                                    <p key={suggestion.id}>
-                                        {suggestion['business-type']}
-                                    </p>
-                                </div>
-                            </Link>
-                        ))}
-                    </div>
-                )}
             </div>
+            {suggestions.length > 0 && (
+                <div className="suggestions absolute top-32 p-4 flex flex-col max-h-[350px] w-[350px] overflow-auto border-[1px] rounded-xl bg-white">
+                    {suggestions.map((suggestion, index) => (
+                        <Link href={`/business-browse-page/${suggestion.id}?city=${city}`}
+                            key={suggestion.id}>
+                            <div key={index}
+                                className="flex gap-2 p-2 border-b-[1px] rounded-md hover:bg-black/5 transition duration-300">
+                                <Star1 />
+                                <p key={suggestion.id}>
+                                    {suggestion['business-type']}
+                                </p>
+                            </div>
+                        </Link>
+                    ))}
+                </div>
+            )}
         </div>
     )
 }

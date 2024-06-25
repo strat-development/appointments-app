@@ -1,6 +1,7 @@
 import { Database } from "@/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 
@@ -47,7 +48,8 @@ export const RandomBusinessInCity = ({ city }: RandomBusinessInCityProps) => {
                         id
                     )
                 `)
-                .eq('business_type_id', businessTypesData.id || "")
+                .eq('business_type_id',
+                    businessTypesData.id || "")
                 .eq('business_city_name', city || "")
 
             if (error) {
@@ -136,27 +138,37 @@ export const RandomBusinessInCity = ({ city }: RandomBusinessInCityProps) => {
 
     return (
         <>
-            <div className="flex flex-col gap-8 self-center w-full">
+            <div className="flex flex-col gap-4 self-center w-full overflow-hidden">
                 <h1 className="text-xl font-medium tracking-wide text-black/70">
-                    {businessTypesData?.["business-type"]} in {city}
+                    {businessTypesData?.["business-type"]} businesses in {city}
                 </h1>
                 {businessData.length > 0 && (
-                    <div className="flex gap-8">
+                    <div className="flex gap-4 overflow-x-auto max-w-[1200px] pb-4">
                         {isLoadingTypes && <p>Loading...</p>}
                         {isErrorTypes && <p>Error loading business types</p>}
 
                         {businessData.map((business: any) => (
                             business["business-info"] ? (
-                                <div key={business.id}>
-                                    <h2>{business["business-info"].business_name}</h2>
-                                    <p>{business["business-info"].business_address}</p>
-                                    <Image className="rounded-xl object-cover h-[250px] w-[300px]"
-                                        src={imageUrls.find((image) => image.businessId === business["business-info"].id)?.publicUrl || "/images/placeholder.jpg"}
-                                        alt={business["business-info"].business_name}
-                                        width={200}
-                                        height={200}
-                                    />
-                                </div>
+                                <Link href={`/business/${business["business-info"].id}`} passHref>
+                                    <div key={business.id} className="flex flex-col gap-4 min-w-[350px] border-[1px] bg-white p-4 rounded-xl shadow-md">
+                                        {imageUrls.find((image) => image.businessId === business["business-info"].id)?.publicUrl ? (
+                                            <Image className="rounded-xl object-cover h-[250px] w-full"
+                                                src={imageUrls.find((image) => image.businessId === business["business-info"].id)?.publicUrl as string}
+                                                alt={business["business-info"].business_name}
+                                                width={2000}
+                                                height={1000}
+                                            />
+                                        ) : (
+                                            <div className="h-[250px] w-full border-[1px] flex items-center justify-center rounded-lg bg-black/10">
+                                                <p className="text-xl text-black/70 font-semibold">No image available 😔</p>
+                                            </div>
+                                        )}
+                                        <div className="flex flex-col gap-2">
+                                            <h2 className="text-lg font-bold">{business["business-info"].business_name}</h2>
+                                            <p className="text-black/70">{business["business-info"].business_address}</p>
+                                        </div>
+                                    </div>
+                                </Link>
                             ) : (
                                 <p key={business.id}>No business data available for this type.</p>
                             )

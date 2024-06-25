@@ -1,8 +1,8 @@
 import { Database } from "@/types/supabase";
-import { BusinessData, Images } from "@/types/types";
+import { Images } from "@/types/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { set } from "date-fns";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 
@@ -13,7 +13,6 @@ interface CityBusinessesSectionProps {
 export const CityBusinessesSection = ({ city }: CityBusinessesSectionProps) => {
     const supabase = createClientComponentClient<Database>();
     const [imageUrls, setImageUrls] = useState<{ businessId: string, publicUrl: string }[]>([]);
-    // const [suggestedBusinesses, setSuggestedBusinesses] = useState<BusinessData[]>([]);
 
 
     const { data: suggestedBusinesses, isLoading } = useQuery(
@@ -131,24 +130,34 @@ export const CityBusinessesSection = ({ city }: CityBusinessesSectionProps) => {
 
     return (
         <>
-            <div className="flex flex-col gap-8 self-center w-full">
+            <div className="flex flex-col gap-4 self-center max-[1024px]:w-fit overflow-hidden">
                 {
                     city &&
                     <h1 className="text-xl font-medium tracking-wide text-black/70">Suggested businesses in {city}</h1>
                     ||
                     <h1 className="text-xl font-medium tracking-wide text-black/70">Discover new businesses</h1>
                 }
-                <div className="flex gap-4 ">
+                <div className="flex gap-4 rounded-lg overflow-x-scroll overflow-hidden w-[700px] pb-4 max-md:max-w-[500px] max-[520px]:w-[348px]">
                     {suggestedBusinesses?.map((business) => {
                         const businessUrl = imageUrls.find((image) => image.businessId === business.id)?.publicUrl;
                         return (
-                            <div key={business.id}>
-                                {businessUrl ? <Image className="rounded-xl object-cover h-[250px] w-[300px]" src={businessUrl as string} alt="" width={2000} height={1000} /> : <p>No image available</p>}
-                                <div className="business-data">
-                                    <h2>{business.business_name}</h2>
-                                    <p>{business.business_address}</p>
+                            <Link key={business.id} 
+                            href={`/business-page/${business.id}`}>
+                                <div className="flex flex-col gap-4 w-[350px] bg-white p-4 rounded-xl shadow-md"
+                                    key={business.id}>
+                                    {businessUrl ?
+                                        <Image className="rounded-xl object-cover h-[250px] w-full" src={businessUrl as string} alt="" width={2000} height={1000} />
+                                        :
+                                        <div className="h-[250px] w-full border-[1px] flex items-center justify-center rounded-lg bg-black/10">
+                                            <p className="text-xl text-black/70 font-semibold">No image available 😔</p>
+                                        </div>
+                                    }
+                                    <div className="flex flex-col gap-2">
+                                        <h2 className="text-lg font-bold">{business.business_name}</h2>
+                                        <p className="text-black/70">{business.business_address}</p>
+                                    </div>
                                 </div>
-                            </div>
+                            </Link>
                         );
                     })}
                 </div>

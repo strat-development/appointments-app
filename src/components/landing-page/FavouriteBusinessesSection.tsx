@@ -97,20 +97,24 @@ export const FavouriteBusinessesSection = () => {
 
     return (
         <>
-            <div className="flex flex-col gap-8 self-center w-full">
+            <div className="flex flex-col gap-4 self-center max-[1024px]:w-fit overflow-hidden">
                 <h1 className="text-xl font-medium tracking-wide text-black/70">Favourite businesses</h1>
-                <div className="flex gap-4">
+                <div className="flex gap-4 rounded-lg overflow-x-scroll overflow-hidden w-[700px] pb-4 max-md:max-w-[500px] max-[520px]:w-[348px]">
                     {favouriteBusinesses?.map((business) => {
                         const businessUrl = imageUrls.find((image) => image.businessId === business.business_id)?.publicUrl;
                         return (
                             <Link key={business.business_id} href={`/business-page/${business.business_id}`}>
-                                <div className="flex flex-col gap-4">
-                                    <div>
-                                        {businessUrl ? <Image className="h-[250px] w-[300px] rounded-xl object-cover" src={businessUrl as string} alt="" width={2000} height={1000} /> : <p>No image available</p>}
-                                    </div>
+                                <div className="flex flex-col gap-4 w-[350px] bg-white p-4 rounded-xl shadow-md">
+                                    {businessUrl ?
+                                        <Image className="rounded-xl object-cover h-[250px] w-full" src={businessUrl as string} alt="" width={2000} height={1000} />
+                                        :
+                                        <div className="h-[250px] w-full border-[1px] flex items-center justify-center rounded-lg bg-black/10">
+                                            <p className="text-xl text-black/70 font-semibold">No image available 😔</p>
+                                        </div>
+                                    }
                                     <div className="flex flex-col gap-2">
-                                        <p>{businessData?.find((data) => data.id === business.business_id)?.business_name}</p>
-                                        <p>{businessData?.find((data) => data.id === business.business_id)?.business_address}</p>
+                                        <h2 className="text-lg font-bold">{businessData?.find((data) => data.id === business.business_id)?.business_name}</h2>
+                                        <p className="text-black/70">{businessData?.find((data) => data.id === business.business_id)?.business_address}</p>
                                     </div>
                                 </div>
                             </Link>
