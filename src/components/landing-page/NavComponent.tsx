@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useState } from "react";
 import { CloseCircle, Menu } from "iconsax-react";
+import { useCityContext } from "@/providers/cityContextProvider";
 
 export const NavComponent = () => {
     const authModal = useModal();
@@ -17,6 +18,7 @@ export const NavComponent = () => {
     const supabase = createClientComponentClient<Database>();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const router = useRouter();
+    const { city } = useCityContext();
 
     return (
         <>
@@ -29,7 +31,7 @@ export const NavComponent = () => {
                         <Link href="/">
                             About
                         </Link>
-                        <Link href={`/business-browse-page/${"all"}`}>
+                        <Link href={`/business-browse-page/${"all"}?city=${city}`}>
                             Businesess
                         </Link>
                         <Link className="font-semibold"

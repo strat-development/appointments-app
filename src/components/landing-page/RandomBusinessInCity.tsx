@@ -143,13 +143,13 @@ export const RandomBusinessInCity = ({ city }: RandomBusinessInCityProps) => {
                     {businessTypesData?.["business-type"]} businesses in {city}
                 </h1>
                 {businessData.length > 0 && (
-                    <div className="flex gap-4 overflow-x-auto max-w-[1200px] pb-4">
+                    <div className="flex gap-4 overflow-x-auto rounded-xl max-w-[1200px] pb-4">
                         {isLoadingTypes && <p>Loading...</p>}
                         {isErrorTypes && <p>Error loading business types</p>}
 
                         {businessData.map((business: any) => (
                             business["business-info"] ? (
-                                <Link href={`/business/${business["business-info"].id}`} passHref>
+                                <Link href={`/business-page/${business["business-info"].id}`} passHref>
                                     <div key={business.id} className="flex flex-col gap-4 min-w-[350px] border-[1px] bg-white p-4 rounded-xl shadow-md">
                                         {imageUrls.find((image) => image.businessId === business["business-info"].id)?.publicUrl ? (
                                             <Image className="rounded-xl object-cover h-[250px] w-full"

@@ -4,34 +4,15 @@ import { CityBusinessesSection } from "@/components/landing-page/CityBusinessesS
 import { FavouriteBusinessesSection } from "@/components/landing-page/FavouriteBusinessesSection";
 import { Footer } from "@/components/landing-page/Footer";
 import { Navbar } from "@/components/landing-page/Navbar"
-import { SuggestedBusinessesSection } from "@/components/landing-page/SuggestedBusinessesSection";
+import { SuggestedBusinessesSection } from "@/components/sugessted-businesses/SuggestedBusinessesSection";
 import { BusinessSearchComponent } from "@/features/business-search/BusinessSearchComponent";
 import { BusinessTypeFilter } from "@/features/business-search/BusinessTypeFilter";
+import { useCityContext } from "@/providers/cityContextProvider";
 import { useUserContext } from "@/providers/userContextProvider";
-import { useEffect, useState } from "react";
 
 export default function Home() {
-	const geoKey = process.env.NEXT_PUBLIC_GEO_CODE_API_KEY;
-	const [city, setCity] = useState<string | null>(null);
 	const { userId } = useUserContext();
-
-	useEffect(() => {
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(async (position) => {
-				const { latitude, longitude } = position.coords;
-
-				const response = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${geoKey}&language=en`);
-				const data = await response.json();
-				const city = data.results[0].components.city;
-
-				setCity(city);
-			}, (error) => {
-				console.error("Error occurred while getting geolocation: ", error);
-			});
-		} else {
-			console.log("Geolocation is not supported by this browser.");
-		}
-	}, []);
+	const { city } = useCityContext();
 
 	return (
 		<div className="overflow-hidden">

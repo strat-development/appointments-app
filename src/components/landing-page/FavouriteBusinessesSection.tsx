@@ -99,7 +99,7 @@ export const FavouriteBusinessesSection = () => {
         <>
             <div className="flex flex-col gap-4 self-center max-[1024px]:w-fit overflow-hidden">
                 <h1 className="text-xl font-medium tracking-wide text-black/70">Favourite businesses</h1>
-                <div className="flex gap-4 rounded-lg overflow-x-scroll overflow-hidden w-[700px] pb-4 max-md:max-w-[500px] max-[520px]:w-[348px]">
+                <div className="flex gap-4 rounded-lg overflow-x-auto overflow-hidden w-[700px] pb-4 max-md:max-w-[500px] max-[520px]:w-[348px]">
                     {favouriteBusinesses?.map((business) => {
                         const businessUrl = imageUrls.find((image) => image.businessId === business.business_id)?.publicUrl;
                         return (

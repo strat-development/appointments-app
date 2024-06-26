@@ -11,6 +11,7 @@ import BusinessContextProvider, { BusinessContext } from "@/providers/businessCo
 import "./globals.css";
 import { Suspense } from "react";
 import Loading from "./loading";
+import CityContextProvider from "@/providers/cityContextProvider";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -30,13 +31,15 @@ export default function RootLayout({
         <SupabaseProvider>
           <QueryClientProvider client={queryClient}>
             <UserContextProvider>
-              <BusinessContextProvider>
-                <ModalProvider />
-                <AuthModal />
-                <Suspense fallback={<Loading />}>
-                  {children}
-                </Suspense>
-              </BusinessContextProvider>
+              <CityContextProvider>
+                <BusinessContextProvider>
+                  <ModalProvider />
+                  <AuthModal />
+                  <Suspense fallback={<Loading />}>
+                    {children}
+                  </Suspense>
+                </BusinessContextProvider>
+              </CityContextProvider>
             </UserContextProvider>
           </QueryClientProvider>
         </SupabaseProvider>

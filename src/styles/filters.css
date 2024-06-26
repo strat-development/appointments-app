@@ -1,0 +1,13 @@
+.filter-container {
+    display: none;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 300ms ease-out, transform 300ms ease-out;
+  }
+  
+  /* State when filters are shown */
+  .filter-container.show {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+  }

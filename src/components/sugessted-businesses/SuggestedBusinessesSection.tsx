@@ -1,5 +1,6 @@
+import { RandomBusinessInCity } from "../landing-page/RandomBusinessInCity";
 import { BusinessesInCity } from "../sugessted-businesses/BusinessesInCity";
-import { RandomBusinessInCity } from "./RandomBusinessInCity";
+
 
 interface SuggestedBusinessesSectionProps {
     city: string | null;

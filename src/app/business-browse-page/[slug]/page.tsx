@@ -1,11 +1,14 @@
 "use client"
 
+import { BusinessFilter } from "@/components/business-browse-page/BusinessFilter";
 import { Footer } from "@/components/landing-page/Footer";
 import { Navbar } from "@/components/landing-page/Navbar";
+import { useCityContext } from "@/providers/cityContextProvider";
 import { useUserContext } from "@/providers/userContextProvider";
 import { Database } from "@/types/supabase";
 import { BusinessData } from "@/types/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -23,6 +26,7 @@ export default function BusinessPagesBrowser({
     const [imageUrls, setImageUrls] = useState<{ businessId: string, publicUrl: string }[]>([]);
     const { userRole } = useUserContext();
     const router = useRouter();
+    const { city } = useCityContext();
 
     if (userRole === 'Employer') {
         router.push('/dashboard/schedule');
@@ -95,13 +99,8 @@ export default function BusinessPagesBrowser({
         ['business-images'],
         async () => {
             const { data, error } = await supabase
-                .from('business-type-info-linker')
-                .select(`
-                    business-images (
-                        business_id,
-                        image_url
-                    )
-                `)
+                .from('business-images')
+                .select("*")
 
             if (error) {
                 throw error;
@@ -131,21 +130,18 @@ export default function BusinessPagesBrowser({
     return (
         <>
             <Navbar />
-            <div className="flex flex-col items-center">
-                <div className="relative top-24 grid grid-cols-3 gap-8 max-w-[1200px] w-full min-h-[60vh] mx-auto">
+            <div className="flex flex-col gap-8 items-center">
+                <BusinessFilter city={city} />
+                <div className="relative grid grid-cols-3 gap-8 max-w-[1200px] w-full mx-auto">
                     {businessPages.map((businessPage) => (
                         <Link key={businessPage.id}
                             href={`/business-page/${businessPage.id}`}>
-                            <div className="border-[.5px] rounded-2xl p-4 flex justify-between"
-                                key={businessPage.id}>
+                            <div className="flex flex-col gap-4 border-[1px] p-4 rounded-xl">
+                                <Image className="w-[350px] h-[250px] object-cover rounded-lg"
+                                    src={imageUrls.find((image) => image.businessId === businessPage.id)?.publicUrl as string} alt="" width={2000} height={2000} />
                                 <div className="flex flex-col gap-2">
-                                    <div className="max-h-[200px]">
-                                        <p>{imageUrls.find((image) => image.businessId === businessPage.id)?.publicUrl || ''}</p>
-                                    </div>
-                                    <div className="flex gap-4">
-                                        <p>{businessPage.business_name}</p>
-                                        <p>{businessPage.business_address}</p>
-                                    </div>
+                                    <p>{businessPage.business_name}</p>
+                                    <p>{businessPage.business_address}</p>
                                 </div>
                             </div>
                         </Link>
