@@ -8,13 +8,13 @@ export default function ScheduleFeaturesPage() {
         <div className="overflow-hidden">
             <Navbar />
             <div className="flex flex-col items-center gap-32 mt-32 px-16 m-auto">
-                <div className="flex justify-between gap-8 items-center">
-                    <Image className="w-[55%] shadow-xl rounded-xl"
+                <div className="flex justify-between gap-8 items-center max-lg:flex-col-reverse">
+                    <Image className="w-[55%] shadow-xl rounded-xl max-lg:w-full"
                         src="/Schedule/ScheduleView.png" width={2000} height={2000} alt="calendar" />
                     <div className="flex justify-start w-full">
                         <div className="flex flex-col gap-4 justify-self-center w-fit">
-                            <h1 className="text-4xl tracking-wider font-bold text-[#5100D6]">Convinient schedule</h1>
-                            <p className="text-black/70 w-[500px]">
+                            <h1 className="text-4xl tracking-wider font-bold text-[#5100D6] max-sm:text-3xl">Convinient schedule</h1>
+                            <p className="text-black/70 w-[500px] max-[520px]:w-fit">
                                 We are constantly working on improving our schedule features to make it as convinient as possible for you.
                             </p>
                             <ul className="flex flex-col gap-6 mt-6">
@@ -30,11 +30,11 @@ export default function ScheduleFeaturesPage() {
                         </div>
                     </div>
                 </div>
-                <div className="flex justify-between gap-8 items-center">
-                    <div className="flex justify-end w-full">
+                <div className="flex justify-between gap-8 items-center max-lg:flex-col">
+                    <div className="flex justify-end w-full max-lg:justify-start">
                         <div className="flex flex-col gap-4 justify-self-center w-fit">
-                            <h1 className="text-4xl tracking-wider font-bold text-[#5100D6]">Detailed visits form</h1>
-                            <p className="text-black/70 w-[500px]">
+                            <h1 className="text-4xl tracking-wider font-bold text-[#5100D6] max-sm:text-3xl">Detailed visits form</h1>
+                            <p className="text-black/70 w-[500px] max-[520px]:w-fit">
                                 We are strive to improve our visit form to make it as convinient as possible for you.
                             </p>
                             <ul className="flex flex-col gap-6 mt-6">
@@ -57,7 +57,7 @@ export default function ScheduleFeaturesPage() {
                             </ul>
                         </div>
                     </div>
-                    <Image className="w-[55%] shadow-xl rounded-xl"
+                    <Image className="w-[55%] shadow-xl rounded-xl max-lg:w-full"
                         src="/Schedule/ScheduleVisitModal.png" width={2000} height={2000} alt="calendar" />
                 </div>
             </div>

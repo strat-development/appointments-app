@@ -9,7 +9,7 @@ h3 {
 
 .AccordionRoot {
   border-radius: 1rem;
-  width: 800px;
+  width: 100%;
   margin: 0 auto;
   background-color: var(--mauve-6);
 }

@@ -7,8 +7,8 @@ import { ArrowDown2, MagicStar } from 'iconsax-react';
 
 const AccordionDemo = () => (
     <>
-        <div className='flex flex-col items-center gap-16' id="FAQ">
-            <h2 className="text-5xl font-semibold tracking-wider text-transparent bg-gradient-to-b from-[#5100D6] to-[#A168FF] bg-clip-text">
+        <div className='flex flex-col items-center gap-16 w-fit' id="FAQ">
+            <h2 className="text-5xl font-semibold tracking-wider text-transparent bg-gradient-to-b from-[#5100D6] to-[#A168FF] bg-clip-text max-lg:text-4xl max-lg:text-center max-md:text-3xl">
                 Frequently asked questions
             </h2>
             <Accordion.Root className="AccordionRoot" type="single" collapsible>

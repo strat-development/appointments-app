@@ -11,14 +11,13 @@ export default function BusinessLandingPage() {
     return (
         <>
             <Navbar />
-            <div className="max-w-[1200px] w-full mx-auto flex flex-col justify-center mt-16">
+            <div className="max-w-[1200px] gap-32 w-full mx-auto flex flex-col justify-center mt-16 px-8 max-[1200px]:overflow-x-hidden max-lg:-mt-16 max-[600px]:-mt-32 max-[420px]:-mt-24">
                 <BusinessTopHeroSection />
                 <FeaturesSection />
                 <MobilitySection />
                 <QuestionsSection />
             </div>
             <Footer />
-
         </>
     )
 }
