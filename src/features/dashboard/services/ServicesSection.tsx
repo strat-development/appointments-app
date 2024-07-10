@@ -11,6 +11,7 @@ import { AddServiceModal } from "./AddServiceModal"
 import { EditServiceModal } from "./EditServiceModal"
 import { useBusinessContext } from "@/providers/businessContextProvider"
 import { ServicesData } from "@/types/types"
+import { Pagination } from "@mui/material"
 
 export const ServicesSection = () => {
     const supabase = createClientComponentClient<Database>();
@@ -26,6 +27,15 @@ export const ServicesSection = () => {
     const [serviceDuration, setServiceDuration] = useState<string>("");
     const filteredData = isData.filter(item => item.title && item.title.includes(searchPrompt));
     const { businessId } = useBusinessContext();
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 8;
+    const pageCount = Math.ceil(filteredData.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, filteredData.length);
+
+    const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+        setCurrentPage(page);
+    };
 
     useQuery(
         ['services', businessId],
@@ -88,7 +98,7 @@ export const ServicesSection = () => {
                     )}
 
                     <div className="grid grid-cols-4 gap-8 max-[1460px]:grid-cols-3 max-[1200px]:grid-cols-2 max-[640px]:grid-cols-1">
-                        {filteredData.map((service) => (
+                        {filteredData.slice(startIndex, endIndex).map((service) => (
                             <div className="peer group gap-4 cursor-pointer flex flex-col justify-start items-start p-4 w-full bg-white rounded-lg border-[1px] hover:border-violet-300 transition shadow-[0_0px_10px_0px_rgba(0,0,0,0.1)]"
                                 key={service.service_id}
                                 onClick={() => {
@@ -119,6 +129,13 @@ export const ServicesSection = () => {
                         ))
                         }
                     </div>
+                    <Pagination className="self-center"
+                        count={pageCount}
+                        page={currentPage}
+                        onChange={handlePageChange}
+                        variant="outlined"
+                        color="secondary"
+                    />
                 </div>
             </div>
             <AddServiceModal

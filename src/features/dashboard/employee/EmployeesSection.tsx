@@ -12,6 +12,7 @@ import { EditEmployeeModal } from "./EditEmployeeModal"
 import { useBusinessContext } from "@/providers/businessContextProvider"
 import { EmployeesData } from "@/types/types"
 import { IoMdMail, IoMdPhonePortrait } from "react-icons/io"
+import { Pagination } from "@mui/material"
 
 export const EmployeesSection = () => {
     const supabase = createClientComponentClient<Database>();
@@ -27,6 +28,15 @@ export const EmployeesSection = () => {
     const [employeeEmail, setEmployeeEmail] = useState<string>("");
     const filteredData = isData.filter(item => item.full_name && item.full_name.includes(searchPrompt));
     const { businessName } = useBusinessContext();
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 8;
+    const pageCount = Math.ceil(filteredData.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, filteredData.length);
+
+    const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+        setCurrentPage(page);
+    };
 
     useQuery(
         ['employees', businessName],
@@ -71,7 +81,7 @@ export const EmployeesSection = () => {
                                             value={searchPrompt}
                                             onChange={(e) => setSearchPrompt(e.target.value)}
                                         />
-                                        <p className="w-[250px] max-[480px]:text-xs max-[480px]:max-w-[300px] min:[1024px]:max-w-[400px] text-sm text-black/70">
+                                        <p className="w-[350px] max-[480px]:text-xs max-[480px]:max-w-[300px] min:[1024px]:max-w-[400px] text-sm text-black/70">
                                             In this section you can manage your employees. You can add, edit and delete employees.
                                         </p>
                                     </div>
@@ -89,7 +99,7 @@ export const EmployeesSection = () => {
                     )}
 
                     <div className="grid grid-cols-4 gap-8 max-[1460px]:grid-cols-3 max-[1200px]:grid-cols-2 max-[640px]:grid-cols-1">
-                        {filteredData.map((employee) => (
+                    {filteredData.slice(startIndex, endIndex).map((employee) => (
                             <div className="peer group gap-4 cursor-pointer flex flex-col justify-start items-start p-4 w-full bg-white rounded-lg border-[1px] hover:border-violet-300 transition shadow-[0_0px_10px_0px_rgba(0,0,0,0.1)]"
                                 key={employee.employee_id}
                                 onClick={() => {
@@ -123,6 +133,13 @@ export const EmployeesSection = () => {
                         ))
                         }
                     </div>
+                    <Pagination className="self-center"
+                        count={pageCount}
+                        page={currentPage}
+                        onChange={handlePageChange}
+                        variant="outlined"
+                        color="secondary"
+                    />
                 </div>
             </div>
             <AddEmployeeModal
