@@ -13,6 +13,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
+import Pagination from '@mui/material/Pagination';
 
 export default function BusinessPagesBrowser({
     params
@@ -27,6 +28,15 @@ export default function BusinessPagesBrowser({
     const { userRole } = useUserContext();
     const router = useRouter();
     const { city } = useCityContext();
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 30;
+    const pageCount = Math.ceil(businessPages.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, businessPages.length);
+
+    const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+        setCurrentPage(page);
+    };
 
     if (userRole === 'Employer') {
         router.push('/dashboard/schedule');
@@ -133,9 +143,8 @@ export default function BusinessPagesBrowser({
             <div className="flex flex-col gap-8 items-center">
                 <BusinessFilter city={city} />
                 <div className="relative grid grid-cols-3 gap-8 max-w-[1200px] w-full mx-auto">
-                    {businessPages.map((businessPage) => (
-                        <Link key={businessPage.id}
-                            href={`/business-page/${businessPage.id}`}>
+                    {businessPages.slice(startIndex, endIndex).map((businessPage) => (
+                        <Link key={businessPage.id} href={`/business-page/${businessPage.id}`}>
                             <div className="flex flex-col gap-4 border-[1px] p-4 rounded-xl">
                                 <Image className="w-[350px] h-[250px] object-cover rounded-lg"
                                     src={imageUrls.find((image) => image.businessId === businessPage.id)?.publicUrl as string} alt="" width={2000} height={2000} />
@@ -147,6 +156,13 @@ export default function BusinessPagesBrowser({
                         </Link>
                     ))}
                 </div>
+                <Pagination
+                    count={pageCount}
+                    page={currentPage}
+                    onChange={handlePageChange}
+                    variant="outlined"
+                    color="secondary"
+                />
                 <Footer />
             </div>
         </>

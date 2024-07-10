@@ -7,7 +7,7 @@ import { ArrowDown2, MagicStar } from 'iconsax-react';
 
 const AccordionDemo = () => (
     <>
-        <div className='flex flex-col items-center gap-16 w-fit' id="FAQ">
+        <div className='flex flex-col items-center gap-16 w-fit m-auto' id="FAQ">
             <h2 className="text-5xl font-semibold tracking-wider text-transparent bg-gradient-to-b from-[#5100D6] to-[#A168FF] bg-clip-text max-lg:text-4xl max-lg:text-center max-md:text-3xl">
                 Frequently asked questions
             </h2>
@@ -22,7 +22,7 @@ const AccordionDemo = () => (
                     <AccordionContent className="AccordionContent">
                         <div>
                             <p className="AccordionContentText">
-                                &apos;Visio&apos; is a great option for those who runs a business and those who just want to get the best service available in their location.
+                                &apos;Visio&apos; is a great option for those who runs a business and those who <br /> just want to get the best service available in their location.
                             </p>
                         </div>
                     </AccordionContent>
