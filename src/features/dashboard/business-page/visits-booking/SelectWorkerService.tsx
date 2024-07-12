@@ -4,7 +4,6 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { BookVisitButton } from "./BookVisitButton";
-import { set } from "date-fns";
 
 interface SelectWorkerServiceProps {
     businessSlugId: BusinessSlugIdProps["businessSlugId"];
@@ -16,7 +15,8 @@ interface SelectWorkerServiceProps {
 export const SelectWorkerService = ({ businessSlugId, startTime, endTime, selectedService }: SelectWorkerServiceProps) => {
     const supabase = createClientComponentClient<Database>();
     const [selectedWorker, setSelectedWorker] = useState<string>("");
-    const [selectedWorkerName, setSelectedWorkerName] = useState<string>("");
+    const [clientPhoneNumber, setClientPhoneNumber] = useState<string>("");
+    const [clientName, setClientName] = useState<string>("");
 
     const { data: workersData, isLoading, isError } = useQuery(
         ['employees', businessSlugId],
@@ -34,6 +34,8 @@ export const SelectWorkerService = ({ businessSlugId, startTime, endTime, select
         },
     );
 
+
+    console.log(workersData);
 
     const { data: servicesData, isLoading: servicesIsLoading } = useQuery(
         ['services', businessSlugId],
@@ -94,6 +96,16 @@ export const SelectWorkerService = ({ businessSlugId, startTime, endTime, select
                         ))}
                     </select>
                 </div>
+                <div className="flex  gap-4">
+                    <input className="p-2 border-[1px] rounded-full w-fit outline-none"
+                        type="text"
+                        placeholder="Full name"
+                        onChange={(e) => setClientName(e.target.value)} />
+                    <input className="p-2 border-[1px] rounded-full w-fit outline-none"
+                        type="text"
+                        placeholder="Phone number"
+                        onChange={(e) => setClientPhoneNumber(e.target.value)} />
+                </div>
             </div>
 
             <div>
@@ -101,7 +113,10 @@ export const SelectWorkerService = ({ businessSlugId, startTime, endTime, select
                     selectedService={Number(selectedService)}
                     selectedWorker={selectedWorker}
                     startTime={startTime}
-                    endTime={endTime} />
+                    endTime={endTime}
+                    phoneNumber={clientPhoneNumber}
+                    clientName={clientName}
+                />
             </div>
         </div>
     )

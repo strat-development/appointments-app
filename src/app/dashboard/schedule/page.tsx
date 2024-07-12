@@ -4,6 +4,7 @@ import { Navbar } from "@/components/dashboard/Navbar";
 import { Schedule } from "@/features/dashboard/schedule/Schedule";
 
 export default function SchedulePage() {
+
     return (
         <div className="flex gap-16 items-center">
             <Navbar />

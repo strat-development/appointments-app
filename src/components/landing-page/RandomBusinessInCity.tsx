@@ -56,8 +56,6 @@ export const RandomBusinessInCity = ({ city }: RandomBusinessInCityProps) => {
                 throw error;
             }
 
-            console.log('Returned data:', data);
-
             setBusinessData(data);
 
             return data;

@@ -58,13 +58,12 @@ export const OpinionForm = ({ businessSlugId }: BusinessSlugIdProps) => {
                         className="border-[.5px] rounded-2xl p-2 outline-none min-h-[300px]" />
                     <button onClick={() => {
                         AddOpinionMutation.mutateAsync([{
-                            id: businessSlugId || "",
                             user_name: fullName,
                             opinion_rating: rating,
                             opinion_text: opinion,
                             created_at: opinionDate,
-                            business_id: ""
-                        }])
+                            business_id: businessSlugId || ""
+                        }] as OpinionsData[])
 
                         setFullName("");
                         setOpinion("");

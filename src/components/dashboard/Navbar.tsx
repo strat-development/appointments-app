@@ -116,14 +116,14 @@ export const Navbar = ({ className }: NavbarProps) => {
                             <div className="flex flex-col gap-4 self-start">
                                 <button className="p-2 transition rounded-full hover:text-white hover:bg-gradient-to-b hover:from-violet-600 hover:to-violet-500 text-[#404040] flex self-end gap-4 max-[480px]:p-1"
                                     onClick={async () => {
+                                        await clearUserRole();
                                         await supabase.auth.signOut();
-                                        clearUserRole();
                                         toast.success('Logged out successfully!')
 
                                         router.push('/')
                                     }}
                                     type="submit">
-                                    <LogoutCurve className="max-[480px]:w-[20px]"  size="24" />
+                                    <LogoutCurve className="max-[480px]:w-[20px]" size="24" />
                                     <p className="max-[1024px]:hidden">Log out</p>
                                 </button>
                             </div>

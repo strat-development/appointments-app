@@ -7,7 +7,7 @@ import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import { DateSelectArg, EventClickArg } from "@fullcalendar/core"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 import { Database } from "@/types/supabase"
 import { useQuery, useQueryClient } from "react-query"
 import { Calendar } from "iconsax-react"
@@ -17,50 +17,79 @@ import { handleEvents, renderEventContent } from "@/actions/schedule/EventHandle
 import { NewVisitModal } from "./NewVisitModal"
 import { EditVisitModal } from "./EditVisitModal"
 import { VisitsData } from "@/types/types"
+import { useBusinessContext } from "@/providers/businessContextProvider"
 
 export const Schedule = () => {
     const supabase = createClientComponentClient<Database>();
     const [isData, setIsData] = useState<VisitsData[]>([])
     const queryClient = useQueryClient();
-    const { userId } = useUserContext();
+    const { userId, userRole } = useUserContext();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [eventId, setEventId] = useState<string>("")
     const [newVisits, setNewVisits] = useState<VisitsData | null>(null);
     const [screenWidth, setScreenWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
+    const { businessId } = useBusinessContext();
+
 
     useEffect(() => {
         const handleResize = () => {
             setScreenWidth(window.innerWidth);
         };
-    
+
         window.addEventListener('resize', handleResize);
-    
-        
+
+
         return () => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
 
-    const { data: hoursData, isLoading, isError } = useQuery(
-        ['visits', userId],
-        async () => {
-            const { data, error, status } = await supabase
-                .from("visits")
-                .select("*")
-                .eq("employee", userId);
 
-            if (error && status !== 406) {
-                throw error;
-            }
+    if (userRole === 'Employee') {
+        const { data: hoursData, isLoading, isError } = useQuery(
+            ['visits', userId],
+            async () => {
+                const { data, error, status } = await supabase
+                    .from("visits")
+                    .select("*")
+                    .eq("employee", userId);
 
-            if (data) {
-                setIsData(data);
+                if (error && status !== 406) {
+                    throw error;
+                }
 
-                queryClient.invalidateQueries(['visits', userId]);
-            }
-        },
-    );
+                if (data) {
+                    setIsData(data);
+
+                    queryClient.invalidateQueries(['visits', userId]);
+                }
+            },
+        );
+    }
+
+    if (userRole === 'Employer') {
+        const { data: hoursData, isLoading, isError } = useQuery(
+            ['visits', userId],
+            async () => {
+                const { data, error, status } = await supabase
+                    .from("visits")
+                    .select("*")
+                    .eq("business_id", businessId || "");
+
+                if (error && status !== 406) {
+                    throw error;
+                }
+
+                if (data) {
+                    setIsData(data);
+
+                    queryClient.invalidateQueries(['visits', userId]);
+                }
+            },
+        );
+    }
+
 
     const closeModal = () => {
         setIsModalOpen(false);

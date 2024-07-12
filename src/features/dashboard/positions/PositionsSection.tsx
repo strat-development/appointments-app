@@ -78,7 +78,7 @@ export const PositionsSection = () => {
                                             value={searchPrompt}
                                             onChange={(e) => setSearchPrompt(e.target.value)}
                                         />
-                                        <p className="w-[250px] max-[480px]:text-xs max-[480px]:max-w-[300px] min:[1024px]:max-w-[400px] text-sm text-black/70">
+                                        <p className="w-[350px] max-[480px]:text-xs max-[480px]:max-w-[300px] min:[1024px]:max-w-[400px] text-sm text-black/70">
                                             In this section you can manage your positions. You can add, edit and delete positions.
                                         </p>
                                     </div>

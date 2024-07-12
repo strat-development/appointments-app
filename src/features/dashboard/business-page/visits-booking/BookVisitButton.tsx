@@ -1,7 +1,8 @@
+import { useUserContext } from "@/providers/userContextProvider";
 import { Database } from "@/types/supabase";
 import { BusinessSlugIdProps } from "@/types/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useEffect } from "react";
+import toast from "react-hot-toast";
 import { useMutation, useQueryClient } from "react-query";
 import { NavigationType, useNavigate } from "react-router-dom";
 
@@ -12,6 +13,8 @@ interface BookVisitButtonProps {
     selectedService: number;
     selectedWorker: string;
     navigate?: NavigationType;
+    phoneNumber: string;
+    clientName: string;
 }
 
 export const BookVisitButton = ({
@@ -19,11 +22,15 @@ export const BookVisitButton = ({
     startTime,
     endTime,
     selectedService,
-    navigate
+    selectedWorker,
+    phoneNumber, 
+    clientName
+    // navigate
 }: BookVisitButtonProps) => {
     const supabase = createClientComponentClient<Database>();
     const queryClient = useQueryClient();
-    const navigation = useNavigate();
+    const { userId } = useUserContext();
+    // const navigation = useNavigate();
     const bookVistiMutation = useMutation(
         async () => {
             try {
@@ -35,13 +42,18 @@ export const BookVisitButton = ({
                             start_time: startTime,
                             end_time: endTime,
                             service_id: selectedService,
+                            employee: selectedWorker,
+                            phone_number: phoneNumber,
+                            status: 'Active',
+                            client_name: clientName,
+                            client_id: userId || null
                         }
                     ]);
-    
+
                 if (error) {
                     throw error;
                 }
-    
+
                 return data;
             } catch (error) {
                 console.error(error);
@@ -50,16 +62,16 @@ export const BookVisitButton = ({
         },
         {
             onSuccess: () => {
-                navigation('localhost:3001/api/mail',{state:{clientId:"123",businessId:"123",mailTemplate:"123"}});
+                // navigation('localhost:3001/api/mail',{state:{clientId:"123",businessId:"123",mailTemplate:"123"}});
+                toast.success('Visit booked successfully');
                 queryClient.invalidateQueries('visits');
             }
         }
     );
 
     return (
-        <div>
-            <button onClick={() => bookVistiMutation.mutateAsync()} 
-            className="p-2 border-[1px]">Book a visit</button>
-        </div>
+        <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-violet-600 to-violet-500 text-white w-full"
+            onClick={() => bookVistiMutation.mutateAsync()}>
+            Book a visit</button>
     )
 }

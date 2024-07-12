@@ -93,7 +93,7 @@ export const Footer = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="flex gap-8">
+                    <div className="flex gap-8 flex-wrap">
                         <Image src="/business-page-images/APPSTORE.svg" width={124} height={150} alt="App Store" />
                         <Image src="/business-page-images/GOOGLEPLAY.svg" width={124} height={150} alt="Google Play" />
                     </div>

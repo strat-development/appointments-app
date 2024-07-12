@@ -18,9 +18,6 @@ export const StatisticsTable: React.FC<StatisticsTableProps> = ({
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [pageInput, setPageInput] = useState('1');
 
-    console.log(visitsData);
-    console.log(servicesData);
-
     const mergedData = visitsData.map((visit) => {
         const relatedService = servicesData.find(
             (service) => service.service_id === visit.service_id

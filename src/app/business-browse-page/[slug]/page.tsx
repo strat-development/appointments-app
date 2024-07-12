@@ -140,13 +140,13 @@ export default function BusinessPagesBrowser({
     return (
         <>
             <Navbar />
-            <div className="flex flex-col gap-8 items-center">
+            <div className="flex flex-col gap-8 items-center px-8 max-[480px]:px-4">
                 <BusinessFilter city={city} />
-                <div className="relative grid grid-cols-3 gap-8 max-w-[1200px] w-full mx-auto">
+                <div className="relative grid grid-cols-3 gap-8 max-w-[1200px] w-full mx-auto max-[1200px]:grid-cols-2 max-[768px]:flex max-[768px]:flex-col max-[768px]:items-center">
                     {businessPages.slice(startIndex, endIndex).map((businessPage) => (
                         <Link key={businessPage.id} href={`/business-page/${businessPage.id}`}>
-                            <div className="flex flex-col gap-4 border-[1px] p-4 rounded-xl">
-                                <Image className="w-[350px] h-[250px] object-cover rounded-lg"
+                            <div className="flex flex-col w-[350px] max-[380px]:w-[320px] gap-4 border-[1px] p-4 rounded-xl">
+                                <Image className="h-[250px] object-cover rounded-lg"
                                     src={imageUrls.find((image) => image.businessId === businessPage.id)?.publicUrl as string} alt="" width={2000} height={2000} />
                                 <div className="flex flex-col gap-2">
                                     <p>{businessPage.business_name}</p>
