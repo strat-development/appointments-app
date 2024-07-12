@@ -24,8 +24,9 @@ export const NavComponent = () => {
         <>
             <header className="border-b-[1px] w-full z-[222222222] backdrop-blur-xl max-lg:px-8 max-[1200px]:px-8 max-[480px]:px-4 bg-white">
                 <nav className="m-auto flex items-center justify-between py-4 max-w-[1200px]">
-                    <Link href="/" className="text-3xl font-sans font-semibold text-[#1b0b3b] m-0 max-lg:text-2xl">
-                        <Image src="/Visio_logo.svg" width={100} height={100} alt="logo" />
+                    <Link href="/">
+                        <Image className="max-[480px]:w-[72px]" 
+                         src="/Visio_logo.svg" width={100} height={100} alt="logo" />
                     </Link>
                     <div className="flex gap-16 text-black/70 max-[1024px]:hidden">
                         <Link href="/">

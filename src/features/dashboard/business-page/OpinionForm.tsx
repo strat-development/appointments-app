@@ -40,7 +40,7 @@ export const OpinionForm = ({ businessSlugId }: BusinessSlugIdProps) => {
             <h1 className="text-xl font-bold">Add your opinion</h1>
             <div className="border-[.5px] rounded-2xl p-4 flex justify-between">
                 <div className="flex flex-col gap-2 w-full">
-                    <div className="flex gap-4">
+                    <div className="flex gap-4 flex-wrap">
                         <input onChange={(e) => setFullName(e.target.value)}
                             type="text"
                             placeholder="Your name"
@@ -74,6 +74,6 @@ export const OpinionForm = ({ businessSlugId }: BusinessSlugIdProps) => {
                     </button>
                 </div>
             </div>
-        </div >
+        </div>
     )
 }

@@ -33,7 +33,7 @@ export const BusinessServices = ({ businessSlugId }: BusinessSlugIdProps) => {
     return (
         <>
             {services?.map((service, index) => (
-                <div className="border-[.5px] rounded-2xl p-4 flex justify-between hover:shadow-md transition duration-300 ease-in-out"
+                <div className="border-[.5px] rounded-2xl p-4 flex justify-between hover:shadow-md transition duration-300 ease-in-out w-full"
                     key={index}>
                     <div className="flex flex-col gap-2">
                         <h2 className="text-lg">{service.title}</h2>

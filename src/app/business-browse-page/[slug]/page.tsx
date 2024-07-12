@@ -42,6 +42,21 @@ export default function BusinessPagesBrowser({
         router.push('/dashboard/schedule');
     }
 
+    const { data: businessesRatingData } = useQuery(
+        ['businessesRating'],
+        async () => {
+            const { data, error } = await supabase
+                .from('opinions')
+                .select('opinion_rating')
+
+            if (error) {
+                throw error;
+            }
+
+            return data || [];
+        }
+    )
+
     const { data: allBusinessPagesData } = useQuery(
         ['businessPages'],
         async () => {

@@ -93,10 +93,10 @@ export const BusinessDescription = ({ businessSlugId }: BusinessSlugIdProps) => 
     return (
         <>
             {isLoading ? <div>Loading...</div> : (
-                <div className="flex items-start justify-between w-full">
+                <div className="flex items-start justify-between">
                     <div className="flex flex-col gap-2">
                         <h1 className="text-xl font-semibold max-[600px]:text-base w-fit">{businessInfoData?.business_name}</h1>
-                        <p className="text-black/70 max-[600px]:text-sm max-[480px]:w-[80%]">{businessInfoData?.business_address}</p>
+                        <p className="text-black/70 max-[600px]:text-sm">{businessInfoData?.business_address}</p>
                     </div>
                     <div className="flex gap-4">
                         <button onClick={() => copyToClipboard(window.location.href)}>

@@ -43,23 +43,23 @@ export const BusinessOpinions = ({ businessSlugId }: BusinessSlugIdProps) => {
 
     return (
         <>
-            <div className="flex flex-col gap-4 mb-24">
-                    <h1 className="text-xl font-bold">Opinions</h1>
+            <div className="flex flex-col gap-4 mb-24 w-full">
+                <h1 className="text-xl font-bold">Opinions</h1>
                 {opinions.map((opinion) => (
-                    <div className="border-[.5px] rounded-2xl p-4 flex justify-between"
+                    <div className="border-[.5px] rounded-2xl p-4 flex flex-col gap-2"
                         key={opinion.id}>
-                        <div className="flex flex-col gap-2">
-                            <div className="flex items-center gap-4">
+                        <div className="flex justify-between">
+                            <div className="flex flex-col gap-2">
                                 <h2 className="text-lg max-w-[150px] truncate max-[480px]:max-w-[96px] max-[480px]:text-base">{opinion.user_name}</h2>
-                                <Rating className="max-[768px]:text-base"
-                                    name="rating"
-                                    value={opinion.opinion_rating}
-                                    readOnly
-                                />
+                                <p className="text-black/70 max-w-[450px] max-[480px]:text-sm">{opinion.opinion_text}</p>
                             </div>
-                            <p className="text-black/70 max-w-[450px] max-[480px]:text-sm">{opinion.opinion_text}</p>
+                            <Rating className="max-[768px]:text-base max-[480px]:text-sm"
+                                name="rating"
+                                value={opinion.opinion_rating}
+                                readOnly
+                            />
                         </div>
-                        <p className="text-black/70 max-[480px]:text-sm">{opinion.created_at}</p>
+                        <p className="text-black/70 max-[480px]:text-sm self-end">{opinion.created_at}</p>
                     </div>
                 ))}
                 {opinions.length > 9 && (
@@ -75,7 +75,7 @@ export const BusinessOpinions = ({ businessSlugId }: BusinessSlugIdProps) => {
                 {!userRole && (
                     <OpinionForm businessSlugId={businessSlugId} />
                 )}
-            </div >
+            </div>
         </>
     )
 }
