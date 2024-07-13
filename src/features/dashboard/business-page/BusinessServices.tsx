@@ -42,7 +42,7 @@ export const BusinessServices = ({ businessSlugId }: BusinessSlugIdProps) => {
                             <p>{service.price}zł</p>
                         </div>
                     </div>
-                    {!userRole &&
+                    {userRole !== "Employer" && userRole !== "Employee" &&
                         <button className="px-6 py-2 h-fit rounded-full hover:opacity-90 transition bg-gradient-to-b from-violet-600 to-violet-500 text-white"
                             value={service.title}
                             onClick={() => {

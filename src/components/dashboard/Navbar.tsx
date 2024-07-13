@@ -4,18 +4,14 @@ import { Database } from "@/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation"
-import { Calendar, Card, ChemicalGlass, Coin1, LogoutCurve, People, Profile2User, Shop, StatusUp } from 'iconsax-react';
+import { Calendar, Card, ChemicalGlass, Coin1, Heart, LogoutCurve, Note, People, Profile2User, Shop, StatusUp } from 'iconsax-react';
 import { useUserContext } from "@/providers/userContextProvider";
 import { useEffect, useState } from "react";
 import { UserDataModal } from "./UserDataModal";
 import { useBusinessContext } from "@/providers/businessContextProvider";
 import toast from "react-hot-toast";
 
-interface NavbarProps {
-    className?: string;
-}
-
-export const Navbar = ({ className }: NavbarProps) => {
+export const Navbar = () => {
     const router = useRouter();
     const supabase = createClientComponentClient<Database>();
     const { userRole, userName, clearUserRole } = useUserContext();
@@ -26,14 +22,28 @@ export const Navbar = ({ className }: NavbarProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const closeModal = () => {
         setIsModalOpen(false);
+        router.refresh();
     };
 
     useEffect(() => {
-        if (userName.length == 0) {
+        if (!userName || userName.length == 0 || !userRole || userRole.length == 0) {
             setIsModalOpen(true);
         }
     })
 
+
+    const ClientLinks = [
+        {
+            name: "My visits",
+            link: "/dashboard/visits",
+            icon: <Note className="max-[480px]:w-[20px]" size="24" />
+        },
+        {
+            name: "Favorites",
+            link: "/dashboard/favorites",
+            icon: <Heart className="max-[480px]:w-[20px]" size="24" />
+        },
+    ]
 
     const AppointmentsLinks = [
         {
@@ -84,7 +94,7 @@ export const Navbar = ({ className }: NavbarProps) => {
                         <div className="flex items-center gap-4 max-[1024px]:hidden">
                             <div className="bg-violet-500 w-12 h-12 rounded-full flex items-center justify-center text-white text-xl uppercase">
                                 <p>
-                                    {userName.split(' ').map(name => name.charAt(0)).join('')}
+                                    {userName?.split(' ').map(name => name.charAt(0)).join('')}
                                 </p>
                             </div>
                             <div>
@@ -94,15 +104,30 @@ export const Navbar = ({ className }: NavbarProps) => {
                         </div>
                         <div className="flex flex-col gap-4 max-[1024px]:flex-row max-[1024px]:w-full max-[1024px]:justify-between max-[1024px]:gap-0">
                             <h3 className="text-xl font-bold max-[1024px]:hidden">Appointments</h3>
-                            {AppointmentsLinks.map((link, index) => (
-                                <Link className={currentRoute === link.link ? activeStyle : linkStyle}
-                                    href={link.link} key={index}>
-                                    {link.icon}
-                                    <p className="max-[1024px]:hidden">{link.name}</p>
-                                </Link>
-                            ))}
-                            <h3 className="text-xl font-bold max-[1024px]:hidden">Management</h3>
+                            {(userRole === "Client") && (
+                                <>
+                                    {ClientLinks.map((link, index) => (
+                                        <Link className={currentRoute === link.link ? activeStyle : linkStyle}
+                                            href={link.link} key={index}>
+                                            {link.icon}
+                                            <p className="max-[1024px]:hidden">{link.name}</p>
+                                        </Link>
+                                    ))}
+                                </>
+                            )}
                             {(userRole === "Employer" || userRole === "Employee") && (
+                                <>
+                                    {AppointmentsLinks.map((link, index) => (
+                                        <Link className={currentRoute === link.link ? activeStyle : linkStyle}
+                                            href={link.link} key={index}>
+                                            {link.icon}
+                                            <p className="max-[1024px]:hidden">{link.name}</p>
+                                        </Link>
+                                    ))}
+                                </>
+                            )}
+                            <h3 className="text-xl font-bold max-[1024px]:hidden">Management</h3>
+                            {(userRole === "Employer") && (
                                 <>
                                     {ManagamentLinks.map((link, index) => (
                                         <Link className={currentRoute === link.link ? activeStyle : linkStyle}
@@ -132,7 +157,7 @@ export const Navbar = ({ className }: NavbarProps) => {
                 </div>
             </div>
 
-            {(userName.length == 0) && (
+            {(!userName || userName.length == 0) && (
                 <UserDataModal isOpen={isModalOpen}
                     onClose={() => closeModal} />
             )}

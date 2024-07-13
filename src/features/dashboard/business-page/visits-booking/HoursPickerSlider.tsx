@@ -18,6 +18,8 @@ export const HoursPickerSlider = ({ visits, businessSlugId, selectedDate, select
     const [selectedEndTime, setSelectedEndTime] = useState<string>("");
     const supabase = createClientComponentClient<Database>();
 
+    console.log(selectedService);
+
     const { data: openingHours, isLoading } = useQuery<OpeningHoursData>(
         ['opening-hours'],
         async () => {

@@ -1,16 +1,17 @@
 import { useUserContext } from "@/providers/userContextProvider";
 import { Database } from "@/types/supabase";
-import { BusinessSlugIdProps } from "@/types/types";
+import { BusinessSlugIdProps, ServicesData } from "@/types/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useMutation, useQueryClient } from "react-query";
-import { NavigationType, useNavigate } from "react-router-dom";
+import { NavigationType } from "react-router-dom";
 
 interface BookVisitButtonProps {
     businessSlugId: BusinessSlugIdProps["businessSlugId"];
     startTime: string;
     endTime: string;
-    selectedService: number;
+    selectedService?: ServicesData[];
     selectedWorker: string;
     navigate?: NavigationType;
     phoneNumber: string;
@@ -30,7 +31,11 @@ export const BookVisitButton = ({
     const supabase = createClientComponentClient<Database>();
     const queryClient = useQueryClient();
     const { userId } = useUserContext();
+    const router = useRouter();
     // const navigation = useNavigate();
+
+    console.log(selectedService);
+
     const bookVistiMutation = useMutation(
         async () => {
             try {
@@ -41,7 +46,7 @@ export const BookVisitButton = ({
                             business_id: businessSlugId,
                             start_time: startTime,
                             end_time: endTime,
-                            service_id: selectedService,
+                            service_id: selectedService?.map(item => item.service_id)[0],
                             employee: selectedWorker,
                             phone_number: phoneNumber,
                             status: 'Active',
@@ -65,6 +70,7 @@ export const BookVisitButton = ({
                 // navigation('localhost:3001/api/mail',{state:{clientId:"123",businessId:"123",mailTemplate:"123"}});
                 toast.success('Visit booked successfully');
                 queryClient.invalidateQueries('visits');
+                router.refresh();
             }
         }
     );

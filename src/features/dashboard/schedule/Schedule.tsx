@@ -7,7 +7,7 @@ import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import { DateSelectArg, EventClickArg } from "@fullcalendar/core"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-import { use, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { Database } from "@/types/supabase"
 import { useQuery, useQueryClient } from "react-query"
 import { Calendar } from "iconsax-react"

@@ -18,6 +18,8 @@ export const SelectWorkerService = ({ businessSlugId, startTime, endTime, select
     const [clientPhoneNumber, setClientPhoneNumber] = useState<string>("");
     const [clientName, setClientName] = useState<string>("");
 
+    console.log(selectedService);
+
     const { data: workersData, isLoading, isError } = useQuery(
         ['employees', businessSlugId],
         async () => {
@@ -110,7 +112,7 @@ export const SelectWorkerService = ({ businessSlugId, startTime, endTime, select
 
             <div>
                 <BookVisitButton businessSlugId={businessSlugId}
-                    selectedService={Number(selectedService)}
+                    selectedService={selectedService}
                     selectedWorker={selectedWorker}
                     startTime={startTime}
                     endTime={endTime}

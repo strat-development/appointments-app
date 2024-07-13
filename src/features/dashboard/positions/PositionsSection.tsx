@@ -92,7 +92,7 @@ export const PositionsSection = () => {
                         )}
                     </div>
                     {isData.length === 0 && (
-                        <p className="text-lg font-semibold text-black/70 min-[768px]:text-xl">No clients added</p>
+                        <p className="text-lg font-semibold text-black/70 min-[768px]:text-xl">No positions added</p>
                     )}
 
                     <div className="grid grid-cols-4 gap-8 max-[1460px]:grid-cols-3 max-[1200px]:grid-cols-2 max-[640px]:grid-cols-1">

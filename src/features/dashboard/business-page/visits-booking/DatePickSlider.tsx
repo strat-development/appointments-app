@@ -18,6 +18,8 @@ export const DatePickSlider = ({ businessSlugId, selectedService }: DatePickSlid
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
     const supabase = createClientComponentClient<Database>();
 
+    console.log(selectedService);
+
     const getVisits = async () => {
         const { data, error } = await supabase
             .from('visits')

@@ -19,14 +19,17 @@ export const NavComponent = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const router = useRouter();
     const { city } = useCityContext();
+    const session = supabase.auth.getSession();
+
+    console.log(session);
 
     return (
         <>
             <header className="border-b-[1px] w-full z-[222222222] backdrop-blur-xl max-lg:px-8 max-[1200px]:px-8 max-[480px]:px-4 bg-white">
                 <nav className="m-auto flex items-center justify-between py-4 max-w-[1200px]">
                     <Link href="/">
-                        <Image className="max-[480px]:w-[72px]" 
-                         src="/Visio_logo.svg" width={100} height={100} alt="logo" />
+                        <Image className="max-[480px]:w-[72px]"
+                            src="/Visio_logo.svg" width={100} height={100} alt="logo" />
                     </Link>
                     <div className="flex gap-16 text-black/70 max-[1024px]:hidden">
                         <Link href="/">
@@ -91,10 +94,17 @@ export const NavComponent = () => {
                             </div>
                         ) || (
                                 <>
-                                    <Link href="/dashboard/schedule">
-                                        <p onClick={() => setIsMenuOpen(false)}
-                                            className="bg-gradient-to-b from-violet-600 to-violet-500 text-white px-8 py-2 rounded-xl font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:text-sm">Dashboard</p>
-                                    </Link>
+                                    {userRole === "Client" && (
+                                        <Link href="/dashboard/visits"
+                                            className="bg-gradient-to-b from-violet-600 to-violet-500 text-white px-8 py-2 rounded-xl font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:text-sm">
+                                            Dashboard
+                                        </Link>
+                                    ) || (
+                                            <Link href="/dashboard/schedule"
+                                                className="bg-gradient-to-b from-violet-600 to-violet-500 text-white px-8 py-2 rounded-xl font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:text-sm">
+                                                Dashboard
+                                            </Link>
+                                        )}
                                     <button
                                         onClick={async () => {
                                             await supabase.auth.signOut();
@@ -126,10 +136,17 @@ export const NavComponent = () => {
                     {userRole && (
                         <>
                             <div className="flex gap-4 max-[1024px]:hidden">
-                                <Link href="/dashboard/schedule"
-                                    className="bg-gradient-to-b from-violet-600 to-violet-500 text-white px-8 py-2 rounded-xl font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:text-sm">
-                                    Dashboard
-                                </Link>
+                                {userRole === "Client" && (
+                                    <Link href="/dashboard/visits"
+                                        className="bg-gradient-to-b from-violet-600 to-violet-500 text-white px-8 py-2 rounded-xl font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:text-sm">
+                                        Dashboard
+                                    </Link>
+                                ) || (
+                                        <Link href="/dashboard/schedule"
+                                            className="bg-gradient-to-b from-violet-600 to-violet-500 text-white px-8 py-2 rounded-xl font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:text-sm">
+                                            Dashboard
+                                        </Link>
+                                    )}
                                 <button className="flex rounded-xl text-black/70 border-[1px] font-medium border-black/20 items-center justify-center px-8 py-2 hover:scale-95 duration-300 max-lg:text-sm max-lg:py-1 max-sm:hidden"
                                     onClick={async () => {
                                         await supabase.auth.signOut();

@@ -17,6 +17,8 @@ export const BookVisitModal = ({ onClose, isOpen, businessSlugId, selectedServic
     const supabase = createClientComponentClient<Database>();
     const [businessData, setBusinessData] = useState<VisitsData>();
 
+    console.log(selectedService);
+
     const { data: business } = useQuery<VisitsData>(
         ['business', businessSlugId],
         async () => {
