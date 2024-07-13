@@ -1,5 +1,5 @@
 import { Navbar } from "@/components/dashboard/Navbar";
-import { VisitsSection } from "@/features/dashboard/visits/VisitsSections";
+import { VisitsSection } from "@/features/dashboard/visits/VisitsSection";
 
 export default function VisitsPage() {
     return (
