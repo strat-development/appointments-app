@@ -4,12 +4,13 @@ import { Database } from "@/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation"
-import { Calendar, Card, ChemicalGlass, Coin1, Heart, LogoutCurve, Note, People, Profile2User, Shop, StatusUp } from 'iconsax-react';
+import { Calendar, ChemicalGlass, Coin1, Heart, LogoutCurve, Note, People, Profile2User, Setting, Settings, Shop, StatusUp } from 'iconsax-react';
 import { useUserContext } from "@/providers/userContextProvider";
 import { useEffect, useState } from "react";
 import { UserDataModal } from "./UserDataModal";
 import { useBusinessContext } from "@/providers/businessContextProvider";
 import toast from "react-hot-toast";
+import { SettingsModal } from "@/features/dashboard/settings/SettingsModal";
 
 export const Navbar = () => {
     const router = useRouter();
@@ -20,8 +21,10 @@ export const Navbar = () => {
     const activeStyle = "p-2 transition rounded-full text-white bg-gradient-to-b from-violet-600 to-violet-500 flex gap-4 max-[480px]:p-1"
     const currentRoute = usePathname();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const closeModal = () => {
         setIsModalOpen(false);
+        setIsSettingsOpen(false);
         router.refresh();
     };
 
@@ -139,6 +142,13 @@ export const Navbar = () => {
                                 </>
                             )}
                             <div className="flex flex-col gap-4 self-start">
+                                <button className="p-2 transition rounded-full hover:text-white hover:bg-gradient-to-b hover:from-violet-600 hover:to-violet-500 text-[#404040] flex gap-4 max-[480px]:p-1"
+                                    onClick={() => {
+                                        setIsSettingsOpen(true)
+                                    }}>
+                                    <Setting className="max-[480px]:w-[20px]" size="24" />
+                                    <p className="max-[1024px]:hidden">Settings</p>
+                                </button>
                                 <button className="p-2 transition rounded-full hover:text-white hover:bg-gradient-to-b hover:from-violet-600 hover:to-violet-500 text-[#404040] flex self-end gap-4 max-[480px]:p-1"
                                     onClick={async () => {
                                         await clearUserRole();
@@ -156,6 +166,10 @@ export const Navbar = () => {
                     </div>
                 </div>
             </div>
+
+            <SettingsModal isOpen={isSettingsOpen}
+                onClose={closeModal} />
+
 
             {(!userName || userName.length == 0) && (
                 <UserDataModal isOpen={isModalOpen}

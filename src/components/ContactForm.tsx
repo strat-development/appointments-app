@@ -27,7 +27,7 @@ export const ContactForm = ({ onClose, isOpen }: ContactFormProps) => {
     const { submit: onSubmit } = useWeb3forms({
         access_key: apiKey,
         settings: {
-            from_name: "Acme Inc",
+            from_name: "Visio Client",
             subject: "New Contact Message from your Website",
         },
         onSuccess: (msg, data) => {
@@ -125,7 +125,7 @@ export const ContactForm = ({ onClose, isOpen }: ContactFormProps) => {
 
                 <button
                     type="submit"
-                    className="bg-gradient-to-b from-violet-600 to-violet-500 text-white w-full py-4 rounded-xl font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:text-sm">
+                    className="bg-gradient-to-b from-violet-600 to-violet-500 text-white text-center w-full py-4 rounded-xl font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:text-sm">
                     {isSubmitting ? (
                         <svg
                             className="w-5 h-5 mx-auto text-black animate-spin"

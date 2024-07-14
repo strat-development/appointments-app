@@ -6,7 +6,6 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import toast from "react-hot-toast";
 import { Database } from "@/types/supabase";
 import { useUserContext } from "@/providers/userContextProvider";
-import Swal from "sweetalert2";
 import Image from "next/image";
 
 interface UserDataModalProps {

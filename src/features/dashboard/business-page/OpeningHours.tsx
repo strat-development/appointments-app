@@ -8,7 +8,7 @@ import { useUserContext } from "@/providers/userContextProvider";
 import { BusinessSlugIdProps, OpeningHoursData } from "@/types/types";
 import { isDashboardPage } from "@/types/consts";
 
-export const OpeningHours = ({businessSlugId}: BusinessSlugIdProps) => {
+export const OpeningHours = ({ businessSlugId }: BusinessSlugIdProps) => {
     const supabase = createClientComponentClient<Database>();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -32,11 +32,17 @@ export const OpeningHours = ({businessSlugId}: BusinessSlugIdProps) => {
         }
     )
 
-    if (isLoading || !openingHours) {
-        return <div>Loading...</div>;
-    }
 
-    const parsedOpeningHours = JSON.parse(openingHours.opening_hours as string);
+
+    let parsedOpeningHours = {};
+
+    if (openingHours?.opening_hours && typeof openingHours.opening_hours === 'string') {
+        try {
+            parsedOpeningHours = JSON.parse(openingHours.opening_hours);
+        } catch (error) {
+            console.error("Failed to parse opening hours:", error);
+        }
+    }
 
     return (
         <>
@@ -46,8 +52,8 @@ export const OpeningHours = ({businessSlugId}: BusinessSlugIdProps) => {
                     {Object.entries(parsedOpeningHours).map(([day, hours]) => {
                         const hoursAsObj = hours as { start?: string, end?: string, closed?: boolean };
                         return (
-                            <div className="flex justify-between w-full"  
-                            key={day}>
+                            <div className="flex justify-between w-full"
+                                key={day}>
                                 <h3>{day}</h3>
                                 {hoursAsObj.closed
                                     ? <p className="text-black/70">Closed</p>
@@ -56,12 +62,13 @@ export const OpeningHours = ({businessSlugId}: BusinessSlugIdProps) => {
                         );
                     })}
                 </div>
-                
+
                 {isDashboardPage && !openingHours && userRole === "Employer" && (
-                    <button onClick={() => setIsModalOpen(true)}>
+                    <button className="self-center" 
+                    onClick={() => setIsModalOpen(true)}>
                         Add hours
                     </button>
-                )} 
+                )}
                 {isDashboardPage && openingHours && userRole === "Employer" && (
                     <button onClick={() => setIsEditModalOpen(true)}>
                         Edit hours
