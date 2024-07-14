@@ -12,6 +12,7 @@ input {
 .TabsRoot {
   display: flex;
   flex-direction: column;
+  min-width: 500px;
 }
 
 .TabsList {
@@ -118,4 +119,8 @@ input {
 }
 .Button.green:focus {
   box-shadow: 0 0 0 2px var(--green-7);
+}
+
+.swal2-popup-custom {
+  z-index: 999999999999999999999;
 }

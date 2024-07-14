@@ -91,7 +91,7 @@ export const Navbar = () => {
 
     return (
         <>
-            <div className="bg-white h-screen z-[222222222] flex flex-col justify-center border-r-[1px] max-[1024px]:h-fit max-[1024px]:fixed max-[1024px]:bottom-0 max-[1024px]:w-full">
+            <div className="bg-white h-screen z-[2222222] flex flex-col justify-center border-r-[1px] max-[1024px]:h-fit max-[1024px]:fixed max-[1024px]:bottom-0 max-[1024px]:w-full">
                 <div className="flex flex-col justify-between items-start h-[80vh] w-[300px] px-8 max-[1024px]:flex-row max-[1024px]:h-fit max-[1024px]:px-6 max-[1024px]:py-4 max-[1024px]:shadow-[0_0px_10px_0px_rgba(0,0,0,0.1)] max-[1024px]:w-screen max-[320px]:px-2">
                     <div className="flex flex-col gap-8 max-[1024px]:justify-between max-[1024px]:w-full">
                         <div className="flex items-center gap-4 max-[1024px]:hidden">
