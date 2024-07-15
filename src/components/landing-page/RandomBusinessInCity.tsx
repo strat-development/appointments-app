@@ -42,15 +42,14 @@ export const RandomBusinessInCity = ({ city }: RandomBusinessInCityProps) => {
             const { data, error, status } = await supabase
                 .from("business-type-info-linker")
                 .select(`
-                    business-info (
-                        business_name,
-                        business_address,
-                        id
-                    )
-                `)
-                .eq('business_type_id',
-                    businessTypesData.id || "")
-                .eq('business_city_name', city || "")
+        business-info (
+            business_name,
+            business_address,
+            id
+        )
+    `)
+                .eq('business_type_id', businessTypesData.id || "")
+                .match(city ? { business_city_name: city } : {})
 
             if (error) {
                 throw error;
@@ -140,7 +139,15 @@ export const RandomBusinessInCity = ({ city }: RandomBusinessInCityProps) => {
         <>
             <div className="flex flex-col gap-4 self-center w-full overflow-hidden">
                 <h1 className="text-xl font-medium tracking-wide text-black/70">
-                    {businessTypesData?.["business-type"]} businesses in {city}
+                    {city && (
+                        <div>
+                            Suggested {businessTypesData?.["business-type"]} businesses in {city}
+                        </div>
+                    ) || (
+                            <div>
+                                Suggested {businessTypesData?.["business-type"]} businesses
+                            </div>
+                        )}
                 </h1>
                 {businessData.length > 0 && (
                     <div className="flex gap-4 overflow-x-auto rounded-xl max-w-[1200px] pb-4">
