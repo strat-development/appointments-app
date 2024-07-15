@@ -129,7 +129,7 @@ export const FavoritesSection = () => {
 
     return (
         <>
-            <div className="p-4 rounded-lg bg-white w-full h-[80vh] overflow-y-auto flex flex-col gap-8">
+            <div className="p-4 rounded-lg bg-white w-full h-[80vh] overflow-y-auto flex flex-col gap-8 max-[1024px]:h-[90vh]">
                 <div className="flex items-start justify-start self-start w-full border-b-[1px] pb-4 gap-2">
                     <Heart className="w-6 h-6 text-violet-500" />
                     <p className="text-lg font-medium">Favourite Businesses</p>
@@ -140,7 +140,7 @@ export const FavoritesSection = () => {
                             <div className="flex flex-col justify-end">
                                 <div className="flex justify-between">
                                     <div className="flex flex-col gap-4">
-                                        <input className="px-4 py-2 outline-none border transition focus:border-violet-300 border-gray-300 rounded-lg w-full max-[768px]:w-[250px] min-[768px]:w-64"
+                                        <input className="px-4 py-2 outline-none border-[1px] transition focus:border-violet-300 border-gray-300 rounded-lg w-full max-[768px]:w-[250px] min-[768px]:w-64"
                                             type="text"
                                             placeholder="Search..."
                                             value={searchPrompt}
@@ -158,60 +158,57 @@ export const FavoritesSection = () => {
                         <p className="text-lg font-semibold text-black/70 min-[768px]:text-xl">No favourite businesses yet 😔</p>
                     )}
 
-                    <div className="grid grid-cols-3 gap-8 max-[1460px]:grid-cols-2 max-[1200px]:grid-cols-2 max-[640px]:grid-cols-1">
+                    <div className="grid grid-cols-3 gap-8 max-[1460px]:grid-cols-2 max-[1360px]:grid-cols-1">
                         {filteredData.slice(startIndex, endIndex).map((item) => {
                             const imageUrl = imageUrls.find(url => url.businessId === item.id);
 
                             return (
-                                <div key={item.id} className="flex flex-col gap-4 border-[1px] p-4 rounded-lg">
-                                    <div className="flex gap-4">
-                                        <div className="relative">
-                                            <Image alt=""
-                                                src={imageUrl?.publicUrl as string}
-                                                width={200}
-                                                height={200}
-                                                className="rounded-lg"
-
-                                            />
+                                <div className="flex gap-4 border-[1px] max-[480px]:flex-col max-[480px]:items-start p-4 rounded-lg">
+                                    <div className="relative">
+                                        <Image alt=""
+                                            src={imageUrl?.publicUrl as string}
+                                            width={200}
+                                            height={200}
+                                            className="rounded-lg w-[164px] resize-none max-[480px]:w-full"
+                                        />
+                                    </div>
+                                    <div className="flex flex-col justify-between gap-4">
+                                        <div className="flex flex-col gap-2">
+                                            <p>{item.business_name}</p>
+                                            <p className="text-xl font-semibold text-black/70">{item.business_address}</p>
                                         </div>
-                                        <div className="flex flex-col justify-between">
-                                            <div className="flex flex-col gap-2">
-                                                <p>{item.business_name}</p>
-                                                <p className="text-xl font-semibold text-black/70">{item.business_address}</p>
-
-                                            </div>
-                                            <div className="flex gap-8">
-                                                <Link href={`/business-page/${item.id}`}
-                                                    className="px-4 py-2 bg-violet-500 text-white rounded-lg">Check</Link>
-                                                <button className="px-4 py-2 bg-red-500 text-white rounded-lg"
-                                                    onClick={() => {
-                                                        Swal.fire({
-                                                            title: 'Are you sure you want to remove this business?',
-                                                            showCancelButton: true,
-                                                            confirmButtonText: `Yes`,
-                                                            cancelButtonText: `No`,
-                                                        }).then((result) => {
-                                                            if (result.isConfirmed) {
-                                                                deleteFavourite.mutate(item.id);
-                                                            }
-                                                        })
-                                                    }}
-                                                >Remove</button>
-                                            </div>
+                                        <div className="flex gap-8">
+                                            <Link href={`/business-page/${item.id}`}
+                                                className="px-4 py-2 bg-violet-500 text-white rounded-lg max-[480px]:text-lg">Check</Link>
+                                            <button className="px-4 py-2 bg-red-500 text-white rounded-lg max-[480px]:text-lg"
+                                                onClick={() => {
+                                                    Swal.fire({
+                                                        title: 'Are you sure you want to remove this business?',
+                                                        showCancelButton: true,
+                                                        confirmButtonText: `Yes`,
+                                                        cancelButtonText: `No`,
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            deleteFavourite.mutate(item.id);
+                                                        }
+                                                    })
+                                                }}
+                                            >Remove</button>
                                         </div>
                                     </div>
                                 </div>
+
                             )
                         })}
                     </div>
+                    <Pagination className="self-center"
+                        count={pageCount}
+                        page={currentPage}
+                        onChange={handlePageChange}
+                        variant="outlined"
+                        color="secondary"
+                    />
                 </div>
-                <Pagination className="self-center"
-                    count={pageCount}
-                    page={currentPage}
-                    onChange={handlePageChange}
-                    variant="outlined"
-                    color="secondary"
-                />
             </div >
         </>
     )

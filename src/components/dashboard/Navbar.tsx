@@ -141,7 +141,7 @@ export const Navbar = () => {
                                     ))}
                                 </>
                             )}
-                            <div className="flex flex-col gap-4 self-start">
+                            <div className="flex flex-col gap-4 self-start max-[1024px]:flex-row">
                                 <button className="p-2 transition rounded-full hover:text-white hover:bg-gradient-to-b hover:from-violet-600 hover:to-violet-500 text-[#404040] flex gap-4 max-[480px]:p-1"
                                     onClick={() => {
                                         setIsSettingsOpen(true)

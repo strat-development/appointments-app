@@ -1,5 +1,5 @@
 import { Navbar } from "@/components/dashboard/Navbar";
-import { FavoritesSection } from "@/features/dashboard/favorites/page";
+import { FavoritesSection } from "@/features/dashboard/favorites/FavoritesSection";
 
 export default function FavoritesPage() {
     return (
