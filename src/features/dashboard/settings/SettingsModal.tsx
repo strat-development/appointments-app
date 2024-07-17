@@ -181,7 +181,7 @@ export const SettingsModal = ({ onClose, isOpen }: UserDataModalProps) => {
                     )}
                 </Tabs.List>
                 <Tabs.Content className="TabsContent" value="tab1">
-                    <p className="Text">Make changes to your account here. Click save when you're done.</p>
+                    <p className="Text">Make changes to your account here. Click save when you&apos;re done.</p>
                     <fieldset className="Fieldset">
                         <label className="Label" htmlFor="name">
                             Name

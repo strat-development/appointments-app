@@ -140,7 +140,8 @@ export const BusinessesInCity = ({ city }: BusinessesInCity) => {
                     {suggestedBusinesses?.map((business) => {
                         const businessUrl = imageUrls.find((image) => image.businessId === business.id)?.publicUrl;
                         return (
-                            <Link href={`/business-page/${business.id}`} passHref>
+                            <Link href={`/business-page/${business.id}`} 
+                            key={business.id}>
                                 <div key={business.id} className="flex flex-col gap-4 min-w-[350px] border-[1px] bg-white p-4 rounded-xl shadow-md">
                                     {imageUrls.find((image) => image.businessId === business.id)?.publicUrl ? (
                                         <Image className="rounded-xl object-cover h-[250px] w-full"

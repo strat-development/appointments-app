@@ -1,6 +1,10 @@
+import { AuthModal } from "@/features/auth-modal/AuthModal"
+import { useModal } from "@/hooks/useModal"
 import Image from "next/image"
 
 export const BusinessTopHeroSection = () => {
+    const authModal = useModal();
+
     return (
         <>
             <div className="relative flex items-center h-screen max-md:flex-col-reverse">
@@ -11,7 +15,10 @@ export const BusinessTopHeroSection = () => {
                     <p className="text-black/70 text-xl w-[55%] max-md:text-lg max-[480px]:w-[65%] max-[420px]:w-fit">
                         Completely new approach to time and business management
                     </p>
-                    <button className="bg-gradient-to-b from-violet-600 to-violet-500 text-white px-8 py-3 rounded-xl font-medium hover:scale-95 hover:opacity-80 duration-300 max-md:px-12 max-md:py-4 max-md:text-lg max-[400px]:px-10 max-[400px]:py-3">
+                    <button onClick={() => {
+                        authModal.onOpen()
+                    }}
+                        className="bg-gradient-to-b cursor-pointer from-violet-600 to-violet-500 text-white px-8 py-3 rounded-xl font-medium hover:scale-95 hover:opacity-80 duration-300 max-md:px-12 max-md:py-4 max-md:text-lg max-[400px]:px-10 max-[400px]:py-3">
                         Get Started
                     </button>
                     <div className="flex gap-8 max-[420px]:flex-col">
@@ -26,6 +33,7 @@ export const BusinessTopHeroSection = () => {
                 </div>
                 <div className="absolute w-[1400px] h-[700px] blur-[100px] bg-[#A788FF]/30 rounded-full z-0 max-md:-z-50 max-[1200px]:hidden"></div>
             </div>
+            <AuthModal />
         </>
     )
 }

@@ -161,7 +161,8 @@ export const VisitsSection = () => {
                             const imageUrl = imageUrls.find(url => url.businessId === item.business_id);
 
                             return (
-                                <div className="flex gap-4 border-[1px] max-[480px]:flex-col max-[480px]:items-start p-4 rounded-lg">
+                                <div className="flex gap-4 border-[1px] max-[480px]:flex-col max-[480px]:items-start p-4 rounded-lg"
+                                key={item.visit_id}>
                                     <div className="relative">
                                         <Image alt=""
                                             src={imageUrl?.publicUrl as string}

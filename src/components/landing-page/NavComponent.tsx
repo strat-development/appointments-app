@@ -21,8 +21,6 @@ export const NavComponent = () => {
     const { city } = useCityContext();
     const session = supabase.auth.getSession();
 
-    console.log(session);
-
     return (
         <>
             <header className="border-b-[1px] w-full z-[222222222] backdrop-blur-xl max-lg:px-8 max-[1200px]:px-8 max-[480px]:px-4 bg-white">

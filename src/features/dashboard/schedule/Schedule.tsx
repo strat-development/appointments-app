@@ -45,51 +45,70 @@ export const Schedule = () => {
         };
     }, []);
 
+    const getQueryKeyAndFn = () => {
+        if (userRole === 'Employee') {
+            return {
+                queryKey: ['visits', userId],
+                queryFn: async () => {
+                    const { data, error, status } = await supabase
+                        .from("visits")
+                        .select("*")
+                        .eq("employee", userId);
 
-    if (userRole === 'Employee') {
-        const { data: hoursData, isLoading, isError } = useQuery(
-            ['visits', userId],
-            async () => {
-                const { data, error, status } = await supabase
-                    .from("visits")
-                    .select("*")
-                    .eq("employee", userId);
+                    if (error && status !== 406) {
+                        throw error;
+                    }
 
-                if (error && status !== 406) {
-                    throw error;
+                    if (data) {
+                        setIsData(data);
+
+                        queryClient.invalidateQueries(['visits', userId]);
+                    }
+
+                    return data;
                 }
+            };
+        } else if (userRole === 'Employer') {
+            return {
+                queryKey: ['visits', businessId],
+                queryFn: async () => {
+                    const { data, error, status } = await supabase
+                        .from("visits")
+                        .select("*")
+                        .eq("business_id", businessId || "");
 
-                if (data) {
-                    setIsData(data);
+                    if (error && status !== 406) {
+                        throw error;
+                    }
 
-                    queryClient.invalidateQueries(['visits', userId]);
+                    if (data) {
+                        setIsData(data);
+
+                        queryClient.invalidateQueries(['visits', businessId]);
+                    }
+
+                    return data;
                 }
-            },
-        );
-    }
+            };
+        }
 
-    if (userRole === 'Employer') {
-        const { data: hoursData, isLoading, isError } = useQuery(
-            ['visits', userId],
-            async () => {
-                const { data, error, status } = await supabase
-                    .from("visits")
-                    .select("*")
-                    .eq("business_id", businessId || "");
+        return { queryKey: null, queryFn: () => { } };
+    };
 
-                if (error && status !== 406) {
-                    throw error;
-                }
+    const { queryKey, queryFn } = getQueryKeyAndFn();
 
-                if (data) {
-                    setIsData(data);
+    const { data: hoursData, isLoading, isError } = useQuery(queryKey || [], queryFn as () => Promise<any[] | null>, {
+        enabled: !!queryKey
+    });
 
-                    queryClient.invalidateQueries(['visits', userId]);
-                }
-            },
-        );
-    }
-
+    useEffect(() => {
+        if (hoursData) {
+            console.log('Data fetched', hoursData);
+            if (queryKey) {
+              queryClient.invalidateQueries(queryKey);
+            }
+        }
+    }, [hoursData, queryKey, queryClient]);
 
     const closeModal = () => {
         setIsModalOpen(false);

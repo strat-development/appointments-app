@@ -156,7 +156,8 @@ export const RandomBusinessInCity = ({ city }: RandomBusinessInCityProps) => {
 
                         {businessData.map((business: any) => (
                             business["business-info"] ? (
-                                <Link href={`/business-page/${business["business-info"].id}`} passHref>
+                                <Link href={`/business-page/${business["business-info"].id}`}
+                                key={business.id}>
                                     <div key={business.id} className="flex flex-col gap-4 min-w-[350px] border-[1px] bg-white p-4 rounded-xl shadow-md">
                                         {imageUrls.find((image) => image.businessId === business["business-info"].id)?.publicUrl ? (
                                             <Image className="rounded-xl object-cover h-[250px] w-full"

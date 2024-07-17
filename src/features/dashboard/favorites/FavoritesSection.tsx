@@ -27,50 +27,53 @@ export const FavoritesSection = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = Math.min(startIndex + itemsPerPage, filteredData.length);
     const [imageUrls, setImageUrls] = useState<{ businessId: string, publicUrl: string }[]>([]);
-
+    const [isFavourite, setIsFavourite] = useState(false);
 
 
     const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
         setCurrentPage(page);
     };
 
-    const { data: favouriteBusinesses } = useQuery(
+    const { data: favouriteBusinesses, isError: isFavBusinessesError, isLoading: isFavBusinessesLoading } = useQuery(
         ['favourite-businesses', userId],
         async () => {
             const { data, error, status } = await supabase
                 .from("favourite-businesses")
                 .select("*")
-                .eq("user_id", userId)
-
+                .eq("user_id", userId);
+    
             if (error && status !== 406) {
                 throw error;
             }
-
+    
             return data;
         },
     );
 
     const businessId = favouriteBusinesses?.map(item => item.business_id);
 
-    const { data: businessData } = useQuery(
-        ['business-info'],
+    const { data: businessData, isError: isBusinessDataError, isLoading: isBusinessDataLoading } = useQuery(
+        ['business-info', businessId],
         async () => {
             const { data, error } = await supabase
                 .from('business-info')
                 .select("*")
-                .in("id", businessId as string[])
-
+                .in("id", businessId as string[]);
+    
             if (error) {
                 throw error;
             }
 
             if (data) {
-                setIsData(data as BusinessData[]);
+                setIsData(data);
             }
-
+    
             return data || [];
+        },
+        {
+            enabled: !!businessId && businessId.length > 0,
         }
-    )
+    );
 
     const { data: images } = useQuery(
         ['business-images'],
@@ -163,7 +166,8 @@ export const FavoritesSection = () => {
                             const imageUrl = imageUrls.find(url => url.businessId === item.id);
 
                             return (
-                                <div className="flex gap-4 border-[1px] max-[480px]:flex-col max-[480px]:items-start p-4 rounded-lg">
+                                <div className="flex gap-4 border-[1px] max-[480px]:flex-col max-[480px]:items-start p-4 rounded-lg" 
+                                key={item.id}>
                                     <div className="relative">
                                         <Image alt=""
                                             src={imageUrl?.publicUrl as string}

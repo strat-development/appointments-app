@@ -12,7 +12,7 @@ input {
 .TabsRoot {
   display: flex;
   flex-direction: column;
-  min-width: 500px;
+  width: fit-content;
 }
 
 .TabsList {
