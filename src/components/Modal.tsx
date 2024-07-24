@@ -49,7 +49,7 @@ export const Modal: React.FC<ModalProps> = ({
                     <div className={`translate duration-300 h-full ${showModal ? 'translate-y-0' : 'translate-y-full'} ${showModal ? 'opacity-100' : 'opacity-0'}`}>
                         <div className=" translate m-4 h-full lg:h-auto md:h-auto border-0 rounded-lg shadow-lg relative flex flex-col gap-4 w-full bg-white outline-none focus:outline-none">
                             {/* Header */}
-                            <div className="flex items-center p-6 rounded-t justify-center relative">
+                            <div className="flex items-center p-2 rounded-t justify-center relative">
                                 <button className="p-1 border-0 hover:opacity-70 text-lg transition absolute right-5"
                                     onClick={handleClose}>
                                     <IoMdClose />

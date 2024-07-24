@@ -90,7 +90,7 @@ export const HoursPickerSlider = ({ visits, businessSlugId, selectedDate, select
 
     return (
         <>
-            <div className="flex gap-4 overflow-x-scroll w-[600px]">
+            <div className="flex gap-4 overflow-x-scroll w-[600px] max-[768px]:w-[400px] max-[440px]:w-[300px] max-[380px]:w-[260px]">
                 {availableTimeSlots.map((slot, index) => {
                     const startTime = new Date(`${selectedDate}T${slot}:00Z`).toISOString();
                     const isSelected = startTime === selectedStartTime;

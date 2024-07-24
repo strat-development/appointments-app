@@ -84,7 +84,7 @@ export const DatePickSlider = ({ businessSlugId, selectedService }: DatePickSlid
     return (
         <div className="flex flex-col items-center gap-8" ref={sliderRef}>
             <div className="text-xl capitalize">{new Date(today.getFullYear(), pages[currentPage][0].month).toLocaleString('default', { month: 'long' })}</div>
-            <div className="w-[700px] flex items-center justify-center gap-16">
+            <div className="flex items-center justify-center gap-8 max-[768px]:gap-4    ">
                 {currentPage > 0 &&
                     <button onClick={handlePrev} className="text-black">
                         <ArrowLeft />
@@ -92,8 +92,11 @@ export const DatePickSlider = ({ businessSlugId, selectedService }: DatePickSlid
                 }
                 {pages[currentPage].map((date, index) => {
                     const day = new Date(date.date).getDate();
+                    const isHiddenOnSmallScreen = index >= 3;
                     return (
-                        <div key={index} className="flex flex-col items-center w-fit">
+                        <div key={index} className="flex flex-col items-center w-fit"
+                            style={{ display: isHiddenOnSmallScreen && window.innerWidth < 480 ? 'none' : 'flex' }}
+                        >
                             <div className={`flex items-center justify-center text-white w-[50px] h-[50px] rounded-full ${date.available ? "bg-violet-500" : "bg-red-500"}`}
                                 onClick={() => handleDateSelect(date.date)}
                             >{day}</div>
@@ -107,8 +110,8 @@ export const DatePickSlider = ({ businessSlugId, selectedService }: DatePickSlid
             <HoursPickerSlider selectedDate={selectedDate}
                 businessSlugId={businessSlugId}
                 visits={visits}
-                selectedService={selectedService} 
-                />
+                selectedService={selectedService}
+            />
         </div>
     )
 }
