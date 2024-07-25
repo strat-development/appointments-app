@@ -87,8 +87,6 @@ export default function StatisticInfo() {
         clientsData.forEach((visit) => {
             if (servicesMap.has(visit.service_id as any)) {
                 profit += parseFloat(servicesMap.get(visit.service_id as any) as any);
-            } else {
-                toast.error("You dont have acces to this service");
             }
         })
         setCurrentProfit(profit)
@@ -187,27 +185,31 @@ export default function StatisticInfo() {
                                 getServicesInSelectedRange();
                             }}>Select</button>
                     </div>
-                    <div className="flex gap-16 border-[1px] w-full h-full mt-16 p-8 rounded-md">
-                        <div className="flex flex-col gap-8">
-                            <div className="flex flex-col gap-4 items-center border-b-[1px] p-8">
-                                <h1 className="text-7xl font-bold text-black/70">
-                                    <CountUp end={monthlyClients as number} duration={1.5} />
-                                </h1>
-                                <p className="text-lg font-medium text-black/50">Monthly clients</p>
+                    <div className="flex max-[1400px]:flex-wrap gap-16 border-[1px] w-full h-full mt-16 p-8 rounded-md overflow-y-auto">
+                        <div className="flex w-full gap-8 max-[700px]:flex-col-reverse items">
+                            <div className="flex flex-col gap-8 max-[700px]:flex-row max-[700px]:items-center">
+                                <div className="flex flex-col gap-4 items-center min-[701px]:border-b-[1px] p-8 max-[700px]:border-r-[1px]">
+                                    <h1 className="text-7xl font-bold text-black/70 max-[700px]:text-5xl">
+                                        <CountUp end={monthlyClients as number} duration={1.5} />
+                                    </h1>
+                                    <p className="text-lg font-medium text-black/50 max-[700px]:text-base">Monthly clients</p>
+                                </div>
+                                <div className="flex flex-col gap-4 items-center">
+                                    <h1 className="text-7xl font-bold text-black/70 max-[700px]:text-5xl">
+                                        <CountUp end={currentProfit} duration={1.5} />
+                                    </h1>
+                                    <p className="text-lg font-medium text-black/50 max-[700px]:text-base">Current profit</p>
+                                </div>
                             </div>
-                            <div className="flex flex-col gap-4 items-center">
-                                <h1 className="text-7xl font-bold text-black/70">
-                                    <CountUp end={currentProfit} duration={1.5} />
-                                </h1>
-                                <p className="text-lg font-medium text-black/50">Current profit</p>
+                            <div className="w-fit" >
+                                <PieChart serviceNameMap={serviceName || new Map<number, string>()} serviceCountMap={everyServiceCount || new Map<number, number>()} />
                             </div>
                         </div>
-                        <div className="w-fit" >
-                            <PieChart serviceNameMap={serviceName || new Map<number, string>()} serviceCountMap={everyServiceCount || new Map<number, number>()} />
+                        <div className="w-full">
+                            <StatisticsTable visitsData={visitsData}
+                                servicesData={servicesData}
+                            />
                         </div>
-                        <StatisticsTable visitsData={visitsData}
-                            servicesData={servicesData}
-                        />
                     </div>
                 </div>
             </div>
