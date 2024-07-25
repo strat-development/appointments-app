@@ -91,7 +91,7 @@ export const Navbar = () => {
 
     return (
         <>
-            <div className="bg-white h-screen z-[2222222] flex flex-col justify-center border-r-[1px] max-[1024px]:h-fit max-[1024px]:fixed max-[1024px]:bottom-0 max-[1024px]:w-full">
+            <div className="bg-white h-screen z-[22222222222222222222] flex flex-col justify-center border-r-[1px] max-[1024px]:h-fit max-[1024px]:fixed max-[1024px]:bottom-0 max-[1024px]:w-full">
                 <div className="flex flex-col justify-between items-start h-[80vh] w-[300px] px-8 max-[1024px]:flex-row max-[1024px]:h-fit max-[1024px]:px-6 max-[1024px]:py-4 max-[1024px]:shadow-[0_0px_10px_0px_rgba(0,0,0,0.1)] max-[1024px]:w-screen max-[320px]:px-2">
                     <div className="flex flex-col gap-8 max-[1024px]:justify-between max-[1024px]:w-full">
                         <div className="flex items-center gap-4 max-[1024px]:hidden">
@@ -124,7 +124,7 @@ export const Navbar = () => {
                                         <Link className={currentRoute === link.link ? activeStyle : linkStyle}
                                             href={link.link} key={index}>
                                             {link.icon}
-                                            <p className="max-[1024px]:hidden">{link.name}</p>
+                                            <p className="max-[1024px]:hidden text-center">{link.name}</p>
                                         </Link>
                                     ))}
                                 </>
@@ -136,7 +136,7 @@ export const Navbar = () => {
                                         <Link className={currentRoute === link.link ? activeStyle : linkStyle}
                                             href={link.link} key={index}>
                                             {link.icon}
-                                            <p className="max-[1024px]:hidden">{link.name}</p>
+                                            <p className="max-[1024px]:hidden text-center">{link.name}</p>
                                         </Link>
                                     ))}
                                 </>
@@ -147,7 +147,7 @@ export const Navbar = () => {
                                         setIsSettingsOpen(true)
                                     }}>
                                     <Setting className="max-[480px]:w-[20px]" size="24" />
-                                    <p className="max-[1024px]:hidden">Settings</p>
+                                    <p className="max-[1024px]:hidden text-center">Settings</p>
                                 </button>
                                 <button className="p-2 transition rounded-full hover:text-white hover:bg-gradient-to-b hover:from-violet-600 hover:to-violet-500 text-[#404040] flex self-end gap-4 max-[480px]:p-1"
                                     onClick={async () => {

@@ -70,7 +70,7 @@ export const BusinessOpinions = ({ businessSlugId }: BusinessSlugIdProps) => {
                             return newOpinionsPerPage;
                         });
                     }}
-                        className="bg-gradient-to-b from-violet-600 to-violet-500 text-white px-8 py-2 rounded-full font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:text-sm outline-none">Show more</button>
+                        className="bg-gradient-to-b text-center from-violet-600 to-violet-500 text-white px-8 py-2 rounded-full font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:text-sm outline-none">Show more</button>
                 )}
                 {!userRole && (
                     <OpinionForm businessSlugId={businessSlugId} />

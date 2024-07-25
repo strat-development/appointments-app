@@ -19,7 +19,6 @@ export const NavComponent = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const router = useRouter();
     const { city } = useCityContext();
-    const session = supabase.auth.getSession();
 
     return (
         <>
@@ -73,48 +72,50 @@ export const NavComponent = () => {
                                 </p>
                             </Link>
                         </div>
-                        {!userRole && (
-                            <div className="flex flex-col gap-4 border-t-[1px]">
-                                <button onClick={() => {
-                                    authModal.onOpen();
-                                    setIsMenuOpen(false);
-                                }}
-                                    className="flex rounded-xl text-black/70 border-[1px] font-medium border-black/20 items-center justify-center px-8 py-2 hover:scale-95 duration-300 max-lg:py-4 max-lg:hover:bg-violet-500/20">
-                                    Login
-                                </button>
-                                <button onClick={() => {
-                                    authModal.onOpen();
-                                    setIsMenuOpen(false);
-                                }}
-                                    className="bg-gradient-to-b text-center from-violet-600 to-violet-500 text-white px-8 py-2 rounded-xl font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:py-4">
-                                    Register
-                                </button>
-                            </div>
-                        ) || (
-                                <>
-                                    {userRole === "Client" && (
-                                        <Link href="/dashboard/visits"
-                                            className="bg-gradient-to-b from-violet-600 to-violet-500 text-white px-8 py-2 rounded-xl font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:text-sm">
-                                            Dashboard
-                                        </Link>
-                                    ) || (
-                                            <Link href="/dashboard/schedule"
-                                                className="bg-gradient-to-b from-violet-600 to-violet-500 text-white px-8 py-2 rounded-xl font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:text-sm">
+                        <div className="w-full flex flex-col gap-4">
+                            {!userRole && (
+                                <div className="flex flex-col gap-4 border-t-[1px]">
+                                    <button onClick={() => {
+                                        authModal.onOpen();
+                                        setIsMenuOpen(false);
+                                    }}
+                                        className="flex rounded-xl text-black/70 border-[1px] font-medium border-black/20 items-center justify-center px-8 py-2 hover:scale-95 duration-300 max-lg:py-4 max-lg:hover:bg-violet-500/20">
+                                        Login
+                                    </button>
+                                    <button onClick={() => {
+                                        authModal.onOpen();
+                                        setIsMenuOpen(false);
+                                    }}
+                                        className="bg-gradient-to-b text-center from-violet-600 to-violet-500 text-white px-8 py-2 rounded-xl font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:py-4">
+                                        Register
+                                    </button>
+                                </div>
+                            ) || (
+                                    <>
+                                        {userRole === "Client" && (
+                                            <Link href="/dashboard/visits"
+                                                className="bg-gradient-to-b from-violet-600 to-violet-500 text-white px-8 py-2 rounded-xl font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:text-sm text-center">
                                                 Dashboard
                                             </Link>
-                                        )}
-                                    <button
-                                        onClick={async () => {
-                                            await supabase.auth.signOut();
-                                            clearUserRole();
-                                            router.refresh();
-                                            setIsMenuOpen(false);
-                                        }}
-                                        className="flex rounded-xl text-black/70 border-[1px] font-medium border-black/20 items-center justify-center px-8 py-2 hover:scale-95 duration-300 max-lg:text-sm max-lg:py-1 max-sm:hidden">
-                                        Logout
-                                    </button>
-                                </>
-                            )}
+                                        ) || (
+                                                <Link href="/dashboard/schedule"
+                                                    className="bg-gradient-to-b from-violet-600 to-violet-500 text-white px-8 py-2 rounded-xl font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:text-sm text-center">
+                                                    Dashboard
+                                                </Link>
+                                            )}
+                                        <button
+                                            onClick={async () => {
+                                                await supabase.auth.signOut();
+                                                clearUserRole();
+                                                router.refresh();
+                                                setIsMenuOpen(false);
+                                            }}
+                                            className="flex rounded-xl text-black/70 border-[1px] font-medium border-black/20 items-center justify-center px-8 py-2 hover:scale-95 duration-300 max-lg:text-sm max-lg:py-1 max-sm:hidden">
+                                            Logout
+                                        </button>
+                                    </>
+                                )}
+                        </div>
                     </div>
 
                     {!userRole && (

@@ -205,7 +205,8 @@ export default function StatisticInfo() {
                                 <PieChart serviceNameMap={serviceName || new Map<number, string>()} serviceCountMap={everyServiceCount || new Map<number, number>()} />
                             </div>
                         </div>
-                        <div className="w-full">
+
+                        <div className="w-full max-[480px]:hidden">
                             <StatisticsTable visitsData={visitsData}
                                 servicesData={servicesData}
                             />
