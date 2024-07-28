@@ -76,7 +76,7 @@ export const ClientsSection = () => {
                             <div className="flex flex-col justify-end">
                                 <div className="flex justify-between">
                                     <div className="flex flex-col gap-4">
-                                        <input className="px-4 py-2 outline-none border transition focus:border-violet-300 border-gray-300 rounded-lg w-full max-[768px]:w-[250px] min-[768px]:w-64"
+                                        <input className="px-4 py-2 border-[1px] outline-none transition focus:border-violet-300 rounded-lg w-full max-[768px]:w-[250px] min-[768px]:w-64"
                                             type="text"
                                             placeholder="Search..."
                                             value={searchPrompt}

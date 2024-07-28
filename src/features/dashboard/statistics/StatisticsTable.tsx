@@ -58,7 +58,7 @@ export const StatisticsTable: React.FC<StatisticsTableProps> = ({
         <div className="p-4 border-[1px] rounded-lg bg-white w-full overflow-y-auto flex flex-col gap-8">
             <div className="flex justify-between">
                 <input
-                    className="px-4 py-2 outline-none border transition focus:border-violet-300 border-gray-300 rounded-full w-full min-[768px]:w-64"
+                    className="px-4 py-2 outline-none border-[1px] transition focus:border-violet-300 rounded-full w-full min-[768px]:w-64"
                     type="text"
                     placeholder="Search"
                     value={filter}

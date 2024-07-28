@@ -29,9 +29,9 @@ export const NavComponent = () => {
                             src="/Visio_logo.svg" width={100} height={100} alt="logo" />
                     </Link>
                     <div className="flex gap-16 text-black/70 max-[1024px]:hidden">
-                        <Link href="/">
+                        {/* <Link href="/">
                             About
-                        </Link>
+                        </Link> */}
                         <Link href={`/business-browse-page/${"all"}?city=${city}`}>
                             Businesess
                         </Link>
