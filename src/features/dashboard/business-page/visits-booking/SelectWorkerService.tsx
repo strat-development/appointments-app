@@ -15,7 +15,7 @@ interface SelectWorkerServiceProps {
 export const SelectWorkerService = ({ businessSlugId, startTime, endTime, selectedService }: SelectWorkerServiceProps) => {
     const supabase = createClientComponentClient<Database>();
     const [selectedWorker, setSelectedWorker] = useState<string>("Any");
-    const [clientPhoneNumber, setClientPhoneNumber] = useState<string>("");
+    const [clientEmail, setClientEmail] = useState<string>("");
     const [clientName, setClientName] = useState<string>("");
 
     const { data: workersData, isLoading, isError } = useQuery(
@@ -98,18 +98,18 @@ export const SelectWorkerService = ({ businessSlugId, startTime, endTime, select
                         onChange={(e) => setClientName(e.target.value)} />
                     <input className="p-2 border-[1px] rounded-full w-fit outline-none"
                         type="text"
-                        placeholder="Phone number"
-                        onChange={(e) => setClientPhoneNumber(e.target.value)} />
+                        placeholder="Email"
+                        onChange={(e) => setClientEmail(e.target.value)} />
                 </div>
             </div>
 
-        {/* {selectedService && startTime && endTime && clientPhoneNumber && clientName && */}
+        {/* {selectedService && startTime && endTime && clientEmail && clientName && */}
             <BookVisitButton businessSlugId={businessSlugId}
                 selectedService={selectedService}
                 selectedWorker={selectedWorker}
                 startTime={startTime}
                 endTime={endTime}
-                phoneNumber={clientPhoneNumber}
+                email={clientEmail}
                 clientName={clientName}
             />
         {/* } */}

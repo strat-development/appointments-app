@@ -103,7 +103,6 @@ export const Schedule = () => {
 
     useEffect(() => {
         if (hoursData) {
-            console.log('Data fetched', hoursData);
             if (queryKey) {
               queryClient.invalidateQueries(queryKey);
             }

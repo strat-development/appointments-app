@@ -12,7 +12,7 @@ interface BookVisitButtonProps {
     endTime: string;
     selectedService?: ServicesData[];
     selectedWorker: string;
-    phoneNumber: string;
+    email: string;
     clientName: string;
 }
 
@@ -22,7 +22,7 @@ export const BookVisitButton = ({
     endTime,
     selectedService,
     selectedWorker,
-    phoneNumber, 
+    email,
     clientName
 }: BookVisitButtonProps) => {
     const supabase = createClientComponentClient<Database>();
@@ -42,7 +42,7 @@ export const BookVisitButton = ({
                             end_time: endTime,
                             service_id: selectedService?.map(item => item.service_id)[0],
                             employee: selectedWorker,
-                            phone_number: phoneNumber,
+                            client_email: email,
                             status: 'Active',
                             client_name: clientName,
                             client_id: userId || null
@@ -53,17 +53,17 @@ export const BookVisitButton = ({
                     throw error;
                 }
 
-                const emailResponse = await fetch('/api/mail', {
+                const emailResponse = await fetch('/api/new-visit-mail', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        email: 'work.andrew.naida@gmail.com',
+                        email: email,
                         userFirstname: clientName
                     })
                 });
-                
+
                 if (!emailResponse.ok) {
                     throw new Error('Failed to send email');
                 }
@@ -79,6 +79,10 @@ export const BookVisitButton = ({
                 toast.success('Visit booked successfully');
                 queryClient.invalidateQueries('visits');
                 router.refresh();
+            },
+
+            onError: () => {
+                toast.error('Failed to book visit');
             }
         }
     );

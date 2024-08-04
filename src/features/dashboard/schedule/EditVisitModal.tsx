@@ -20,7 +20,6 @@ interface EditVisitModalProps {
 
 export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, visitId }: EditVisitModalProps) => {
     const [email, setEmail] = useState<string | null>(null);
-    const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
     const [service, setService] = useState<number | null>(null);
     const [client, setClient] = useState<string | null>(null);
     const [clientId, setClientId] = useState<string | null>(null)
@@ -38,15 +37,32 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, visitId }:
                 .from("visits")
                 .update(newVisits)
                 .eq("visit_id", visitId);
+
+            const emailResponse = await fetch('/api/edited-visit-mail', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    userFirstname: client
+                })
+            });
+
+            if (!emailResponse.ok) {
+                throw new Error('Failed to send email');
+            }
         },
+
         {
             onSuccess: () => {
                 queryClient.invalidateQueries(['visits', userId]);
-                toast.success('Visit added successfully!')
+                toast.success('Visit edited successfully!')
+
             },
 
             onError: () => {
-                toast.error('Error adding the visit!')
+                toast.error('Error editing the visit!')
             }
         }
     );
@@ -56,6 +72,17 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, visitId }:
             await supabase.from('visits')
                 .delete()
                 .eq('visit_id', eventId);
+
+                const emailResponse = await fetch('/api/deleted-visit-mail', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        userFirstname: client
+                    })
+                });
         },
         {
             onSuccess: () => {
@@ -91,7 +118,7 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, visitId }:
                         console.error("Error fetching client data:", error);
                     } else if (data && data.length > 0) {
                         const clientData = data[0];
-                        setPhoneNumber(clientData.phone_number);
+                        setEmail(clientData.client_email);
                         setClient(clientData.client_name);
                         setNote(clientData.client_description);
                         setStatus(clientData.status);
@@ -127,7 +154,6 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, visitId }:
 
     const clearStates = () => {
         setEmail(null);
-        setPhoneNumber(null);
         setService(null);
         setClient(null);
         setNote(null);
@@ -154,8 +180,8 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, visitId }:
                     id="Phone number"
                     label="Phone number"
                     type="text"
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    value={phoneNumber || ''}
+                    onChange={(e) => setEmail(e.target.value)}
+                    value={email || ''}
                 />
                 <label htmlFor="Service">Service</label>
                 <select
@@ -208,7 +234,7 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, visitId }:
                             label: '',
                             start_time: startTime || '',
                             status: status,
-                            phone_number: phoneNumber,
+                            client_email: email,
                             service_id: service
                         } as VisitsData)
 
