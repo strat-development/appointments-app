@@ -19,7 +19,7 @@ export const DeletedVisitsTemplate: React.FC<Readonly<DeletedVisitsTemplateProps
                 😔
             </h2>
             <p className='text-lg'>
-                We're sorry to inform you that your appointment at {business_name} has been deleted.
+                We&apos;re sorry to inform you that your appointment at {business_name} has been deleted.
             </p>
             <br />
             <br />
