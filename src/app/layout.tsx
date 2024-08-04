@@ -7,7 +7,7 @@ import UserContextProvider from "@/providers/userContextProvider";
 import { ModalProvider } from "@/providers/modalProvider";
 import { AuthModal } from "@/features/auth-modal/AuthModal";
 import { QueryClient, QueryClientProvider } from 'react-query'
-import BusinessContextProvider, { BusinessContext } from "@/providers/businessContextProvider";
+import BusinessContextProvider from "@/providers/businessContextProvider";
 import "./globals.css";
 import { Suspense } from "react";
 import Loading from "./loading";

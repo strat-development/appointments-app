@@ -5,7 +5,6 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useMutation, useQueryClient } from "react-query";
-import { NavigationType } from "react-router-dom";
 
 interface BookVisitButtonProps {
     businessSlugId: BusinessSlugIdProps["businessSlugId"];
@@ -13,7 +12,6 @@ interface BookVisitButtonProps {
     endTime: string;
     selectedService?: ServicesData[];
     selectedWorker: string;
-    navigate?: NavigationType;
     phoneNumber: string;
     clientName: string;
 }
@@ -26,17 +24,13 @@ export const BookVisitButton = ({
     selectedWorker,
     phoneNumber, 
     clientName
-    // navigate
 }: BookVisitButtonProps) => {
     const supabase = createClientComponentClient<Database>();
     const queryClient = useQueryClient();
     const { userId } = useUserContext();
     const router = useRouter();
-    // const navigation = useNavigate();
 
-    console.log(selectedService);
-
-    const bookVistiMutation = useMutation(
+    const bookVisitMutation = useMutation(
         async () => {
             try {
                 const { data, error } = await supabase
@@ -59,6 +53,21 @@ export const BookVisitButton = ({
                     throw error;
                 }
 
+                const emailResponse = await fetch('/api/mail', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'work.andrew.naida@gmail.com',
+                        userFirstname: clientName
+                    })
+                });
+                
+                if (!emailResponse.ok) {
+                    throw new Error('Failed to send email');
+                }
+
                 return data;
             } catch (error) {
                 console.error(error);
@@ -67,7 +76,6 @@ export const BookVisitButton = ({
         },
         {
             onSuccess: () => {
-                // navigation('localhost:3001/api/mail',{state:{clientId:"123",businessId:"123",mailTemplate:"123"}});
                 toast.success('Visit booked successfully');
                 queryClient.invalidateQueries('visits');
                 router.refresh();
@@ -77,7 +85,7 @@ export const BookVisitButton = ({
 
     return (
         <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-violet-600 to-violet-500 text-white w-full"
-            onClick={() => bookVistiMutation.mutateAsync()}>
+            onClick={() => bookVisitMutation.mutateAsync()}>
             Book a visit</button>
     )
 }

@@ -18,8 +18,6 @@ export const SelectWorkerService = ({ businessSlugId, startTime, endTime, select
     const [clientPhoneNumber, setClientPhoneNumber] = useState<string>("");
     const [clientName, setClientName] = useState<string>("");
 
-    console.log(selectedService);
-
     const { data: workersData, isLoading, isError } = useQuery(
         ['employees', businessSlugId],
         async () => {
@@ -35,9 +33,6 @@ export const SelectWorkerService = ({ businessSlugId, startTime, endTime, select
             return data;
         },
     );
-
-
-    console.log(workersData);
 
     const { data: servicesData, isLoading: servicesIsLoading } = useQuery(
         ['services', businessSlugId],
