@@ -45,7 +45,9 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, visitId }:
                 },
                 body: JSON.stringify({
                     email: email,
-                    userFirstname: client
+                    userFirstname: client,
+                    visitDate: startTime,
+                    businessName: businessName,
                 })
             });
 
@@ -80,7 +82,9 @@ export const EditVisitModal = ({ isOpen, onClose, startTime, endTime, visitId }:
                     },
                     body: JSON.stringify({
                         email: email,
-                        userFirstname: client
+                        userFirstname: client,
+                        visitDate: startTime,
+                        businessName: businessName,
                     })
                 });
         },

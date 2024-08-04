@@ -60,7 +60,8 @@ export const BookVisitButton = ({
                     },
                     body: JSON.stringify({
                         email: email,
-                        userFirstname: clientName
+                        userFirstname: clientName,
+                        visitDate: startTime,
                     })
                 });
 
@@ -88,7 +89,7 @@ export const BookVisitButton = ({
     );
 
     return (
-        <button className="px-4 py-2 rounded-full hover:opacity-90 transition bg-gradient-to-b from-violet-600 to-violet-500 text-white w-full"
+        <button className="px-4 py-2 rounded-lg hover:opacity-90 transition bg-gradient-to-b from-violet-600 to-violet-500 text-white w-full"
             onClick={() => bookVisitMutation.mutateAsync()}>
             Book a visit</button>
     )

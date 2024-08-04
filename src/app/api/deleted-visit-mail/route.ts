@@ -1,17 +1,22 @@
+import { EditedVisitTemplate } from "@/emails/EditedVisitTemplate";
 import { Resend } from "resend";
-import { NewAppointmentEmailTemplate } from "@/emails/NewAppointmentEmailTemplate";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
     try {
-        const { email, userFirstname } = await request.json();
+        const { email, userFirstname, visitDate, businessName, visitStatus } = await request.json();
 
         const { data, error } = await resend.emails.send({
             from: 'Acme <onboarding@resend.dev>',
             to: [email],
             subject: 'Hello world',
-            react: NewAppointmentEmailTemplate({ firstName: userFirstname }) as React.ReactElement,
+            react: EditedVisitTemplate({ 
+                firstName: userFirstname,
+                date: visitDate,
+                business_name: businessName,
+                status: visitStatus
+            }) as React.ReactElement,
         });
 
         if (error) {

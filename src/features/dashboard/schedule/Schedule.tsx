@@ -101,14 +101,6 @@ export const Schedule = () => {
         enabled: !!queryKey
     });
 
-    useEffect(() => {
-        if (hoursData) {
-            if (queryKey) {
-              queryClient.invalidateQueries(queryKey);
-            }
-        }
-    }, [hoursData, queryKey, queryClient]);
-
     const closeModal = () => {
         setIsModalOpen(false);
         setIsEditModalOpen(false);
