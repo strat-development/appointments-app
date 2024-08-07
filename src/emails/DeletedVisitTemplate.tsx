@@ -1,5 +1,3 @@
-import Image from 'next/image';
-import Link from 'next/link';
 import * as React from 'react';
 
 interface DeletedVisitsTemplateProps {
@@ -7,7 +5,7 @@ interface DeletedVisitsTemplateProps {
     business_name: string;
 }
 
-export const DeletedVisitsTemplate: React.FC<Readonly<DeletedVisitsTemplateProps>> = ({
+export const DeletedVisitTemplate: React.FC<Readonly<DeletedVisitsTemplateProps>> = ({
     firstName,
     business_name,
 }) => (

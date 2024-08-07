@@ -8,9 +8,9 @@ export async function POST(request: Request) {
         const { email, userFirstname, visitDate, businessName } = await request.json();
 
         const { data, error } = await resend.emails.send({
-            from: 'Acme <onboarding@resend.dev>',
+            from: 'visio@hourly.site',
             to: [email],
-            subject: 'Hello world',
+            subject: 'New Visit Scheduled',
             react: NewAppointmentEmailTemplate({ 
                 firstName: userFirstname,
                 date: visitDate

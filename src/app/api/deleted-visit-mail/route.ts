@@ -1,21 +1,19 @@
-import { EditedVisitTemplate } from "@/emails/EditedVisitTemplate";
+import { DeletedVisitTemplate } from "@/emails/DeletedVisitTemplate";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
     try {
-        const { email, userFirstname, visitDate, businessName, visitStatus } = await request.json();
+        const { email, userFirstname, businessName } = await request.json();
 
         const { data, error } = await resend.emails.send({
-            from: 'Acme <onboarding@resend.dev>',
+            from: 'visio@hourly.site',
             to: [email],
-            subject: 'Hello world',
-            react: EditedVisitTemplate({ 
+            subject: 'Visit Deleted',
+            react: DeletedVisitTemplate({ 
                 firstName: userFirstname,
-                date: visitDate,
                 business_name: businessName,
-                status: visitStatus
             }) as React.ReactElement,
         });
 
