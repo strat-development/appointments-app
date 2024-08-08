@@ -11,6 +11,7 @@ import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import { useBusinessContext } from '@/providers/businessContextProvider';
 import { useRouter } from 'next/navigation';
+import { EmailTemplatesContainer } from '@/components/dashboard/EmailTemplatesContainer';
 
 interface UserDataModalProps {
     isOpen: boolean;
@@ -181,22 +182,7 @@ export const SettingsModal = ({ onClose, isOpen }: UserDataModalProps) => {
                     )}
                 </Tabs.List>
                 <Tabs.Content className="TabsContent" value="tab1">
-                    <p className="Text">Make changes to your account here. Click save when you&apos;re done.</p>
-                    <fieldset className="Fieldset">
-                        <label className="Label" htmlFor="name">
-                            Name
-                        </label>
-                        <input className="Input" id="name" defaultValue="Pedro Duarte" />
-                    </fieldset>
-                    <fieldset className="Fieldset">
-                        <label className="Label" htmlFor="username">
-                            Username
-                        </label>
-                        <input className="Input" id="username" defaultValue="@peduarte" />
-                    </fieldset>
-                    <div style={{ display: 'flex', marginTop: 20, justifyContent: 'flex-end' }}>
-                        <button className="Button green">Save changes</button>
-                    </div>
+                    <EmailTemplatesContainer />
                 </Tabs.Content>
                 {userRole === "Client" && (
                     <Tabs.Content className="TabsContent" value="tab2">
@@ -270,7 +256,7 @@ export const SettingsModal = ({ onClose, isOpen }: UserDataModalProps) => {
                                     confirmButtonText: 'Yes, create business!',
                                     customClass: {
                                         popup: 'swal2-popup-custom'
-                                      }
+                                    }
                                 }).then((result) => {
                                     if (result.isConfirmed) {
                                         createBusinessMutation.mutateAsync({
@@ -352,7 +338,7 @@ export const SettingsModal = ({ onClose, isOpen }: UserDataModalProps) => {
                                             confirmButtonText: 'Yes, delete business!',
                                             customClass: {
                                                 popup: 'swal2-popup-custom'
-                                              }
+                                            }
                                         }).then((result) => {
                                             if (result.isConfirmed) {
                                                 deleteBusinessMutation.mutateAsync({

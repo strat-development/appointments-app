@@ -83,6 +83,10 @@ export const FeaturesSection = () => {
                                 <ArrowUp className="text-white rotate-45" />
                             </Link>
                         </div>
+                        <div className="w-full border-[1px] rounded-lg overflow-hidden">
+                            <Image className="object-cover rounded-xl"
+                                src="/Management/EmailTemplates.png" width={2000} height={2000} alt="business page" />
+                        </div>
                     </div>
                     <div className="flex flex-col gap-4 rounded-xl p-4 justify-start border-[1px] col-span-3 h-[600px] shadow-lg hover:scale-110 transition duration-300 bg-white max-md:h-fit max-lg:max-h-[460px]">
                         <div className="flex w-full justify-between">

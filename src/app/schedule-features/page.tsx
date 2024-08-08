@@ -1,6 +1,6 @@
 import { Footer } from "@/components/landing-page/Footer";
 import { Navbar } from "@/components/landing-page/Navbar";
-import { Calendar, Clock, Note, Star1, User } from "iconsax-react";
+import { Calendar, Clock, Message, Note, Star1, User } from "iconsax-react";
 import Image from "next/image";
 
 export default function ScheduleFeaturesPage() {
@@ -59,6 +59,28 @@ export default function ScheduleFeaturesPage() {
                     </div>
                     <Image className="w-[55%] shadow-xl rounded-xl max-lg:w-full"
                         src="/Schedule/ScheduleVisitModal.png" width={2000} height={2000} alt="calendar" />
+                </div>
+                <div className="flex flex-col items-center gap-32 mt-32 px-16 m-auto">
+                    <div className="flex justify-between gap-8 items-center max-lg:flex-col-reverse">
+                        <Image className="w-[55%]  self-start shadow-xl rounded-xl max-lg:w-full"
+                            src="/Management/EmailTemplates.png" width={2000} height={2000} alt="calendar" />
+                        <div className="flex justify-start w-full">
+                            <div className="flex flex-col gap-4 justify-self-center w-fit">
+                                <h1 className="text-4xl tracking-wider font-bold text-[#5100D6] max-sm:text-3xl">Email templates</h1>
+                                <p className="text-black/70 w-[500px] max-[520px]:w-fit">
+                                    Save your time by creating an automatic notifications using our email templates
+                                </p>
+                                <ul className="flex flex-col gap-6 mt-6">
+                                    <li className="flex gap-3">
+                                        <Message className="text-[#5100D6]" size="18" />
+                                        <p className="text-black/70 text-sm">
+                                            Email templates
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <Footer />
