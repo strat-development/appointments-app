@@ -11,6 +11,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { CloseCircle, Menu } from "iconsax-react";
 import { useCityContext } from "@/providers/cityContextProvider";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 
 export const NavComponent = () => {
     const authModal = useModal();
@@ -19,6 +20,7 @@ export const NavComponent = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const router = useRouter();
     const { city } = useCityContext();
+    const session = useSessionContext();
 
     return (
         <>
@@ -70,7 +72,7 @@ export const NavComponent = () => {
                             </Link>
                         </div>
                         <div className="w-full flex flex-col gap-4">
-                            {!userRole && (
+                            {!session.session?.user.role === true && (
                                 <div className="flex flex-col gap-4 border-t-[1px]">
                                     <button onClick={() => {
                                         authModal.onOpen();
@@ -115,7 +117,7 @@ export const NavComponent = () => {
                         </div>
                     </div>
 
-                    {!userRole && (
+                    {!session.session?.user.role === true && (
                         <>
                             <div className="flex gap-4 max-[1024px]:hidden">
                                 <button onClick={authModal.onOpen}
@@ -128,33 +130,32 @@ export const NavComponent = () => {
                                 </button>
                             </div>
                         </>
-                    )}
-                    {userRole && (
-                        <>
-                            <div className="flex gap-4 max-[1024px]:hidden">
-                                {userRole === "Client" && (
-                                    <Link href="/dashboard/visits"
-                                        className="bg-gradient-to-b from-violet-600 to-violet-500 text-white px-8 py-2 rounded-xl font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:text-sm">
-                                        Dashboard
-                                    </Link>
-                                ) || (
-                                        <Link href="/dashboard/schedule"
+                    ) || (
+                            <>
+                                <div className="flex gap-4 max-[1024px]:hidden">
+                                    {userRole === "Client" || "" && (
+                                        <Link href="/dashboard/visits"
                                             className="bg-gradient-to-b from-violet-600 to-violet-500 text-white px-8 py-2 rounded-xl font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:text-sm">
                                             Dashboard
                                         </Link>
-                                    )}
-                                <button className="flex rounded-xl text-black/70 border-[1px] font-medium border-black/20 items-center justify-center px-8 py-2 hover:scale-95 duration-300 max-lg:text-sm max-lg:py-1 max-sm:hidden"
-                                    onClick={async () => {
-                                        await supabase.auth.signOut();
-                                        router.refresh()
+                                    ) || (
+                                            <Link href="/dashboard/schedule"
+                                                className="bg-gradient-to-b from-violet-600 to-violet-500 text-white px-8 py-2 rounded-xl font-medium hover:scale-95 hover:opacity-80 duration-300 max-lg:text-sm">
+                                                Dashboard
+                                            </Link>
+                                        )}
+                                    <button className="flex rounded-xl text-black/70 border-[1px] font-medium border-black/20 items-center justify-center px-8 py-2 hover:scale-95 duration-300 max-lg:text-sm max-lg:py-1 max-sm:hidden"
+                                        onClick={async () => {
+                                            await supabase.auth.signOut();
+                                            router.refresh()
 
-                                        clearUserRole();
-                                    }}>
-                                    Logout
-                                </button>
-                            </div>
-                        </>
-                    )}
+                                            clearUserRole();
+                                        }}>
+                                        Logout
+                                    </button>
+                                </div>
+                            </>
+                        )}
                     <AuthModal />
                 </nav>
             </header>

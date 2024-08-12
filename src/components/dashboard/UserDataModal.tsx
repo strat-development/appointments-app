@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { Database } from "@/types/supabase";
 import { useUserContext } from "@/providers/userContextProvider";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface UserDataModalProps {
     isOpen: boolean;
@@ -23,6 +24,7 @@ export const UserDataModal = ({ onClose, isOpen }: UserDataModalProps) => {
     const queryClient = useQueryClient();
     const { userId } = useUserContext();
     const [selectedOption, setSelectedOption] = useState('');
+    const router = useRouter();
 
     const handleImageClick = (option: any) => {
         setSelectedOption(selectedOption === option ? '' : option);
@@ -113,6 +115,8 @@ export const UserDataModal = ({ onClose, isOpen }: UserDataModalProps) => {
                             id: userId,
                             role: selectedOption
                         }] as UserData[]);
+
+                        router.refresh();
                     }}
                 >
                     Save
